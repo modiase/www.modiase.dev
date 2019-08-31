@@ -1,0 +1,159 @@
+/* Global styles
+------------------------------------*/
+
+html {     
+
+  box-sizing: border-box; 
+} 
+
+
+* , *:before, *:after{ 
+
+ box-sizing: inherit; 
+
+} 
+body {
+  font-family: 'Roboto', serif;
+  margin: 0;
+}
+a {
+  color: #EF233C;
+}
+a:hover {
+  text-decoration: none;
+}
+h1, h2 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+}
+h1 {
+  font-size: 50px;
+}
+h2 {
+  font-size: 30px;
+  margin-top: 0;
+}
+.content-wrap {
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 50px;
+  overflow: hidden;
+}
+
+.col-narrow{
+    width: 30%;
+    float: left;
+    min-height: 175px;
+}
+
+.col-wide{
+    width: 70%;
+    float: left;
+    padding-left: 20px;
+    min-height: 175px;
+}
+
+
+
+/* Header & Footer
+------------------------------------*/
+header,
+footer {
+  color: #8D99AE;
+}
+header h1,
+header h2 {
+  color: #edf2f4;
+  margin: 0;
+  font-weight: 700;
+  
+}
+
+/* Header styles only */
+header {
+  /*text-align: center;*/
+  
+  overflow: hidden;
+  position: relative;
+
+  background:  url(../images/mountains.jpg);
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-size: cover;
+  
+}
+header .alpha-bg{
+  padding-top: 70px;
+  background: rgba(0,35,102,0.65);
+}
+.profile-img {
+  border-radius: 50%;
+  width: 200px;
+}
+
+
+.btn.downloadpdf{
+
+  color: white;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  
+
+}
+
+.btn.downloadpdf i{
+  display: inline;
+  font-size: 40px;
+  padding-left: 20px;
+}
+
+.btn.downloadpdf p{
+ display: inline;
+ font-size: 20px;
+
+}
+/* Footer styles only */
+footer {
+  text-align: center;
+  background:  url(../images/mountains.jpg);
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  background-size: cover;
+  
+}
+
+footer .alpha-bg{
+  background: rgba(0,35,102,0.5);
+}
+
+footer i{
+  font-size: 30px;
+  padding: 0px 5px;
+}
+.contact-info a {
+  padding: 10px;
+  display: inline-block;
+}
+
+.contact-header{
+  display: inline-block;
+
+}
+.contact-info{
+  display: inline-block;
+}
+
+
+
+/* Work Experience
+------------------------------------*/
+
+
+
+/* Education
+------------------------------------*/
+
+/* Skills and Certification
