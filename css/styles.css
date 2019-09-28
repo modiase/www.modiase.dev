@@ -40,19 +40,27 @@ h2 {
   overflow: hidden;
 }
 
-.col-narrow{
-    width: 30%;
-    float: left;
-    min-height: 175px;
+
+/* Nav Styling */
+
+.navbar{
+  text-align: center;
+  position: fixed;
+  top: 0;
+  background-color: navy;
+  width: 100%;
+  height: 3.5vh;
 }
 
-.col-wide{
-    width: 70%;
-    float: left;
-    padding-left: 20px;
-    min-height: 175px;
+.navbar a{
+  display: inline-block;
+  color: white;
+  font-weight: 700;
+  font-size: 1 rem;
+  padding: 0.5vh 5vw;
+  text-decoration: none;
 }
-
+}
 
 
 /* Header & Footer
@@ -69,6 +77,22 @@ header h2 {
   
 }
 
+header p {
+  color: #edf2f4;
+  font-size: 1.2rem;
+  
+}
+
+
+
+@media (max-width: 640px){
+   h1,
+   h2 {
+    text-align: center;
+    
+  }
+}
+
 /* Header styles only */
 header {
   /*text-align: center;*/
@@ -78,7 +102,7 @@ header {
 
   background:  url(../images/mountains.jpg);
   background-repeat: no-repeat;
-  background-position: top left;
+  background-position: bottom left;
   background-size: cover;
   
 }
@@ -90,6 +114,32 @@ header .alpha-bg{
   border-radius: 50%;
   width: 200px;
 }
+
+@media (min-width: 640px){
+
+  .col-narrow{
+    width: 30%;
+    float: left;
+    min-height: 175px;
+}
+
+.col-wide{
+    width: 70%;
+    float: left;
+    padding-left: 20px;
+    min-height: 175px;
+}
+}
+
+@media (max-width: 640px){
+  header {
+    text-align: center;
+  }
+  .profile-img {
+    width: 200px;
+  }
+}
+
 
 
 .btn.downloadpdf{
@@ -120,7 +170,7 @@ footer {
   text-align: center;
   background:  url(../images/mountains.jpg);
   background-repeat: no-repeat;
-  background-position: bottom left;
+  background-position: top left;
   background-size: cover;
   
 }
@@ -156,4 +206,10 @@ footer i{
 /* Education
 ------------------------------------*/
 
-/* Skills and Certification
+/* Skills and Certification */
+.skills h2 {
+
+  margin: 0px;
+  display: inline-block;
+
+}
