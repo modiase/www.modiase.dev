@@ -1,0 +1,65 @@
+const WORK_BTN = document.querySelector("#workbtn");
+const EDUCATION_BTN = document.querySelector("#educationbtn");
+const SKILLS_BTN = document.querySelector("#skillsbtn");
+
+const SECTIONS = {
+    "work": document.querySelector(".work"),
+    "education": document.querySelector(".education"),
+    "skills": document.querySelector(".skills"),
+}
+
+for (let k in SECTIONS) {
+    SECTIONS[k].classList.add("hidden");
+    SECTIONS[k].classList.add("visuallyHidden");
+}
+
+function hideAllExcept(s) {
+    for (let k in SECTIONS) {
+        if (k == s) {
+            continue;
+        }
+        let section = SECTIONS[k];
+
+        if (!section.classList.contains("visuallyHidden")) {
+            section.classList.add("visuallyHidden");
+
+        } if (!section.classList.contains("hidden")) {
+            section.addEventListener('transitionend', function (e) {
+                section.classList.add('hidden');
+            }, {
+                capture: false,
+                once: true,
+                passive: false
+            });
+        }
+    }
+}
+function showSection(e, sectionName) {
+    hideAllExcept(sectionName);
+    var section = SECTIONS[sectionName];
+    if (section.classList.contains("hidden") && section.classList.contains("visuallyHidden")) {
+        section.classList.remove('hidden');
+        setTimeout(function () {
+            section.classList.remove('visuallyHidden');
+        }, 20);
+    } else {
+        section.classList.add("visuallyHidden");
+        section.addEventListener('transitionend', function (e) {
+            section.classList.add('hidden');
+        }, {
+            capture: false,
+            once: true,
+            passive: false
+        });
+    }
+}
+
+WORK_BTN.addEventListener("click", function (e) {
+    showSection(e, "work")
+}, false);
+EDUCATION_BTN.addEventListener("click", function (e) {
+    showSection(e, "education")
+}, false);
+SKILLS_BTN.addEventListener("click", function (e) {
+    showSection(e, "skills")
+}, false);

@@ -49,17 +49,26 @@ h2 {
   top: 0;
   background-color: navy;
   width: 100%;
-  height: 3.5vh;
+  max-height: 7vh;
+  opacity: 0.8;
 }
 
-.navbar a{
+.navbar button{
   display: inline-block;
   color: white;
+  background-color: navy;
+  border: none;
   font-weight: 700;
   font-size: 1 rem;
   padding: 0.5vh 5vw;
   text-decoration: none;
+  height: 3.5vh;
+  opacity: 0.8;
 }
+.navbar button:focus{
+  color:red;
+  border: none;
+  outline: none;
 }
 
 
@@ -100,7 +109,8 @@ header {
   overflow: hidden;
   position: relative;
 
-  background:  url(../images/mountains.jpg);
+  /* background:  url(../images/mountains.jpg); */
+  background-color: lightblue;
   background-repeat: no-repeat;
   background-position: bottom left;
   background-size: cover;
@@ -200,16 +210,49 @@ footer i{
 
 /* Work Experience
 ------------------------------------*/
-
+.work{
+  background: white;
+  transition: all 1s linear;
+  display: block;
+}
 
 
 /* Education
 ------------------------------------*/
-
+.education{
+  background: white;
+  transition: all 1s linear;
+  display: block;
+}
 /* Skills and Certification */
+.skills{
+  background: white;
+  text-align: center;
+  transition: all 1s linear;
+  display: block;
+}
+
+.skills li{
+  list-style-type: none;
+}
 .skills h2 {
 
   margin: 0px;
   display: inline-block;
+  padding-left: 80px;
 
+}
+
+#skills h3 {
+  padding-left: 20px;
+}
+
+.hidden{
+  display: none;
+  
+}
+
+.visuallyHidden{
+  opacity: 0;
+  color: white;
 }
