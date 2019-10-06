@@ -24,13 +24,15 @@ function hideAllExcept(s) {
             section.classList.add("visuallyHidden");
 
         } if (!section.classList.contains("hidden")) {
-            section.addEventListener('transitionend', function (e) {
+            section.classList.add("hidden");
+
+            /*section.addEventListener('transitionend', function (e) {
                 section.classList.add('hidden');
             }, {
                 capture: false,
                 once: true,
                 passive: false
-            });
+            });*/
         }
     }
 }
