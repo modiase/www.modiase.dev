@@ -210,11 +210,17 @@ footer i {
   display: block;
 }
 
-.skills li {
+ul {
   list-style-type: none;
+  position: relative;
+  padding-left: 0;
 }
 
-.skills h2 {
+ul li {
+  position: relative;
+}
+
+ul h2 {
   margin: 0px;
   display: inline-block;
   padding-left: 80px;

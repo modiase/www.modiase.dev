@@ -6,7 +6,7 @@ const SECTIONS = {
     "work": document.querySelector(".work"),
     "education": document.querySelector(".education"),
     "skills": document.querySelector(".skills"),
-}
+};
 
 for (let k in SECTIONS) {
     SECTIONS[k].classList.add("hidden");
@@ -57,11 +57,11 @@ function showSection(e, sectionName) {
 }
 
 WORK_BTN.addEventListener("click", function (e) {
-    showSection(e, "work")
+    showSection(e, "work");
 }, false);
 EDUCATION_BTN.addEventListener("click", function (e) {
-    showSection(e, "education")
+    showSection(e, "education");
 }, false);
 SKILLS_BTN.addEventListener("click", function (e) {
-    showSection(e, "skills")
+    showSection(e, "skills");
 }, false);

@@ -1,1 +1,1 @@
-find . -not -path '*git*' -path 'bin' -type f -printf '%P\n' | xargs -I '{}' gsutil cp '{}' gs://www.modiase.co.uk/'{}'
+find . -not -path '*git*' -not -path '*bin*' -type f -printf '%P\n' | xargs -I '{}' gsutil cp '{}' gs://www.modiase.co.uk/'{}'
