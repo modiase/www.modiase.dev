@@ -1,3 +1,5 @@
+@import "color"
+
 html
 
   box-sizing: border-box
@@ -37,7 +39,7 @@ h2
   text-align: center
   position: fixed
   top: 0
-  background-color: navy
+  background-color: $theme-color-2
   width: 100%
   max-height: 7vh
   opacity: 0.8
@@ -45,7 +47,7 @@ h2
   & button
     display: inline-block
     color: white
-    background-color: navy
+    background-color: $theme-color-2
     border: none
     font-weight: 700
     font-size: 1 rem
@@ -90,7 +92,7 @@ header
 
 header .alpha-bg
   padding-top: 70px
-  background: rgba(0,35,102,0.65)
+  background: $theme-color-3
 
 .profile-img
   border-radius: 50%
