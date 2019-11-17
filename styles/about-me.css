@@ -132,13 +132,12 @@ header .alpha-bg {
     float: left;
     min-height: 175px;
   }
-}
-
-.col-wide {
-  width: 70%;
-  float: left;
-  padding-left: 20px;
-  min-height: 175px;
+  .col-wide {
+    width: 70%;
+    float: left;
+    padding-left: 20px;
+    min-height: 175px;
+  }
 }
 
 @media (max-width: 640px) {
