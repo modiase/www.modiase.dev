@@ -1,16 +1,4 @@
-@import "color"
-
-html
-
-  box-sizing: border-box
-
-* , *:before, *:after
-
-  box-sizing: inherit
-
-body
-  font-family: 'Roboto', serif
-  margin: 0
+@import "base"
 
 a
   color: #EF233C
@@ -29,6 +17,40 @@ h2
   font-size: 30px
   margin-top: 0
 
+.masthead__btn
+  width: 100%
+  background-color: inherit
+  border: none
+  color: white
+  font-size: 1.6em
+  opacity: 0.8
+  display: block
+
+
+
+.masthead__content
+  @media(max-width: $break-small)
+      padding: 0 18px
+      overflow: hidden
+
+.masthead__btn-downloadpdf
+
+  color: white
+  position: absolute
+  bottom: 0
+  right: 0
+  padding-bottom: 10px
+  padding-right: 10px
+
+  & i
+    display: inline
+    font-size: 40px
+    padding-left: 20px
+
+  & p
+    display: inline
+    font-size: 20px
+
 .content-wrap
   max-width: 950px
   margin: 0 auto
@@ -42,11 +64,11 @@ h2
   background-color: $theme-color-2
   width: 100%
   max-height: 7vh
-  @media (max-width: 640px)
+  @media (max-width: $break-small)
     height: 10vh
   opacity: 0.8
 
-  & button
+.navbar__btn
     display: inline-block
     color: white
     background-color: $theme-color-2
@@ -56,14 +78,16 @@ h2
     padding: 0.5vh 5vw
     text-decoration: none
     height: 3.5vh
-    @media (max-width: 640px)
+    @media (max-width: $break-small)
       height: 7vh
     opacity: 0.8
+    &:focus
+      border: none
+      outline: none
 
-  & button:focus
-    color: red
-    border: none
-    outline: none
+.navbar__btn--active
+  color: red
+  font-weight: 700
 
 header,
 footer
@@ -79,7 +103,7 @@ header p
   color: #edf2f4
   font-size: 1.2rem
 
-@media (max-width: 640px)
+@media (max-width: $break-small)
   h1,
   h2
     text-align: center
@@ -102,7 +126,7 @@ header .alpha-bg
   border-radius: 50%
   width: 200px
 
-@media (min-width: 640px)
+@media (min-width: $break-small)
 
   .col-narrow
     width: 30%
@@ -115,30 +139,14 @@ header .alpha-bg
     padding-left: 20px
     min-height: 175px
 
-@media (max-width: 640px)
+@media (max-width: $break-small)
   header
     text-align: center
 
   .profile-img
     width: 200px
 
-.btn.downloadpdf
 
-  color: white
-  position: absolute
-  bottom: 0
-  right: 0
-  padding-bottom: 10px
-  padding-right: 10px
-
-  & i
-    display: inline
-    font-size: 40px
-    padding-left: 20px
-
-  & p
-    display: inline
-    font-size: 20px
 
 footer
   text-align: center
@@ -164,21 +172,18 @@ footer i
 .contact-info
   display: inline-block
 
-.work
+.bio__section
   background: white
   transition: all 1s linear
   display: block
 
-.education
-  background: white
-  transition: all 1s linear
-  display: block
+.bio__section-work
+  
+.bio__section-education
 
-.skills
-  background: white
+.bio__section-skills
   text-align: center
-  transition: all 1s linear
-  display: block
+
 
 ul
   list-style-type: none
@@ -203,3 +208,11 @@ ul
 .visuallyHidden
   opacity: 0
   color: white
+
+.hide-big
+  @media(min-width: $break-small)
+    display: none
+
+.hide-small
+  @media(max-width: $break-small)
+    display: none
