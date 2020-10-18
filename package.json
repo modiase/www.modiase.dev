@@ -1,0 +1,20 @@
+{
+  "name": "www.modiase.co.uk",
+  "version": "0.0.1",
+  "description": "modiase site",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Moyoka22/www.modiase.co.uk.git"
+  },
+  "author": "Moye Odiase",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Moyoka22/www.modiase.co.uk/issues"
+  },
+  "homepage": "https://github.com/Moyoka22/www.modiase.co.uk#readme",
+  "dependencies": {}
+}
