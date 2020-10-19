@@ -6,7 +6,7 @@ body {
   font-family: "Karla", Arial, Helvetica, sans-serif;
   background-color: var(--primary);
   color: var(--secondary);
-  text-shadow: 0 0 1px var(--secondary);
+  text-shadow: 0 0 2px var(--secondary);
 }
 .container {
   height: 100vh;
