@@ -1,7 +1,12 @@
+:root {
+  --primary: #14151f;
+  --secondary: #eaf2ef;
+}
 body {
   font-family: "Karla", Arial, Helvetica, sans-serif;
-  background-color: #2d3047;
-  color: #eaf2ef;
+  background-color: var(--primary);
+  color: var(--secondary);
+  text-shadow: 0 0 1px var(--secondary);
 }
 .container {
   height: 100vh;
