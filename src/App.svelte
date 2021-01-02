@@ -6,7 +6,9 @@
 </script>
 
 <main>
-	<SimpleCard title={placeholderCardTitle} messages={placeholderCardMessages}/>
+	<div>
+		<SimpleCard title={placeholderCardTitle} messages={placeholderCardMessages}/>
+	</div>
 </main>
 
 <style lang="scss">
@@ -16,8 +18,10 @@
 		width: 100vw;
 		height: 100vh;
 		justify-content: center;
-		align-items: center;
         text-shadow: 0 0 5px var(--secondary);
+		div {
+			margin-top: 20px;
+		}
 	}
 
 </style>

@@ -7,7 +7,7 @@
 <div class="d-flex flex-column align-items-center justify-content-center">
     <h1 class="h1">{title}</h1>
     {#each messages as message}
-        <p class="h4">{message}</p>
+        <p class="h5">{message}</p>
     {/each}
 </div>
 
