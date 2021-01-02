@@ -9,7 +9,7 @@ import css from "rollup-plugin-css-only";
 import scss from "rollup-plugin-scss";
 import copy from "rollup-plugin-copy";
 import path from "path";
-import uglify from "uglify-js";
+import csso from "csso";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -63,6 +63,10 @@ export default {
           dest: "public",
         },
         {
+          src: "src/assets",
+          dest: "public",
+        },
+        {
           src: "node_modules/bootstrap/dist/css/**/*",
           dest: "public/vendor",
         },
@@ -80,6 +84,7 @@ export default {
     scss({
       output: path.resolve(__dirname, "public", "build", "global.css"),
       failOnError: true,
+      processor: (css) => csso.minify(css).css,
     }),
 
     // If you have external dependencies installed from

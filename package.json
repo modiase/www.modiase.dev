@@ -13,6 +13,7 @@
     "@rollup/plugin-node-resolve": "^10.0.0",
     "@rollup/plugin-typescript": "^6.0.0",
     "@tsconfig/svelte": "^1.0.0",
+    "csso": "^4.2.0",
     "rollup": "^2.3.4",
     "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-css-only": "^3.1.0",
@@ -23,8 +24,7 @@
     "svelte-check": "^1.0.0",
     "svelte-preprocess": "^4.0.0",
     "tslib": "^2.0.0",
-    "typescript": "^3.9.3",
-    "uglify-js": "^3.12.4"
+    "typescript": "^3.9.3"
   },
   "dependencies": {
     "bootstrap": "^4.5.3",

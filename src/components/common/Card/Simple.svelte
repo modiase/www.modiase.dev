@@ -17,7 +17,7 @@
     }
 
     div{
-        box-shadow: 0 0 2px white;
+        box-shadow: 0 0 4px var(--secondary);
         padding: 30px;
     }
 </style>

@@ -369,7 +369,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			t = text(t_value);
-    			attr_dev(p, "class", "h4 svelte-1556f13");
+    			attr_dev(p, "class", "h4 svelte-rozv6a");
     			add_location(p, file, 7, 8, 215);
     		},
     		m: function mount(target, anchor) {
@@ -419,9 +419,9 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(h1, "class", "h1 svelte-1556f13");
+    			attr_dev(h1, "class", "h1 svelte-rozv6a");
     			add_location(h1, file, 5, 4, 147);
-    			attr_dev(div, "class", "d-flex flex-column align-items-center justify-content-center svelte-1556f13");
+    			attr_dev(div, "class", "d-flex flex-column align-items-center justify-content-center svelte-rozv6a");
     			add_location(div, file, 4, 0, 68);
     		},
     		l: function claim(nodes) {
