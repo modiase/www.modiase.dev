@@ -7,6 +7,7 @@ import sveltePreprocess from "svelte-preprocess";
 import typescript from "@rollup/plugin-typescript";
 import css from "rollup-plugin-css-only";
 import scss from "rollup-plugin-scss";
+import copy from "rollup-plugin-copy";
 import path from "path";
 import uglify from "uglify-js";
 
@@ -55,9 +56,29 @@ export default {
     }),
     // we'll extract any component CSS out into
     // a separate file - better for performance
+    copy({
+      targets: [
+        {
+          src: "src/404.html",
+          dest: "public",
+        },
+        {
+          src: "node_modules/bootstrap/dist/css/**/*",
+          dest: "public/vendor",
+        },
+        {
+          src: "node_modules/bootstrap/dist/js/**/*",
+          dest: "public/vendor",
+        },
+        {
+          src: "node_modules/jquery/dist/**/*",
+          dest: "public/vendor",
+        },
+      ],
+    }),
     css({ output: "bundle.css" }),
     scss({
-      output: path.resolve(__dirname, "public", "build", "bundle.css"),
+      output: path.resolve(__dirname, "public", "build", "global.css"),
       failOnError: true,
     }),
 

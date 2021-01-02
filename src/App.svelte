@@ -17,6 +17,7 @@
 		height: 100vh;
 		justify-content: center;
 		align-items: center;
+        text-shadow: 0 0 5px var(--secondary);
 	}
 
 </style>
