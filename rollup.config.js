@@ -59,6 +59,10 @@ export default {
     copy({
       targets: [
         {
+          src: "src/index.html",
+          dest: "public",
+        },
+        {
           src: "src/404.html",
           dest: "public",
         },
