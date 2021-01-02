@@ -18,7 +18,7 @@
 		width: 100vw;
 		height: 100vh;
 		justify-content: center;
-        text-shadow: 0 0 5px var(--secondary);
+        text-shadow: 0 0 4px var(--secondary);
 		div {
 			margin-top: 20px;
 		}
