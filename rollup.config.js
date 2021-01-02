@@ -84,7 +84,7 @@ export default {
     scss({
       output: path.resolve(__dirname, "public", "build", "global.css"),
       failOnError: true,
-      processor: (css) => csso.minify(css).css,
+      processor: (css) => (production ? csso.minify(css).css : css),
     }),
 
     // If you have external dependencies installed from
