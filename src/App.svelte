@@ -7,11 +7,15 @@
 
 <main>
 	<div>
+		<p class="text-center text-jumbo">🚧</p>
 		<SimpleCard title={placeholderCardTitle} messages={placeholderCardMessages}/>
 	</div>
 </main>
 
 <style lang="scss">
+	.text-jumbo{
+		font-size: 12rem;
+	}
 	main {
 		display: flex;
 		position: relative;
