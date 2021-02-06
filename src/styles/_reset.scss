@@ -127,3 +127,13 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+a {
+  color: inherit;
+  text-transform: none;
+  &:active,
+  &:hover,
+  &:visited {
+    text-transform: none;
+    color: inherit;
+  }
+}
