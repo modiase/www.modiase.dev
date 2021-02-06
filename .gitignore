@@ -1,4 +1,14 @@
 
+
+# NPM, Yarn
 node_modules/
-scratch/
+yarn-error.log
+
+# Public
 public/
+
+# Dev Environment
+.vscode/
+scratch/
+
+
