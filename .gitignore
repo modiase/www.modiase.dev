@@ -7,6 +7,12 @@ yarn-error.log
 # Public
 public/
 
+<<<<<<< HEAD
 # Dev Environment
 .vscode/
 scratch/
+=======
+.vscode/
+
+yarn-error.log
+>>>>>>> 0e82639 (Updated typefaces.)

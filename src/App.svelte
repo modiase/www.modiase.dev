@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SimpleCard from "./components/common/Card/Simple.svelte";
+	import { MessageCard } from "./components/common/Card";
 
 	const placeholderCardTitle = "Under Construction."
 	const placeholderCardMessages = ["Hello! My site is currently undergoing a redesign.", "Please, come back at a later date."]
@@ -8,7 +8,7 @@
 <main>
 	<div>
 		<p class="text-center text-jumbo">🚧</p>
-		<SimpleCard title={placeholderCardTitle} messages={placeholderCardMessages}/>
+		<MessageCard title={placeholderCardTitle} messages={placeholderCardMessages}/>
 	</div>
 </main>
 
