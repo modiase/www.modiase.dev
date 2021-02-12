@@ -33,6 +33,6 @@
     top: 0;
     padding: 0;
     margin: 0;
-    min-width: 100vh;
+    min-width: 100vw;
   }
 </style>
