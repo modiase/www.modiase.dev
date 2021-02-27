@@ -1,24 +1,17 @@
 <script lang="ts">
-  import { DefaultLayout } from "./layouts";
-  import { AppHeader, AppAside, AppFooter } from "components/App";
-  import { MessageCard } from "components/common/Card";
+  import { LandingPage } from "./templates";
+  import { Nav } from "components/Nav";
 </script>
 
 <main>
-  <DefaultLayout>
+  <LandingPage>
     <div slot="hero">
       <div class="hero-placeholder" />
     </div>
     <div slot="header">
-      <AppHeader />
+      <Nav />
     </div>
-    <div slot="aside">
-      <AppAside />
-    </div>
-    <div slot="footer">
-      <AppFooter />
-    </div>
-  </DefaultLayout>
+  </LandingPage>
 </main>
 
 <style lang="scss">
@@ -30,6 +23,5 @@
     display: flex;
     position: relative;
     width: 100vw;
-    height: 200vh;
   }
 </style>
