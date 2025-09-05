@@ -1,0 +1,39 @@
+$primary-color: #3b82f6;
+$secondary-color: #8b5cf6;
+$text-color: #374151;
+$background-color: #f9fafb;
+
+// Nord Polar Night palette (nord0–nord3)
+// Source: https://www.nordtheme.com/docs/colors-and-palettes
+$nord0: #2e3440;
+$nord1: #3b4252;
+$nord2: #434c5e;
+$nord3: #4c566a;
+// Snow Storm for light backgrounds (nord4–nord6)
+$nord4: #d8dee9;
+$nord5: #e5e9f0;
+$nord6: #eceff4;
+
+:root {
+  --nord0: #2e3440;
+  --nord1: #3b4252;
+  --nord2: #434c5e;
+  --nord3: #4c566a;
+  --nord4: #d8dee9;
+  --nord5: #e5e9f0;
+  --nord6: #eceff4;
+
+  /* Semantic color tokens */
+  --color-primary: var(--nord2);
+  --color-secondary: var(--nord3);
+  --text-primary: var(--nord0);
+  --text-secondary: var(--nord2);
+  --bg: var(--nord6);
+}
+
+/* SCSS semantic variables (mirror the CSS custom properties) */
+$color-primary: $nord2;
+$color-secondary: $nord3;
+$color-text-primary: $nord0;
+$color-text-secondary: $nord2;
+$color-bg: $nord6;

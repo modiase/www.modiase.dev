@@ -1,0 +1,13 @@
+@use './variables' as *;
+
+body {
+  font-family: 'Karla', Arial, Helvetica, sans-serif;
+  color: $text-color;
+  background-color: $background-color;
+}
+
+// Nord theme scope utility (optional)
+.theme-nord {
+  --color-bg: var(--nord0);
+  --color-fg: #eceff4; // nord6 (Snow Storm) for contrast
+}

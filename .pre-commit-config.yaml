@@ -1,0 +1,32 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: detect-private-key
+
+  - repo: local
+    hooks:
+      - id: prettier
+        name: prettier (pnpm)
+        entry: pnpm exec prettier --write
+        language: system
+        files: "\\.(svelte|ts|js|cjs|mjs|json|md|scss|css|html|ya?ml)$"
+        pass_filenames: true
+
+      - id: svelte-check
+        name: svelte-check
+        entry: pnpm exec svelte-check --tsconfig ./tsconfig.json --fail-on-warnings
+        language: system
+        files: "\\.(svelte|ts|js)$"
+        pass_filenames: false
+
+      - id: typescript-typecheck
+        name: typescript typecheck
+        entry: pnpm exec tsc -p tsconfig.json --noEmit
+        language: system
+        files: "\\.(ts|svelte)$"
+        pass_filenames: false

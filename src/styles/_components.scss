@@ -1,0 +1,12 @@
+@use './mixins' as *;
+
+.construction-sign {
+  @include flex-center;
+  flex-direction: column;
+
+  .emoji {
+    font-size: 6rem;
+    animation: bounce 2s infinite;
+    margin-bottom: 1rem;
+  }
+}
