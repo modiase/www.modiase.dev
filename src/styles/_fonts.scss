@@ -1,10 +1,10 @@
 @use './mixins' as *;
 
-@include font-face('Karla', '../assets/fonts/Karla-Regular.ttf');
-@include font-face('Karla', '../assets/fonts/Karla-Italic.ttf', normal, italic);
-@include font-face('Karla', '../assets/fonts/Karla-Bold.ttf', bold);
-@include font-face('Karla', '../assets/fonts/Karla-BoldItalic.ttf', bold, italic);
-@include font-face('Karla', '../assets/fonts/Karla-Light.ttf', lighter);
-@include font-face('Karla', '../assets/fonts/Karla-LightItalic.ttf', lighter, italic);
-@include font-face('Karla', '../assets/fonts/Karla-ExtraBold.ttf', bolder);
-@include font-face('Karla', '../assets/fonts/Karla-ExtraBoldItalic.ttf', bolder, italic);
+@include font-face('Karla', '/assets/fonts/Karla-Regular.ttf');
+@include font-face('Karla', '/assets/fonts/Karla-Italic.ttf', normal, italic);
+@include font-face('Karla', '/assets/fonts/Karla-Bold.ttf', bold);
+@include font-face('Karla', '/assets/fonts/Karla-BoldItalic.ttf', bold, italic);
+@include font-face('Karla', '/assets/fonts/Karla-Light.ttf', lighter);
+@include font-face('Karla', '/assets/fonts/Karla-LightItalic.ttf', lighter, italic);
+@include font-face('Karla', '/assets/fonts/Karla-ExtraBold.ttf', bolder);
+@include font-face('Karla', '/assets/fonts/Karla-ExtraBoldItalic.ttf', bolder, italic);
