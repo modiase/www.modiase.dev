@@ -26,9 +26,9 @@ $nord6: #eceff4;
   /* Semantic color tokens */
   --color-primary: var(--nord2);
   --color-secondary: var(--nord3);
-  --text-primary: var(--nord0);
-  --text-secondary: var(--nord2);
-  --bg: var(--nord6);
+  --text-primary: var(--nord6);
+  --text-secondary: var(--nord4);
+  --bg: var(--nord0);
 }
 
 /* SCSS semantic variables (mirror the CSS custom properties) */
