@@ -1,0 +1,8 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p google-cloud-sdk
+
+set -euo pipefail
+
+cd $(git rev-parse --show-toplevel) && \
+pnpm run build && \
+gsutil -m rsync -r -c -d build/ gs://www.modiase.dev
