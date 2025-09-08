@@ -1,8 +1,7 @@
-@use './styles/variables' as *;
+@use './styles/colors' as *;
 @use './styles/mixins' as *;
 @use './styles/fonts';
 @use './styles/base';
-@use './styles/components';
 @use './styles/animations';
 
 @tailwind base;
