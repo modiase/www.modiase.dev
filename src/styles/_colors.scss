@@ -10,26 +10,36 @@ $nord4: #d8dee9;
 $nord5: #e5e9f0;
 $nord6: #eceff4;
 
-:root {
-  --nord0: #2e3440;
-  --nord1: #3b4252;
-  --nord2: #434c5e;
-  --nord3: #4c566a;
-  --nord4: #d8dee9;
-  --nord5: #e5e9f0;
-  --nord6: #eceff4;
+$error-light: #e66060;
+$error-mid: #ea3434;
+$error-dark: #b62828;
+$text-contrast: #4ecdc4;
 
-  /* Semantic color tokens */
-  --color-primary: var(--nord2);
-  --color-secondary: var(--nord3);
-  --text-primary: var(--nord6);
-  --text-secondary: var(--nord4);
-  --bg: var(--nord0);
+:root {
+  --nord0: #{$nord0};
+  --nord1: #{$nord1};
+  --nord2: #{$nord2};
+  --nord3: #{$nord3};
+  --nord4: #{$nord4};
+  --nord5: #{$nord5};
+  --nord6: #{$nord6};
+  --error-light: #{$error-light};
+  --error-mid: #{$error-mid};
+  --error-dark: #{$error-dark};
+
+  --color-primary: #{$nord2};
+  --color-secondary: #{$nord3};
+  --text-primary: #{$nord6};
+  --text-secondary: #{$nord4};
+  --text-error: #{$error-mid};
+  --text-contrast: #{$text-contrast};
+  --bg: #{$nord0};
 }
 
-/* SCSS semantic variables (mirror the CSS custom properties) */
+/* SCSS semantic tokens */
 $color-primary: $nord2;
 $color-secondary: $nord3;
-$color-text-primary: $nord0;
-$color-text-secondary: $nord2;
-$color-bg: $nord6;
+$color-text-primary: $nord6;
+$color-text-secondary: $nord4;
+$color-bg: $nord0;
+$color-error: $error-mid;
