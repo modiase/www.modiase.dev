@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { onMount } from 'svelte';
+  import Link from '$lib/components/Link.svelte';
 
   let error: any;
 
@@ -11,12 +12,14 @@
 
 <main>
   <div class="error-container">
-    <h1>Oops!</h1>
+    <p class="text-6xl mb-2 animate-bounce">⚠️</p>
     <p>Something went wrong.</p>
     {#if error}
-      <p class="error-message">{error.message}</p>
+      <p>{error.message}</p>
     {/if}
-    <a href="/">Go home</a>
+    <div class="mt-4">
+      <Link href="/" class="link ">Go Home</Link>
+    </div>
   </div>
 </main>
 
@@ -28,24 +31,5 @@
     justify-content: center;
     height: 100vh;
     text-align: center;
-  }
-
-  .error-message {
-    color: #ff6b6b;
-    margin: 1rem 0;
-  }
-
-  a {
-    color: #4ecdc4;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border: 1px solid #4ecdc4;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-  }
-
-  a:hover {
-    background-color: #4ecdc4;
-    color: white;
   }
 </style>
