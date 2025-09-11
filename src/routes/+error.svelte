@@ -8,7 +8,9 @@
 
   onMount(() => {
     error = $page.error;
-    if (error) {
+    if (typeof window !== 'undefined' && (window as any).__sveltekit_404_fallback) {
+      errorMessage = 'Page Not Found';
+    } else if (error) {
       errorMessage = error.message;
     }
   });
