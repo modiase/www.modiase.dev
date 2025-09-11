@@ -2,6 +2,6 @@
   import Hero from '$lib/components/Hero.svelte';
 </script>
 
-<main class="flex items-center justify-center min-h-screen bg-bg font-karla">
+<main class="flex items-center justify-center flex-1">
   <Hero />
 </main>
