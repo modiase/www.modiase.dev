@@ -1,6 +1,5 @@
 <script lang="ts">
   import Link from './Link.svelte';
-  import Hero from './Hero.svelte';
 </script>
 
 <aside class="sidebar">
@@ -15,14 +14,39 @@
         />
       </div>
       <h2 class="text-lg font-semibold text-center">Moyewa Odiase</h2>
+
+      <!-- Social Icons -->
+      <div class="flex justify-center space-x-3 mt-2">
+        <Link
+          href="https://github.com/modiase"
+          class="text-gray-600 hover:text-gray-800 transition-colors"
+          secondary
+        >
+          <i class="fab fa-github text-sm"></i>
+        </Link>
+        <Link
+          href="https://www.linkedin.com/in/moyewa-odiase-6b4698106/"
+          class="text-gray-600 hover:text-gray-800 transition-colors"
+          secondary
+        >
+          <i class="fab fa-linkedin text-sm"></i>
+        </Link>
+        <Link
+          href="mailto:hello@modiase.dev"
+          class="text-gray-600 hover:text-gray-800 transition-colors"
+          secondary
+        >
+          <i class="fas fa-envelope text-sm"></i>
+        </Link>
+      </div>
     </div>
 
     <!-- Navigation -->
-    <nav class="sidebar-nav">
-      <a href="/" class="sidebar-link">Home</a>
-      <a href="/blog" class="sidebar-link">Blog</a>
-      <a href="/about" class="sidebar-link">About</a>
-      <a href="/gallery" class="sidebar-link">Gallery</a>
+    <nav class="sidebar-nav text-xl gap-8">
+      <Link href="/" class="sidebar-link" highlight>Home</Link>
+      <Link href="/blog" class="sidebar-link" highlight>Blog</Link>
+      <Link href="/about" class="sidebar-link" highlight>About</Link>
+      <Link href="/gallery" class="sidebar-link" highlight>Gallery</Link>
     </nav>
   </div>
 </aside>
