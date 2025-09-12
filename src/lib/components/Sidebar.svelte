@@ -43,10 +43,10 @@
 
     <!-- Navigation -->
     <nav class="sidebar-nav text-xl gap-8">
-      <Link href="/" class="sidebar-link" highlight>Home</Link>
-      <Link href="/blog" class="sidebar-link" highlight>Blog</Link>
-      <Link href="/about" class="sidebar-link" highlight>About</Link>
-      <Link href="/gallery" class="sidebar-link" highlight>Gallery</Link>
+      <Link href="/" highlight>Home</Link>
+      <Link href="/blog" highlight>Blog</Link>
+      <Link href="/about" highlight>About</Link>
+      <Link href="/gallery" highlight>Gallery</Link>
     </nav>
   </div>
 </aside>
@@ -87,20 +87,5 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-  }
-
-  .sidebar-link {
-    display: block;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    transition: all 0.2s ease;
-    text-align: center;
-    text-decoration: none;
-    color: var(--text-secondary);
-  }
-
-  .sidebar-link:hover {
-    background-color: var(--nord2);
-    color: var(--text-contrast);
   }
 </style>
