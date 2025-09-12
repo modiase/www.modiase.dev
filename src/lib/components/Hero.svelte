@@ -6,7 +6,7 @@
   <h1 class="text-4xl text-center mb-4 font-semibold">Moyewa Odiase</h1>
   <div class="flex flex-col items-center gap-1 mb-8">
     <p class="text-center font-bold">Full Stack Software Engineer</p>
-    <p class="text-center font-semibold">Interested in climate change, and safe and fair AI</p>
+    <p class="text-center font-semibold">Interested in cleantech, and safe and fair AI</p>
   </div>
   <div class="w-96 h-96 bg-gray-500 rounded-full flex items-center justify-center overflow-hidden">
     <img
