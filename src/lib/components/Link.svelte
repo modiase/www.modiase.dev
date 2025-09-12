@@ -5,7 +5,7 @@
   export let secondary: boolean = false;
 </script>
 
-<a {href} {target} {rel} class="text-secondary" class:secondary {...$$restProps}>
+<a {href} {target} {rel} class:secondary {...$$restProps}>
   <slot />
 </a>
 

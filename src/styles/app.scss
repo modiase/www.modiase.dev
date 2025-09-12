@@ -1,0 +1,11 @@
+@use './animations';
+@use './base';
+@use './colors' as *;
+@use './mixins' as *;
+@use './typography';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import '@fortawesome/fontawesome-free/css/all.min.css';
