@@ -8,13 +8,13 @@
 >
   <div class="relative inline-block">
     <div class="footer-collapsed flex justify-center items-center transition-all duration-300">
-      <span class="text-lg">©</span>
+      <span class="text-lg">🄯</span>
     </div>
     <div
       class="footer-expanded absolute top-0 left-1/2 transform -translate-x-1/2 opacity-0 -translate-y-2.5 transition-all duration-300 whitespace-nowrap"
     >
       <p class="text-sm">
-        © Moyewa Odiase {currentYear} - Built using Svelte
+        🄯 Moyewa Odiase {currentYear} - Built using Svelte
         <img src="/assets/images/svelte.svg" alt="Svelte" class="inline w-4 h-4 ml-1 svelte-logo" />
       </p>
     </div>
