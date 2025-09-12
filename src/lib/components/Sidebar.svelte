@@ -57,7 +57,7 @@
     left: 0;
     top: 0;
     bottom: 0;
-    width: 250px;
+    width: 200px;
     background: linear-gradient(to bottom, var(--nord0) 0%, var(--nord1) 100%);
     border-right: 1px solid var(--nord2);
     z-index: 1000;

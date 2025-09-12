@@ -18,10 +18,14 @@
     left: 0;
     right: 0;
     z-index: 1000;
-    background: linear-gradient(to bottom, var(--bg) 0%, var(--nord1) 100%);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--bg) 50%, transparent) 0%,
+      color-mix(in srgb, var(--nord1) 50%, transparent) 100%
+    );
     border-bottom: 1px solid var(--nord2);
     border-radius: 0 0 4px 4px;
-    height: 60px;
+    height: 30px;
   }
 
   .nav {
