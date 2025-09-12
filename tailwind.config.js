@@ -11,6 +11,7 @@ module.exports = {
         bg: 'var(--bg)',
       },
       fontFamily: {
+        grotesk: ['Space Grotesk', 'Arial', 'Helvetica', 'sans-serif'],
         karla: ['Karla', 'Arial', 'Helvetica', 'sans-serif'],
       },
     },
