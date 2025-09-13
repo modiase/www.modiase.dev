@@ -2,7 +2,7 @@
   import Link from './Link.svelte';
 </script>
 
-<div class="flex flex-col items-center">
+<div class="flex flex-col items-center pt-[40px]">
   <h1 class="text-4xl text-center mb-4 font-semibold">Moyewa Odiase</h1>
   <div class="flex flex-col items-center gap-1 mb-8">
     <p class="text-center font-bold">Full Stack Software Engineer</p>
