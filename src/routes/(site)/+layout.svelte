@@ -22,7 +22,7 @@
   });
 </script>
 
-<div class="bg-bg text-text-primary font-karla flex min-h-screen">
+<div class="bg-bg text-text-primary font-Lato flex min-h-screen">
   <button
     class={clsx(
       'fixed top-2 left-2 z-50 p-1 rounded-md bg-nord1 border border-nord2 text-text-primary hover:bg-nord2 transition-colors',

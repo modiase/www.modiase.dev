@@ -12,7 +12,7 @@ module.exports = {
       },
       fontFamily: {
         grotesk: ['Space Grotesk', 'Arial', 'Helvetica', 'sans-serif'],
-        karla: ['Karla', 'Arial', 'Helvetica', 'sans-serif'],
+        Lato: ['Lato', 'Arial', 'Helvetica', 'sans-serif'],
       },
     },
   },
