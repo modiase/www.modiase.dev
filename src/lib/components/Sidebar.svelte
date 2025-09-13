@@ -48,8 +48,8 @@
     <!-- Navigation -->
     <nav class="sidebar-nav text-xl gap-8">
       <Link href="/" onClick={onLinkClick}>Home</Link>
-      <Link href="/blog" onClick={onLinkClick}>Blog</Link>
       <Link href="/about" onClick={onLinkClick}>About</Link>
+      <Link href="/blog" onClick={onLinkClick}>Blog</Link>
       <Link href="/gallery" onClick={onLinkClick}>Gallery</Link>
     </nav>
   </div>
