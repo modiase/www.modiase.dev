@@ -4,10 +4,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: 'var(--color-primary)',
-        secondary: 'var(--color-secondary)',
-        'text-primary': 'var(--text-primary)',
-        'text-secondary': 'var(--text-secondary)',
+        primary: 'var(--text-primary)',
+        secondary: 'var(--text-secondary)',
+        contrast: 'var(--text-contrast)',
+        subtle: 'var(--text-subtle)',
         bg: 'var(--bg)',
       },
       fontFamily: {

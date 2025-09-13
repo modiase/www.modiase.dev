@@ -1,39 +1,35 @@
 <script lang="ts">
+  import clsx from 'clsx';
+
   const currentYear = new Date().getFullYear();
+  let isHovered = false;
 </script>
 
 <footer
-  class="footer text-center py-4 overflow-hidden transition-all duration-300"
+  class="footer text-center py-4 transition-all duration-300 flex justify-center items-center font-medium"
   style="color: var(--text-subtle);"
+  on:mouseenter={() => (isHovered = true)}
+  on:mouseleave={() => (isHovered = false)}
 >
-  <div class="relative inline-block">
-    <div class="footer-collapsed flex justify-center items-center transition-all duration-300">
-      <span class="text-lg">🄯</span>
-    </div>
-    <div
-      class="footer-expanded absolute top-0 left-1/2 transform -translate-x-1/2 opacity-0 -translate-y-2.5 transition-all duration-300 whitespace-nowrap"
-    >
-      <p class="text-sm">
-        🄯 Moyewa Odiase {currentYear} - Built using Svelte
-        <img src="/assets/images/svelte.svg" alt="Svelte" class="inline w-3 h-3 ml-1 svelte-logo" />
-      </p>
-    </div>
-  </div>
+  <span
+    class={clsx(
+      'footer-full inline whitespace-nowrap overflow-hidden transition-all duration-500 text-subtle',
+      {
+        'w-0': !isHovered,
+        'w-[175px]': isHovered,
+      }
+    )}
+    >Moyewa Odiase - {currentYear}
+  </span>
+  <i class="fas fa-copyright text-subtle copyleft"></i>
 </footer>
 
 <style>
-  .footer:hover .footer-collapsed {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  .footer:hover .footer-expanded {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
   .svelte-logo {
-    filter: grayscale(100%) brightness(0.8) contrast(1.2);
-    opacity: 0.7;
+    filter: grayscale(100%) brightness(0.4) contrast(0.8);
+  }
+
+  .copyleft {
+    transform: scaleX(-1);
   }
 </style>
