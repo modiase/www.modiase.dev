@@ -46,7 +46,7 @@
 
   <div class={clsx('flex-1 flex flex-col')}>
     {#key $page.url.pathname}
-      <main class="flex-1" in:fade={{ duration: 300 }}>
+      <main class="flex-1 pt-16 px-8" in:fade={{ duration: 300 }}>
         <slot />
       </main>
     {/key}

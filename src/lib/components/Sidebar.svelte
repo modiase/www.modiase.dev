@@ -17,7 +17,7 @@
           class="w-16 h-16 object-cover rounded-full"
         />
       </div>
-      <h2 class="text-lg font-semibold text-center">Moyewa Odiase</h2>
+      <h2 class="text-lg font-medium text-center">Moyewa Odiase</h2>
 
       <!-- Social Icons -->
       <div class="flex justify-center space-x-3 mt-2">

@@ -15,7 +15,7 @@
     >
       <p class="text-sm">
         🄯 Moyewa Odiase {currentYear} - Built using Svelte
-        <img src="/assets/images/svelte.svg" alt="Svelte" class="inline w-4 h-4 ml-1 svelte-logo" />
+        <img src="/assets/images/svelte.svg" alt="Svelte" class="inline w-3 h-3 ml-1 svelte-logo" />
       </p>
     </div>
   </div>
