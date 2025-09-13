@@ -5,10 +5,10 @@
   export let target: string | undefined = undefined;
   export let rel: string | undefined = undefined;
   export let secondary: boolean = false;
-  export let highlight: boolean = false;
+  export let disableActive: boolean = false;
   export let onClick: (() => void) | undefined = undefined;
 
-  $: isActive = highlight && $page.url.pathname === href;
+  $: isActive = !disableActive && $page.url.pathname === href;
 </script>
 
 <a
