@@ -20,8 +20,8 @@
     z-index: 1000;
     background: linear-gradient(
       to bottom,
-      color-mix(in srgb, var(--bg) 50%, transparent) 0%,
-      color-mix(in srgb, var(--nord1) 50%, transparent) 100%
+      color-mix(in srgb, var(--bg) 80%, transparent) 0%,
+      color-mix(in srgb, var(--nord1) 80%, transparent) 100%
     );
     border-bottom: 1px solid var(--nord2);
     border-radius: 0 0 4px 4px;
