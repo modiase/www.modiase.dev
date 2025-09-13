@@ -1,8 +1,11 @@
 <script lang="ts">
   import Link from './Link.svelte';
+  import clsx from 'clsx';
+
+  export let className: string = '';
 </script>
 
-<aside class="sidebar">
+<aside class={clsx('sidebar', className)}>
   <div class="sidebar-content">
     <!-- Mini Hero -->
     <div class="mini-hero">
@@ -53,14 +56,8 @@
 
 <style>
   .sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 200px;
     background: linear-gradient(to bottom, var(--nord0) 0%, var(--nord1) 100%);
     border-right: 1px solid var(--nord2);
-    z-index: 1000;
   }
 
   .sidebar-content {
