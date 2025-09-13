@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CopyFooter from '$lib/components/CopyFooter.svelte';
   import Hero from '$lib/components/Hero.svelte';
   import Header from '$lib/components/Header.svelte';
   import { fade } from 'svelte/transition';
@@ -12,3 +13,4 @@
     </div>
   </main>
 </div>
+<CopyFooter />

@@ -6,11 +6,20 @@
   export let rel: string | undefined = undefined;
   export let secondary: boolean = false;
   export let highlight: boolean = false;
+  export let onClick: (() => void) | undefined = undefined;
 
   $: isActive = highlight && $page.url.pathname === href;
 </script>
 
-<a {href} {target} {rel} class:secondary class:active={isActive} {...$$restProps}>
+<a
+  {href}
+  {target}
+  {rel}
+  class:secondary
+  class:active={isActive}
+  on:click={onClick}
+  {...$$restProps}
+>
   <slot />
 </a>
 

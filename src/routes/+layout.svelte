@@ -5,5 +5,4 @@
 
 <div class="bg-bg text-text-primary font-karla flex flex-col min-h-screen">
   <slot />
-  <CopyFooter />
 </div>
