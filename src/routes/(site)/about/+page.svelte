@@ -2,15 +2,11 @@
   import Link from '$lib/components/Link.svelte';
 </script>
 
-<div class="min-h-full flex flex-col gap-8">
+<div class="min-h-full flex flex-col gap-8 about-container">
   <section class="section">
     <p>
-      I am currently based in <em>London, UK</em>. I observe a plant-based lifestyle and am an
-      enthusiastic photographer and cook.
-    </p>
-    <p>
-      I am a software engineer, keen naturalist and environmentalist. I have spent the last few
-      years working in cleantech and believe that an
+      I am a software engineer, based in <em>London, UK</em>. I am a keen naturalist and
+      environmentalist. I have spent the last few years working in cleantech and believe that an
       <em>abundant but sustainable future is possible</em>. I have recently refocused my time on
       learning more about AI and how it can be used to usher in a
       <em>new era of human and environmental flourishing</em>.
@@ -59,5 +55,13 @@
     text-align: justify;
     max-width: 800px;
     flex-grow: 0;
+  }
+  .about-container section:first-child {
+    padding-top: 2rem;
+    border-top: 1px solid var(--text-secondary);
+  }
+  .about-container section:last-child {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--text-secondary);
   }
 </style>
