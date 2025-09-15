@@ -15,11 +15,11 @@
   <section class="section">
     <h2 class="text-lg font-bold mb-2">Education</h2>
     <p>
-      I graduated from the <em>University of Cambridge</em> in 2018 having studied for an
-      <em>MSc. in Natural Sciences</em>, during which I studied Mathematics, Chemistry, Physics and
-      Computer Science and ultimately specialised in theoretical chemistry. Prior to that I was a
-      student at <em>St. Bernard's Catholic Grammar School</em> where I learned much and cultivated a
-      love for the sciences and the classical world.
+      I graduated from the University of Cambridge in 2018 having studied for an MSc. in Natural
+      Sciences, during which I studied Mathematics, Chemistry, Physics and Computer Science and
+      ultimately specialised in theoretical chemistry. Prior to that I was a student at St.
+      Bernard's Catholic Grammar School where I learnt much and cultivated a love for the sciences
+      and the classical world.
     </p>
   </section>
   <section class="section">
