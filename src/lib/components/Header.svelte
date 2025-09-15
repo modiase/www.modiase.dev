@@ -5,7 +5,7 @@
 <header role="navigation" class="header">
   <nav class="nav gap-16">
     <Link href="/about" secondary>About</Link>
-    <Link href="/blog" secondary>Blog</Link>
+    <Link href="/posts" secondary>Posts</Link>
     <Link href="/gallery" secondary>Gallery</Link>
   </nav>
 </header>
