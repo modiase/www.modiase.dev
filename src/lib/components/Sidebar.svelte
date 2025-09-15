@@ -49,7 +49,7 @@
     <nav class="flex flex-col gap-4 text-xl">
       <Link href="/" onClick={onLinkClick}>Home</Link>
       <Link href="/about" onClick={onLinkClick}>About</Link>
-      <Link href="/blog" onClick={onLinkClick}>Blog</Link>
+      <Link href="/posts" onClick={onLinkClick}>Posts</Link>
       <Link href="/gallery" onClick={onLinkClick}>Gallery</Link>
     </nav>
 
@@ -57,11 +57,7 @@
     <div class="mt-auto pt-6 border-t border-[var(--nord2)]">
       <div class="flex items-center justify-center gap-2 text-[var(--nord4)] text-xs opacity-70">
         <span class="font-medium">Built using Svelte</span>
-        <img 
-          src="/assets/images/svelte.svg" 
-          alt="Svelte" 
-          class="w-4 h-4 svelte-icon"
-        />
+        <img src="/assets/images/svelte.svg" alt="Svelte" class="w-4 h-4 svelte-icon" />
       </div>
     </div>
   </div>
