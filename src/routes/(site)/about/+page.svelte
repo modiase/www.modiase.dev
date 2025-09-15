@@ -8,7 +8,8 @@
       I am a software engineer, based in <em>London, UK</em>. I am a keen naturalist and
       environmentalist. I have spent the last few years working in cleantech and believe that an
       <em>abundant but sustainable future is possible</em>. I have recently refocused my time on
-      learning more about AI and how it can be used to usher in a
+      learning more about AI and how it can be used to accelerate scientific discovery and usher in
+      a
       <em>new era of human and environmental flourishing</em>.
     </p>
   </section>
@@ -16,8 +17,8 @@
     <h2 class="text-lg font-bold mb-2">Education</h2>
     <p>
       I graduated from the University of Cambridge in 2018 having studied for an MSc. in Natural
-      Sciences, during which I studied Mathematics, Chemistry, Physics and Computer Science and
-      ultimately specialised in theoretical chemistry. Prior to that I was a student at St.
+      Sciences. During this time, I studied Mathematics, Chemistry, Physics and Computer Science
+      before ultimately specialising in theoretical chemistry. Prior to that, I was a student at St.
       Bernard's Catholic Grammar School where I learnt much and cultivated a love for the sciences
       and the classical world.
     </p>
@@ -29,19 +30,17 @@
         >equally enthusiastic about working with code and other people</em
       >. I prefer to work at <em>mission driven organisations</em> and typically try to give as much
       of myself to my work as I am healthily able to since I believe that
-      <em>a good life is one lived in service to others</em>.
-    </p>
-    <p>
-      For a fuller listing of my experience, please refer to my <Link
+      <em>a good life is one lived in service to others</em>. For a fuller listing of my experience,
+      please refer to my <Link
         href="https://www.linkedin.com/in/moyewa-odiase-6b4698106/"
         target="_blank"
         rel="noopener noreferrer">LinkedIn</Link
       >.
     </p>
     <p>
-      I am currently taking some time off from work to appreciate the world, reflect and pursue
-      personal projects and I am keen to hear about opportunities to work on AI safety and alignment
-      and applications of AI to sustainability.
+      Presently, I am taking some time off from work to appreciate the world, reflect and pursue
+      personal projects. I am keen to hear about opportunities to work on AI interpretability and
+      applications of AI to scientific discovery and sustainability.
     </p>
   </section>
 </div>
