@@ -7,10 +7,10 @@
 </script>
 
 <aside class={clsx('sidebar', className)}>
-  <div class="sidebar-content">
+  <div class="p-8 h-full flex flex-col gap-8">
     <!-- Mini Hero -->
-    <div class="mini-hero">
-      <div class="mini-hero-image">
+    <div class="flex flex-col items-center gap-4">
+      <div class="flex justify-center">
         <img
           src="/assets/images/hero.jpg"
           alt="Moyewa Odiase"
@@ -46,12 +46,24 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="sidebar-nav text-xl gap-8">
+    <nav class="flex flex-col gap-4 text-xl">
       <Link href="/" onClick={onLinkClick}>Home</Link>
       <Link href="/about" onClick={onLinkClick}>About</Link>
       <Link href="/blog" onClick={onLinkClick}>Blog</Link>
       <Link href="/gallery" onClick={onLinkClick}>Gallery</Link>
     </nav>
+
+    <!-- Footer -->
+    <div class="mt-auto pt-6 border-t border-[var(--nord2)]">
+      <div class="flex items-center justify-center gap-2 text-[var(--nord4)] text-xs opacity-70">
+        <span class="font-medium">Built using Svelte</span>
+        <img 
+          src="/assets/images/svelte.svg" 
+          alt="Svelte" 
+          class="w-4 h-4 svelte-icon"
+        />
+      </div>
+    </div>
   </div>
 </aside>
 
@@ -59,31 +71,5 @@
   .sidebar {
     background: linear-gradient(to bottom, var(--nord0) 0%, var(--nord1) 100%);
     border-right: 1px solid var(--nord2);
-  }
-
-  .sidebar-content {
-    padding: 2rem 1.5rem;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .mini-hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .mini-hero-image {
-    display: flex;
-    justify-content: center;
-  }
-
-  .sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
   }
 </style>
