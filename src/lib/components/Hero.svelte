@@ -19,21 +19,18 @@
   <div class="flex justify-center space-x-8 mt-8">
     <Link
       href="https://github.com/modiase"
-      class="text-gray-600 hover:text-gray-800 transition-colors"
       secondary
     >
       <i class="fab fa-github text-3xl"></i>
     </Link>
     <Link
       href="https://www.linkedin.com/in/moyewa-odiase-6b4698106/"
-      class="text-gray-600 hover:text-gray-800 transition-colors"
       secondary
     >
       <i class="fab fa-linkedin text-3xl"></i>
     </Link>
     <Link
       href="mailto:hello@modiase.dev"
-      class="text-gray-600 hover:text-gray-800 transition-colors"
       secondary
     >
       <i class="fas fa-envelope text-3xl"></i>

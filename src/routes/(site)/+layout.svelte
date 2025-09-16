@@ -36,7 +36,7 @@
 
   <Sidebar
     className={clsx(
-      'top-0 left-0',
+      'top-0 left-0 fixed',
       !isMobile && 'block w-[200px] h-screen',
       isMobile && isMenuOpen && 'fixed inset-0 z-40 w-screen h-screen border-r-0',
       isMobile && !isMenuOpen && 'hidden'
