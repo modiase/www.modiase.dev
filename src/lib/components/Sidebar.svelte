@@ -23,21 +23,18 @@
       <div class="flex justify-center space-x-3 mt-2">
         <Link
           href="https://github.com/modiase"
-          class="text-gray-600 hover:text-gray-800 transition-colors"
           secondary
         >
           <i class="fab fa-github text-sm"></i>
         </Link>
         <Link
           href="https://www.linkedin.com/in/moyewa-odiase-6b4698106/"
-          class="text-gray-600 hover:text-gray-800 transition-colors"
           secondary
         >
           <i class="fab fa-linkedin text-sm"></i>
         </Link>
         <Link
           href="mailto:hello@modiase.dev"
-          class="text-gray-600 hover:text-gray-800 transition-colors"
           secondary
         >
           <i class="fas fa-envelope text-sm"></i>
@@ -55,9 +52,12 @@
 
     <!-- Footer -->
     <div class="mt-auto pt-6 border-t border-[var(--nord2)]">
-      <div class="flex items-center justify-center gap-2 text-[var(--nord4)] text-xs opacity-70">
-        <span class="font-medium">Built using Svelte</span>
-        <img src="/assets/images/svelte.svg" alt="Svelte" class="w-4 h-4 svelte-icon" />
+      <div class="flex flex-col items-center justify-center gap-2 text-[var(--nord4)] text-xs text-secondary hover:drop-shadow-[0_0_8px_rgba(216,222,233,0.3)] transition-all duration-500">
+        <span class="font-medium text-center">sveltejs x tailwindcss</span>
+        <div class="flex items-center justify-center gap-2">
+          <img src="/assets/images/svelte.svg" alt="Svelte" class="w-4 h-4 svelte-icon" />
+          <img src="/assets/images/tailwind.svg" alt="Tailwind" class="w-4 h-4 tailwind-icon" />
+        </div>
       </div>
     </div>
   </div>
