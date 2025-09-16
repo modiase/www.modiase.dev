@@ -1,8 +1,19 @@
 <script lang="ts">
   import Link from '$lib/components/Link.svelte';
+  import { onMount } from 'svelte';
+  import clsx from 'clsx';
+
+  let isMobile = false;
+
+  onMount(() => {
+    const checkMobile = () => (isMobile = window.innerWidth < 500);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  });
 </script>
 
-<div class="min-h-full flex flex-col gap-8 about-container">
+<div class={clsx('min-h-full flex flex-col gap-8 about-container', !isMobile && 'ml-[200px]')}>
   <section class="section">
     <p>
       I am a software engineer, based in <em>London, UK</em>. I am a keen naturalist and
