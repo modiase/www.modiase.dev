@@ -1,8 +1,12 @@
 <script lang="ts">
   import Link from '$lib/components/Link.svelte';
+  import clsx from 'clsx';
+  import { isMobile, initMobileDetection } from '$lib/utils/mobile';
+
+  initMobileDetection();
 </script>
 
-<div class="min-h-full flex flex-col gap-8 about-container">
+<div class={clsx('min-h-full flex flex-col gap-8 about-container', !$isMobile && 'ml-[200px]')}>
   <section class="section">
     <p>
       I am a software engineer, based in <em>London, UK</em>. I am a keen naturalist and
