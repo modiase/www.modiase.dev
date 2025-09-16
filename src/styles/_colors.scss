@@ -5,6 +5,9 @@ $nord1: #3b4252;
 $nord2: #434c5e;
 $nord3: #4c566a;
 
+// Custom nord-black
+$nord-black: #1a1f2e;
+
 // Snow Storm for light backgrounds (nord4–nord6)
 $nord4: #d8dee9;
 $nord5: #e5e9f0;
@@ -23,6 +26,7 @@ $text-contrast: #88c0d0;
   --nord4: #{$nord4};
   --nord5: #{$nord5};
   --nord6: #{$nord6};
+  --nord-black: #{$nord-black};
   --error-light: #{$error-light};
   --error-mid: #{$error-mid};
   --error-dark: #{$error-dark};
