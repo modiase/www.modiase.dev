@@ -46,7 +46,7 @@
       <p class="text-lg text-secondary">Loading posts...</p>
     </div>
   {:else}
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-full sm:max-w-[1200px] mx-auto">
       <!-- Posts List -->
       <div class="space-y-6 mb-8">
         {#each posts as post}

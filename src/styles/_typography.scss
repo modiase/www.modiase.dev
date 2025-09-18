@@ -6,8 +6,8 @@
 @include font-face('Lato', '/assets/fonts/Lato-BoldItalic.ttf', bold, italic);
 @include font-face('Lato', '/assets/fonts/Lato-Light.ttf', lighter);
 @include font-face('Lato', '/assets/fonts/Lato-LightItalic.ttf', lighter, italic);
-@include font-face('Lato', '/assets/fonts/Lato-ExtraBold.ttf', bolder);
-@include font-face('Lato', '/assets/fonts/Lato-ExtraBoldItalic.ttf', bolder, italic);
+@include font-face('Lato', '/assets/fonts/Lato-Black.ttf', 900);
+@include font-face('Lato', '/assets/fonts/Lato-BlackItalic.ttf', 900, italic);
 
 @include font-face('Space Grotesk', '/assets/fonts/SpaceGrotesk-Regular.ttf');
 @include font-face('Space Grotesk', '/assets/fonts/SpaceGrotesk-Italic.ttf', normal, italic);
