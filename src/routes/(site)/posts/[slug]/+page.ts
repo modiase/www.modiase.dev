@@ -1,22 +1,14 @@
 import { error } from '@sveltejs/kit';
 import type { PageLoad, EntryGenerator } from './$types';
+import type { Post } from '$lib/types';
 
 export const prerender = true;
-
-interface Post {
-  id: string;
-  title: string;
-  date: string;
-  lead: string;
-  content: Array<{ tag: string; content: string; classes?: string; language?: string }>;
-  tags: string[];
-}
 
 export const load: PageLoad = async ({ params, fetch }) => {
   try {
     const response = await fetch('/posts.json');
     const posts: Post[] = await response.json();
-    const post = posts.find((p) => p.id === params.id);
+    const post = posts.find((p) => p.slug === params.slug);
 
     if (!post) {
       throw error(404, 'Post not found');
@@ -37,12 +29,12 @@ export const entries: EntryGenerator = async ({
   fetch,
 }: { fetch?: typeof globalThis.fetch } = {}) => {
   if (!fetch) {
-    return [{ id: '01K5E3T0H913588MW7P3ZTYN85' }];
+    return [{ slug: 'feeling-machines' }];
   }
 
   const response = await fetch('/posts.json');
   const posts: Post[] = await response.json();
   return posts.map((post) => ({
-    id: post.id,
+    slug: post.slug,
   }));
 };
