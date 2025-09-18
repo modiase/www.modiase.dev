@@ -12,7 +12,7 @@
   )}
 >
   <div>
-    <h1 class="text-4xl font-bold mb-4 text-contrast">Gallery</h1>
-    <p class="text-lg text-contrast">Coming soon...</p>
+    <h1 class="text-4xl font-bold mb-4 text-nord0">Gallery</h1>
+    <p class="text-lg text-nord0">Coming soon...</p>
   </div>
 </div>
