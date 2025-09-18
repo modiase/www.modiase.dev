@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { format } from 'date-fns';
+  import { enGB } from 'date-fns/locale';
   import Card from '$lib/components/common/Card.svelte';
   import type { Post } from '$lib/types';
 
@@ -59,7 +60,7 @@
             </h2>
             <p class="mb-3">{post.lead}</p>
             <div class="flex justify-between items-center text-sm">
-              <time>{format(new Date(post.date), 'MMMM d, yyyy')}</time>
+              <time>{format(new Date(post.date), 'd MMMM yyyy', { locale: enGB })}</time>
               <div class="flex gap-2">
                 {#each post.tags as tag}
                   <span class="px-2 py-1 rounded text-xs">{tag}</span>

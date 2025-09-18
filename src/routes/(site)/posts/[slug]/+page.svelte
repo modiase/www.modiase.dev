@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { format } from 'date-fns';
+  import { enGB } from 'date-fns/locale';
   import Code from '$lib/components/common/Code.svelte';
   import MarkdownArticle from '$lib/components/common/MarkdownArticle.svelte';
   import type { Post } from '$lib/types';
@@ -43,7 +44,7 @@
       <h1 class="text-4xl font-bold mb-4">{post.title}</h1>
       <p class="text-md mb-4">{post.lead}</p>
       <div class="flex justify-between items-center text-sm mb-6">
-        <time>{format(new Date(post.date), 'MMMM d, yyyy')}</time>
+        <time>{format(new Date(post.date), 'd MMMM yyyy', { locale: enGB })}</time>
         <div class="flex gap-2">
           {#each post.tags as tag}
             <span class="px-2 py-1 rounded text-xs">{tag}</span>
