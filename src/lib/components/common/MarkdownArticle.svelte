@@ -2,8 +2,8 @@
   import { marked } from 'marked';
   import clsx from 'clsx';
   import { onMount } from 'svelte';
-  import Link from '$lib/components/Link.svelte';
   import Card from '$lib/components/common/Card.svelte';
+  import { slugify } from '$lib/utils/slugify';
 
   marked.setOptions({
     breaks: true,
@@ -41,58 +41,90 @@
   let container: HTMLDivElement;
   let progress = 0;
   let headings: HTMLElement[] = [];
-  let tocItems: Array<{ id: string; text: string; level: number }> = [];
+  let tocItems: Array<{ id: string; text: string; level: number; scrollPosition: number }> = [];
   let showToc = false;
   let activeHeadingId = '';
   let firstParagraph: HTMLElement | null = null;
+  let introductionHeading: HTMLElement | null = null;
 
   $: html = marked(content) as string;
 
+  const createIntroductionHeading = (firstParagraph: HTMLElement) => {
+    const heading = document.createElement('h2');
+    heading.textContent = 'Introduction';
+    heading.id = 'introduction';
+    heading.style.position = 'absolute';
+    heading.style.visibility = 'hidden';
+    heading.style.height = '0';
+    heading.style.margin = '0';
+    heading.style.padding = '0';
+    firstParagraph.parentNode?.insertBefore(heading, firstParagraph);
+    return heading;
+  };
+
+  $: if (activeHeadingId && typeof window !== 'undefined') {
+    const url = new URL(window.location.href);
+    url.hash = activeHeadingId;
+    window.location.href !== url.href && window.history.replaceState(null, '', url.href);
+  }
+
   onMount(() => {
-    const updateProgress = () => {
+    const getScrollProgress = () => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-      progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-
-      const referencePoint = scrollTop;
-      const firstHeading = headings[0];
-      const firstP = firstParagraph;
-
-      if (firstHeading && firstP) {
-        const headingDistance = Math.abs(firstHeading.offsetTop - referencePoint);
-        const paragraphDistance = Math.abs(firstP.offsetTop - referencePoint);
-        showToc = headingDistance < paragraphDistance;
-      } else {
-        showToc = progress > 0;
-      }
+      return document.documentElement.scrollHeight - window.innerHeight > 0
+        ? (scrollTop / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+        : 0;
     };
 
-    const updateActiveHeading = () => {
+    const getActiveHeadingId = (scrollTop: number) => {
+      if (tocItems.length === 0) return '';
+
+      const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+      return (
+        tocItems[
+          Math.min(
+            Math.max(Math.floor((scrollTop / documentHeight) * tocItems.length), 0),
+            tocItems.length - 1
+          )
+        ]?.id || ''
+      );
+    };
+
+    const shouldShowToc = (scrollTop: number) => {
+      if (headings.length === 0) return false;
+
+      return headings[0] && firstParagraph
+        ? Math.abs(headings[0].offsetTop - scrollTop) <=
+            Math.abs(firstParagraph.offsetTop - scrollTop)
+        : getScrollProgress() > 0;
+    };
+
+    const updateScrollState = () => {
       if (headings.length === 0) return;
 
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const referencePoint = scrollTop;
-
-      const closestHeading = headings.reduce((closest, heading) => {
-        const currentDistance = Math.abs(heading.offsetTop - referencePoint);
-        const closestDistance = Math.abs(closest.offsetTop - referencePoint);
-        return currentDistance < closestDistance ? heading : closest;
-      });
-
-      activeHeadingId = closestHeading.id;
+      progress = getScrollProgress();
+      activeHeadingId = getActiveHeadingId(scrollTop);
+      showToc = shouldShowToc(scrollTop);
     };
 
-    const handleScroll = () => {
-      updateProgress();
-      updateActiveHeading();
-    };
+    window.addEventListener('scroll', updateScrollState);
+    updateScrollState();
 
-    window.addEventListener('scroll', handleScroll);
-    updateProgress();
-    updateActiveHeading();
+    const timeoutId = setTimeout(() => {
+      const hash = new URL(window.location.href).hash.slice(1);
+      if (hash && tocItems.length > 0) {
+        const targetItem = tocItems.find((item) => item.id === hash);
+        targetItem &&
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: targetItem.scrollPosition, behavior: 'smooth' });
+          });
+      }
+    }, 50);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', updateScrollState);
+      clearTimeout(timeoutId);
     };
   });
 
@@ -100,28 +132,42 @@
     headings = Array.from(container.querySelectorAll('h1, h2, h3, h4, h5, h6'));
     firstParagraph = container.querySelector('p');
 
+    if (
+      firstParagraph &&
+      container.firstElementChild &&
+      container.firstElementChild !== headings[0] &&
+      !introductionHeading
+    ) {
+      introductionHeading = createIntroductionHeading(firstParagraph);
+    }
+
+    headings = Array.from(container.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+
+    const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+
     tocItems = headings.map((heading, index) => {
-      const id = `heading-${index}`;
-      heading.id = id;
+      const text = heading.textContent || '';
+      if (!heading.id) {
+        heading.id = slugify(text);
+      }
+
       return {
-        id,
-        text: heading.textContent || '',
+        id: heading.id,
+        text,
         level: parseInt(heading.tagName.charAt(1)),
+        scrollPosition: (index / (headings.length - 1)) * documentHeight,
       };
     });
   }
 </script>
 
 <div class="relative">
-  <!-- Progress indicator -->
   <div class="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
     <div
       class="h-full bg-blue-500 transition-all duration-300 ease-out"
       style="width: {progress}%"
     ></div>
   </div>
-
-  <!-- Floating Table of Contents -->
   {#if tocItems.length > 0}
     <Card
       className={clsx(
@@ -136,20 +182,20 @@
       </h3>
       <nav class="space-y-1 flex flex-col gap-2">
         {#each tocItems as item}
-          <Link
-            href="#{item.id}"
-            className={activeHeadingId === item.id
-              ? 'text-contrast font-semibold'
-              : 'text-secondary'}
+          <button
+            on:click={() => window.scrollTo({ top: item.scrollPosition, behavior: 'smooth' })}
+            class={clsx(
+              'text-left cursor-pointer hover:text-contrast transition-colors',
+              activeHeadingId === item.id ? 'text-contrast font-semibold' : 'text-secondary'
+            )}
           >
             {item.text}
-          </Link>
+          </button>
         {/each}
       </nav>
     </Card>
   {/if}
 
-  <!-- Content -->
   <div
     bind:this={container}
     class={clsx(
