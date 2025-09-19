@@ -44,6 +44,7 @@
   let tocItems: Array<{ id: string; text: string; level: number }> = [];
   let showToc = false;
   let activeHeadingId = '';
+  let firstParagraph: HTMLElement | null = null;
 
   $: html = marked(content) as string;
 
@@ -51,9 +52,19 @@
     const updateProgress = () => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-
       progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-      showToc = progress > 10;
+
+      const referencePoint = scrollTop;
+      const firstHeading = headings[0];
+      const firstP = firstParagraph;
+
+      if (firstHeading && firstP) {
+        const headingDistance = Math.abs(firstHeading.offsetTop - referencePoint);
+        const paragraphDistance = Math.abs(firstP.offsetTop - referencePoint);
+        showToc = headingDistance < paragraphDistance;
+      } else {
+        showToc = progress > 0;
+      }
     };
 
     const updateActiveHeading = () => {
@@ -87,6 +98,7 @@
 
   $: if (container) {
     headings = Array.from(container.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+    firstParagraph = container.querySelector('p');
 
     tocItems = headings.map((heading, index) => {
       const id = `heading-${index}`;
