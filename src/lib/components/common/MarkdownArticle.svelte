@@ -43,6 +43,7 @@
   let headings: HTMLElement[] = [];
   let tocItems: Array<{ id: string; text: string; level: number }> = [];
   let showToc = false;
+  let activeHeadingId = '';
 
   $: html = marked(content) as string;
 
@@ -55,12 +56,29 @@
       showToc = progress > 10;
     };
 
+    const updateActiveHeading = () => {
+      if (headings.length === 0) return;
+
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const referencePoint = scrollTop;
+
+      const closestHeading = headings.reduce((closest, heading) => {
+        const currentDistance = Math.abs(heading.offsetTop - referencePoint);
+        const closestDistance = Math.abs(closest.offsetTop - referencePoint);
+        return currentDistance < closestDistance ? heading : closest;
+      });
+
+      activeHeadingId = closestHeading.id;
+    };
+
     const handleScroll = () => {
       updateProgress();
+      updateActiveHeading();
     };
 
     window.addEventListener('scroll', handleScroll);
     updateProgress();
+    updateActiveHeading();
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -95,7 +113,7 @@
   {#if tocItems.length > 0}
     <Card
       className={clsx(
-        'hidden md:block fixed right-[12px] top-[12px] w-80 z-40 p-4',
+        'hidden md:block fixed right-[12px] top-[12px] w-60 z-40 p-4 text-md',
         'bg-[var(--nord-black)]',
         'transition-all duration-500 ease-in-out',
         showToc ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'
@@ -106,7 +124,12 @@
       </h3>
       <nav class="space-y-1 flex flex-col gap-2">
         {#each tocItems as item}
-          <Link href="#{item.id}">
+          <Link
+            href="#{item.id}"
+            className={activeHeadingId === item.id
+              ? 'text-contrast font-semibold'
+              : 'text-secondary'}
+          >
             {item.text}
           </Link>
         {/each}
