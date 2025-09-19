@@ -38,7 +38,7 @@
     onLinkClick={closeMenu}
   />
 
-  <div class={clsx('flex-1 flex flex-col')}>
+  <div class={clsx('flex-1 flex flex-col', !$isMobile && 'ml-[200px]')}>
     {#key $page.url.pathname}
       <main class="flex-1 pt-16 px-8" in:fade={{ duration: 300 }}>
         <slot />

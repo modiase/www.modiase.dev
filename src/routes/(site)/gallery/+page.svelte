@@ -1,16 +1,7 @@
 <script lang="ts">
-  import clsx from 'clsx';
-  import { isMobile, initMobileDetection } from '$lib/utils/mobile';
-
-  initMobileDetection();
 </script>
 
-<div
-  class={clsx(
-    'flex items-center justify-center min-h-full text-center bg-[var(--nord4)]',
-    !$isMobile && 'ml-[200px]'
-  )}
->
+<div class="flex items-center justify-center min-h-full text-center bg-[var(--nord4)]">
   <div>
     <h1 class="text-4xl font-bold mb-4 text-nord0">Gallery</h1>
     <p class="text-lg text-nord0">Coming soon...</p>
