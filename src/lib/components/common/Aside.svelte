@@ -29,14 +29,21 @@
 
     if (isTocBreakpoint) {
       const placeholderRect = placeholderElement.getBoundingClientRect();
+      const container = placeholderElement.closest('.prose');
+      const containerRect = container?.getBoundingClientRect();
 
-      Object.assign(asideElement.style, {
-        position: 'absolute',
-        left: `${placeholderRect.right + 400}px`,
-        top: `${placeholderRect.top}px`,
-        width: '270px',
-        zIndex: '10',
-      });
+      if (containerRect) {
+        const relativeTop = placeholderRect.top - containerRect.top;
+        const relativeLeft = placeholderRect.right - containerRect.left + 920;
+
+        Object.assign(asideElement.style, {
+          position: 'absolute',
+          left: `${relativeLeft}px`,
+          top: `${relativeTop}px`,
+          width: '270px',
+          zIndex: '10',
+        });
+      }
     } else {
       Object.assign(asideElement.style, {
         position: '',

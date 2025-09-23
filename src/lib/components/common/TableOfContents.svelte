@@ -49,7 +49,7 @@
 {#if headings.length > 0 && isTocBreakpoint}
   <Card
     className={clsx(
-      'fixed left-[212px] top-[12px] w-60 z-40 p-3 text-sm',
+      'fixed left-[220px] top-[12px] w-60 z-40 p-2 text-sm',
       'bg-[var(--nord-black)]',
       'transition-all duration-500 ease-in-out',
       showToc ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full',
@@ -70,7 +70,7 @@
             'border-l-2 rounded-r-sm',
             'text-xs w-full',
             activeHeadingId === heading.id
-              ? 'text-contrast font-semibold border-contrast'
+              ? 'text-contrast border-contrast'
               : 'text-secondary border-transparent hover:border-secondary'
           )}
           style="padding-left: {indentLevel * 12 +
