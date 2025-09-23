@@ -18,7 +18,7 @@
     try {
       const highlighter = await createHighlighter({
         themes: ['nord'],
-        langs: ['python', 'javascript', 'typescript', 'html', 'css', 'json', 'bash', 'sql'],
+        langs: ['python', 'javascript', 'typescript', 'html', 'css', 'json', 'bash', 'sql', 'go'],
       });
 
       highlightedHtml = highlighter.codeToHtml(content, {

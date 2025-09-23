@@ -3,6 +3,7 @@
 @use './colors' as *;
 @use './mixins' as *;
 @use './typography';
+@use './breakpoints';
 
 @tailwind base;
 @tailwind components;

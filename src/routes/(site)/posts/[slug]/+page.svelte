@@ -2,7 +2,6 @@
   import { goto } from '$app/navigation';
   import { format } from 'date-fns';
   import { enGB } from 'date-fns/locale';
-  import Code from '$lib/components/common/Code.svelte';
   import MarkdownArticle from '$lib/components/common/MarkdownArticle.svelte';
   import type { Post } from '$lib/types';
 
@@ -13,20 +12,6 @@
   export let data: PageData;
 
   const { post } = data;
-
-  function renderContent(content: Post['content']) {
-    return content.map(
-      (item: { tag: string; content: string; classes?: string; language?: string }) => {
-        const { tag, content: text, classes = '', language } = item;
-
-        if (tag === 'markdown') {
-          return { tag: 'markdown', text, classes, language, isMarkdown: true };
-        }
-
-        return { tag, text, classes, language, isMarkdown: false };
-      }
-    );
-  }
 </script>
 
 {#if post}
@@ -56,17 +41,7 @@
 
     <!-- Post content -->
     <article>
-      {#each renderContent(post.content) as item}
-        {#if item.tag === 'code'}
-          <Code content={item.text} language={item.language} />
-        {:else if item.isMarkdown}
-          <MarkdownArticle content={item.text} className={item.classes} />
-        {:else}
-          <svelte:element this={item.tag} class={item.classes}>
-            {item.text}
-          </svelte:element>
-        {/if}
-      {/each}
+      <MarkdownArticle content={post.content} />
     </article>
   </div>
 {/if}

@@ -2,14 +2,10 @@
   import { marked } from 'marked';
   import clsx from 'clsx';
   import { onMount } from 'svelte';
-  import Card from '$lib/components/common/Card.svelte';
+  import Code from '$lib/components/common/Code.svelte';
+  import Aside from '$lib/components/common/Aside.svelte';
+  import TableOfContents from '$lib/components/common/TableOfContents.svelte';
   import { slugify } from '$lib/utils/slugify';
-
-  marked.setOptions({
-    breaks: true,
-    gfm: true,
-    renderer: new marked.Renderer(),
-  });
 
   const renderer = new marked.Renderer();
   renderer.link = function ({ href, title, tokens }) {
@@ -17,9 +13,15 @@
     const isExternal =
       href.startsWith('http') &&
       (typeof window === 'undefined' || !href.includes(window.location.hostname));
-    const target = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
-    const titleAttr = title ? ` title="${title}"` : '';
-    return `<a href="${href}"${target}${titleAttr}>${text}</a>`;
+    return `<a href="${href}"${isExternal ? ' target="_blank" rel="noopener noreferrer"' : ''}${title ? ` title="${title}"` : ''}>${text}</a>`;
+  };
+
+  renderer.em = function ({ tokens }) {
+    const text = tokens.map((token) => token.raw).join('');
+    if (text.match(/^(Aside|Note|Tip|Warning|Important):/i)) {
+      return `<aside class="aside-content">${text}</aside>`;
+    }
+    return `<em>${text}</em>`;
   };
 
   marked.setOptions({
@@ -28,36 +30,52 @@
     renderer: renderer,
   });
 
-  interface Props {
+  interface ContentItem {
+    tag: string;
     content: string;
+    language?: string;
+  }
+
+  interface Props {
+    content: string | ContentItem[];
     className?: string;
     [key: string]: any;
   }
 
-  export let content: string;
+  export let content: string | ContentItem[];
   export let className: string = '';
   export let rest: Record<string, any> = {};
 
   let container: HTMLDivElement;
   let progress = 0;
   let headings: HTMLElement[] = [];
-  let tocItems: Array<{ id: string; text: string; level: number; scrollPosition: number }> = [];
+  let tocItems: Array<{
+    id: string;
+    text: string;
+    level: number;
+    scrollPosition: number;
+    contentItemIndex: number;
+    headingIndex: number;
+  }> = [];
   let showToc = false;
   let activeHeadingId = '';
   let firstParagraph: HTMLElement | null = null;
   let introductionHeading: HTMLElement | null = null;
 
-  $: html = marked(content) as string;
+  $: html = typeof content === 'string' ? (marked(content) as string) : '';
+  $: contentItems = Array.isArray(content) ? content : [];
 
   const createIntroductionHeading = (firstParagraph: HTMLElement) => {
     const heading = document.createElement('h2');
     heading.textContent = 'Introduction';
     heading.id = 'introduction';
-    heading.style.position = 'absolute';
-    heading.style.visibility = 'hidden';
-    heading.style.height = '0';
-    heading.style.margin = '0';
-    heading.style.padding = '0';
+    Object.assign(heading.style, {
+      position: 'absolute',
+      visibility: 'hidden',
+      height: '0',
+      margin: '0',
+      padding: '0',
+    });
     firstParagraph.parentNode?.insertBefore(heading, firstParagraph);
     return heading;
   };
@@ -128,8 +146,47 @@
     };
   });
 
+  function extractHeadingsFromContent() {
+    const extractedHeadings: Array<{
+      id: string;
+      text: string;
+      level: number;
+      scrollPosition: number;
+      contentItemIndex: number;
+      headingIndex: number;
+    }> = [];
+
+    if (Array.isArray(content)) {
+      content.forEach((item, contentIndex) => {
+        if (item.tag === 'markdown') {
+          const html = marked(item.content) as string;
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = html;
+          const headingElements = tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+          headingElements.forEach((heading, headingIndex) => {
+            const text = heading.textContent || '';
+            extractedHeadings.push({
+              id: slugify(text),
+              text,
+              level: parseInt(heading.tagName.charAt(1)),
+              scrollPosition: 0,
+              contentItemIndex: contentIndex,
+              headingIndex: headingIndex,
+            });
+          });
+        }
+      });
+    }
+
+    return extractedHeadings;
+  }
+
   $: if (container) {
-    headings = Array.from(container.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+    const domHeadings = Array.from(container.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+    const contentHeadings = extractHeadingsFromContent();
+
+    headings = domHeadings.length > 0 ? (domHeadings as HTMLElement[]) : [];
     firstParagraph = container.querySelector('p');
 
     if (
@@ -142,7 +199,6 @@
     }
 
     headings = Array.from(container.querySelectorAll('h1, h2, h3, h4, h5, h6'));
-
     const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
 
     tocItems = headings.map((heading, index) => {
@@ -151,11 +207,15 @@
         heading.id = slugify(text);
       }
 
+      const contentHeading = contentHeadings.find((ch) => ch.id === heading.id);
+
       return {
         id: heading.id,
         text,
         level: parseInt(heading.tagName.charAt(1)),
-        scrollPosition: (index / (headings.length - 1)) * documentHeight,
+        scrollPosition: headings.length > 1 ? (index / (headings.length - 1)) * documentHeight : 0,
+        contentItemIndex: contentHeading?.contentItemIndex ?? -1,
+        headingIndex: contentHeading?.headingIndex ?? -1,
       };
     });
   }
@@ -168,43 +228,30 @@
       style="width: {progress}%"
     ></div>
   </div>
-  {#if tocItems.length > 0}
-    <Card
-      className={clsx(
-        'hidden md:block fixed right-[12px] top-[12px] w-60 z-40 p-4 text-md',
-        'bg-[var(--nord-black)]',
-        'transition-all duration-500 ease-in-out',
-        showToc ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'
-      )}
-    >
-      <h3 class="text-sm font-semibold mb-3" style="color: var(--text-secondary);">
-        Table of Contents
-      </h3>
-      <nav class="space-y-1 flex flex-col gap-2">
-        {#each tocItems as item}
-          <button
-            on:click={() => window.scrollTo({ top: item.scrollPosition, behavior: 'smooth' })}
-            class={clsx(
-              'text-left cursor-pointer hover:text-contrast transition-colors',
-              activeHeadingId === item.id ? 'text-contrast font-semibold' : 'text-secondary'
-            )}
-          >
-            {item.text}
-          </button>
-        {/each}
-      </nav>
-    </Card>
-  {/if}
+  <TableOfContents headings={tocItems} {showToc} {activeHeadingId} />
 
   <div
     bind:this={container}
     class={clsx(
       'prose prose-lg max-w-none text-justify',
       '[&>p]:mb-6 [&>h2]:mt-8 [&>h2]:mb-4 [&>h2]:text-xl [&>h2]:font-bold [&_a]:text-contrast [&_a:hover]:text-secondary',
+      '[&_.aside-content]:hidden',
       className
     )}
     {...rest}
   >
-    {@html html}
+    {#if typeof content === 'string'}
+      {@html html}
+    {:else}
+      {#each contentItems as item}
+        {#if item.tag === 'markdown'}
+          {@html marked(item.content)}
+        {:else if item.tag === 'code'}
+          <Code content={item.content} language={item.language || 'text'} />
+        {:else if item.tag === 'aside'}
+          <Aside content={item.content} />
+        {/if}
+      {/each}
+    {/if}
   </div>
 </div>
