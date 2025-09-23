@@ -1,7 +1,6 @@
 <script lang="ts">
   import clsx from 'clsx';
   import { onMount } from 'svelte';
-  import { BREAKPOINTS } from '$lib/constants/breakpoints';
 
   export let content: string;
   export let className: string = '';
@@ -9,75 +8,57 @@
 
   let asideElement: HTMLElement;
   let placeholderElement: HTMLElement;
-  let isTocBreakpoint = true;
-
-  onMount(() => {
-    const checkBreakpoint = () => {
-      isTocBreakpoint = window.innerWidth >= BREAKPOINTS['2xl'];
-    };
-
-    checkBreakpoint();
-    window.addEventListener('resize', checkBreakpoint);
-
-    return () => {
-      window.removeEventListener('resize', checkBreakpoint);
-    };
-  });
 
   const positionAside = () => {
     if (!asideElement || !placeholderElement) return;
 
-    if (isTocBreakpoint) {
-      const placeholderRect = placeholderElement.getBoundingClientRect();
-      const container = placeholderElement.closest('.prose');
-      const containerRect = container?.getBoundingClientRect();
+    const placeholderRect = placeholderElement.getBoundingClientRect();
+    const container = placeholderElement.closest('.prose');
+    const containerRect = container?.getBoundingClientRect();
 
-      if (containerRect) {
-        const relativeTop = placeholderRect.top - containerRect.top;
-        const relativeLeft = placeholderRect.right - containerRect.left + 920;
+    if (containerRect) {
+      const relativeTop = placeholderRect.top - containerRect.top;
+      const relativeLeft = placeholderRect.right - containerRect.left + 920;
 
-        Object.assign(asideElement.style, {
-          position: 'absolute',
-          left: `${relativeLeft}px`,
-          top: `${relativeTop}px`,
-          width: '270px',
-          zIndex: '10',
-        });
-      }
-    } else {
       Object.assign(asideElement.style, {
-        position: '',
-        left: '',
-        top: '',
-        width: '',
-        zIndex: '',
+        position: 'absolute',
+        left: `${relativeLeft}px`,
+        top: `${relativeTop}px`,
+        width: '270px',
+        zIndex: '10',
       });
     }
   };
 
-  $: if (asideElement && placeholderElement && isTocBreakpoint !== undefined) {
+  $: if (asideElement && placeholderElement) {
     requestAnimationFrame(positionAside);
   }
 </script>
 
-{#if isTocBreakpoint}
-  <!-- Invisible placeholder that stays in document flow -->
-  <div bind:this={placeholderElement} class="invisible w-0 h-0" aria-hidden="true"></div>
+<!-- Invisible placeholder that stays in document flow (only on 2xl+) -->
+<div
+  bind:this={placeholderElement}
+  class="hidden 2xl:block invisible w-0 h-0"
+  aria-hidden="true"
+></div>
 
-  <!-- Floating aside positioned relative to placeholder -->
-  <aside bind:this={asideElement} class={clsx('not-prose absolute z-10', className)} {...rest}>
-    <div class="p-4 text-sm text-[var(--text-secondary)] italic">
-      {content}
-    </div>
-  </aside>
-{:else}
-  <!-- Inline aside for mobile -->
-  <aside bind:this={asideElement} class={clsx('not-prose my-4', className)} {...rest}>
-    <div class="p-4 text-sm text-[var(--text-secondary)] italic">
-      {content}
-    </div>
-  </aside>
-{/if}
+<!-- Floating aside positioned relative to placeholder (only on 2xl+) -->
+<aside
+  bind:this={asideElement}
+  class={clsx('hidden 2xl:block not-prose absolute z-10', className)}
+  {...rest}
+>
+  <div class="p-4 text-sm text-[var(--text-secondary)] italic">
+    {content}
+  </div>
+</aside>
+
+<!-- Inline aside for mobile (below 2xl) -->
+<aside class={clsx('2xl:hidden not-prose my-4 w-full', className)} {...rest}>
+  <div class="p-4 text-sm text-[var(--text-secondary)] italic">
+    {content}
+  </div>
+</aside>
 
 <style>
   :global(.prose) {

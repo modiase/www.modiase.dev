@@ -2,7 +2,6 @@
   import Card from '$lib/components/common/Card.svelte';
   import clsx from 'clsx';
   import { onMount } from 'svelte';
-  import { BREAKPOINTS } from '$lib/constants/breakpoints';
 
   export let headings: Array<{
     id: string;
@@ -15,21 +14,6 @@
   export let showToc: boolean = false;
   export let activeHeadingId: string = '';
   export let className: string = '';
-
-  let isTocBreakpoint = true;
-
-  onMount(() => {
-    const checkBreakpoint = () => {
-      isTocBreakpoint = window.innerWidth >= BREAKPOINTS['2xl'];
-    };
-
-    checkBreakpoint();
-    window.addEventListener('resize', checkBreakpoint);
-
-    return () => {
-      window.removeEventListener('resize', checkBreakpoint);
-    };
-  });
 
   onMount(() => {
     if (activeHeadingId && typeof window !== 'undefined') {
@@ -46,13 +30,13 @@
   }
 </script>
 
-{#if headings.length > 0 && isTocBreakpoint}
+{#if headings.length > 0}
   <Card
     className={clsx(
-      'fixed left-[220px] top-[12px] w-60 z-40 p-2 text-sm',
+      'hidden 2xl:block fixed left-[220px] top-[12px] w-60 z-40 p-2 text-sm',
       'bg-[var(--nord-black)]',
       'transition-all duration-500 ease-in-out',
-      showToc ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full',
+      !showToc && 'hidden',
       className
     )}
   >
