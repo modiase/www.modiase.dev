@@ -8,6 +8,7 @@
   export let rest: Record<string, any> = {};
 
   let asideElement: HTMLElement;
+  let placeholderElement: HTMLElement;
   let isTocBreakpoint = true;
 
   onMount(() => {
@@ -24,22 +25,15 @@
   });
 
   const positionAside = () => {
-    if (!asideElement) return;
+    if (!asideElement || !placeholderElement) return;
 
     if (isTocBreakpoint) {
-      const referenceElement = asideElement.previousElementSibling as HTMLElement;
-      if (!referenceElement) return;
-
-      const container = asideElement.closest('.prose') as HTMLElement;
-      if (!container) return;
-
-      const containerRect = container.getBoundingClientRect();
-      const referenceRect = referenceElement.getBoundingClientRect();
+      const placeholderRect = placeholderElement.getBoundingClientRect();
 
       Object.assign(asideElement.style, {
-        position: 'fixed',
-        left: `${containerRect.right + 20}px`,
-        top: `${referenceRect.top}px`,
+        position: 'absolute',
+        left: `${placeholderRect.right + 400}px`,
+        top: `${placeholderRect.top}px`,
         width: '270px',
         zIndex: '10',
       });
@@ -54,20 +48,29 @@
     }
   };
 
-  $: if (asideElement) {
+  $: if (asideElement && placeholderElement && isTocBreakpoint !== undefined) {
     requestAnimationFrame(positionAside);
   }
 </script>
 
-<aside
-  bind:this={asideElement}
-  class={clsx('not-prose', isTocBreakpoint ? 'absolute z-10' : 'my-4', className)}
-  {...rest}
->
-  <div class="p-4 text-sm text-[var(--text-secondary)] italic">
-    {content}
-  </div>
-</aside>
+{#if isTocBreakpoint}
+  <!-- Invisible placeholder that stays in document flow -->
+  <div bind:this={placeholderElement} class="invisible w-0 h-0" aria-hidden="true"></div>
+
+  <!-- Floating aside positioned relative to placeholder -->
+  <aside bind:this={asideElement} class={clsx('not-prose absolute z-10', className)} {...rest}>
+    <div class="p-4 text-sm text-[var(--text-secondary)] italic">
+      {content}
+    </div>
+  </aside>
+{:else}
+  <!-- Inline aside for mobile -->
+  <aside bind:this={asideElement} class={clsx('not-prose my-4', className)} {...rest}>
+    <div class="p-4 text-sm text-[var(--text-secondary)] italic">
+      {content}
+    </div>
+  </aside>
+{/if}
 
 <style>
   :global(.prose) {
