@@ -58,7 +58,7 @@
 </script>
 
 {#if isLoading}
-  <div class={clsx('bg-[var(--nord0)] rounded-lg overflow-hidden my-6', className)} {...rest}>
+  <div class={clsx('bg-[var(--nord0)] rounded-lg overflow-hidden my-6 w-full', className)} {...rest}>
     {#if showHeader}
       <div class="bg-[var(--nord2)] px-4 py-2 flex items-center justify-between">
         <span class="text-[var(--nord4)] text-sm font-medium">{language}</span>
@@ -85,7 +85,7 @@
     </div>
   </div>
 {:else}
-  <div class={clsx('not-prose my-6', className)} {...rest}>
+  <div class={clsx('not-prose my-6 w-full', className)} {...rest}>
     <div class="bg-[var(--nord0)] rounded-lg overflow-hidden">
       {#if showHeader}
         <div class="bg-[var(--nord2)] px-4 py-2 flex items-center justify-between">
@@ -118,15 +118,19 @@
     margin: 0 !important;
     padding: 1.5rem !important;
     overflow-x: auto;
+    width: 100%;
   }
 
   :global(.shiki pre) {
     background-color: transparent !important;
     margin: 0 !important;
     padding: 0 !important;
+    overflow-x: auto;
+    white-space: pre;
   }
 
   :global(.shiki code) {
     background-color: transparent !important;
+    font-size: 0.875rem;
   }
 </style>
