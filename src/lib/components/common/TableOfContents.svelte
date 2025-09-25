@@ -36,9 +36,10 @@
       'fixed left-[220px] top-[12px] w-60 z-40 p-2 text-sm',
       'bg-[var(--nord-black)]',
       'transition-all duration-500 ease-in-out',
+      'hidden 2xl:block',
       {
-        'hidden 2xl:block': showToc,
-        hidden: !showToc,
+        'opacity-100 translate-x-0': showToc,
+        'opacity-0 -translate-x-4': !showToc,
       },
       className
     )}
