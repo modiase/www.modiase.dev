@@ -6,6 +6,7 @@
   import Aside from '$lib/components/common/Aside.svelte';
   import TableOfContents from '$lib/components/common/TableOfContents.svelte';
   import { slugify } from '$lib/utils/slugify';
+  import type { ContentBlock } from '$lib/types';
 
   const renderer = new marked.Renderer();
   renderer.link = function ({ href, title, tokens }) {
@@ -30,20 +31,14 @@
     renderer: renderer,
   });
 
-  interface ContentItem {
-    tag: string;
-    content: string;
-    language?: string;
-  }
-
   interface Props {
-    content: string | ContentItem[];
+    content: string | ContentBlock[];
     className?: string;
     title?: string;
     [key: string]: any;
   }
 
-  export let content: string | ContentItem[];
+  export let content: string | ContentBlock[];
   export let className: string = '';
   export let title: string = '';
   export let rest: Record<string, any> = {};
