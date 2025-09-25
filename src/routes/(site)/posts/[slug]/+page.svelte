@@ -14,6 +14,10 @@
   const { post } = data;
 </script>
 
+<svelte:head>
+  <meta name="description" content={post.lead} />
+</svelte:head>
+
 {#if post}
   <div class="max-w-4xl mx-auto">
     <!-- Back button -->
@@ -41,7 +45,7 @@
 
     <!-- Post content -->
     <article>
-      <MarkdownArticle content={post.content} />
+      <MarkdownArticle content={post.content} title={post.title} />
     </article>
   </div>
 {/if}

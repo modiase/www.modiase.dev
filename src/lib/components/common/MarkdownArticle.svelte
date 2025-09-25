@@ -39,11 +39,13 @@
   interface Props {
     content: string | ContentItem[];
     className?: string;
+    title?: string;
     [key: string]: any;
   }
 
   export let content: string | ContentItem[];
   export let className: string = '';
+  export let title: string = '';
   export let rest: Record<string, any> = {};
 
   let container: HTMLDivElement;
@@ -220,6 +222,12 @@
     });
   }
 </script>
+
+<svelte:head>
+  {#if title}
+    <title>{title} | Modiase.dev</title>
+  {/if}
+</svelte:head>
 
 <div class="relative">
   <div class="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
