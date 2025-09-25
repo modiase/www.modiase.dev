@@ -39,6 +39,11 @@
   }
 </script>
 
+<svelte:head>
+  <title>Posts | Modiase.dev</title>
+  <meta name="description" content="Some thoughts on various topics" />
+</svelte:head>
+
 <div class="container mx-auto px-4 py-8">
   <h1 class="text-4xl font-bold mb-8 text-center">Posts</h1>
 

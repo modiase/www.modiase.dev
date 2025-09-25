@@ -2,6 +2,11 @@
   import Link from '$lib/components/Link.svelte';
 </script>
 
+<svelte:head>
+  <title>About | Modiase.dev</title>
+  <meta name="description" content="About Me" />
+</svelte:head>
+
 <div class="min-h-full flex flex-col gap-8 about-container">
   <section class="section">
     <p>
