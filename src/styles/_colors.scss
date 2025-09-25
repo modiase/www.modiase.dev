@@ -1,9 +1,50 @@
+// Source: https://www.nordtheme.com/docs/colors-and-palettes
+// Nord Polar Night palette (nord0–nord3)
+$nord0: #2e3440;
+$nord1: #3b4252;
+$nord2: #434c5e;
+$nord3: #4c566a;
+
+// Custom nord-black
+$nord-black: #1a1f2e;
+
+// Snow Storm for light backgrounds (nord4–nord6)
+$nord4: #d8dee9;
+$nord5: #e5e9f0;
+$nord6: #eceff4;
+
+$error-light: #e66060;
+$error-mid: #ea3434;
+$error-dark: #b62828;
+$text-contrast: #88c0d0;
+
 :root {
-  --primary: #14151f;
-  --secondary: #eaf2ef;
+  --nord0: #{$nord0};
+  --nord1: #{$nord1};
+  --nord2: #{$nord2};
+  --nord3: #{$nord3};
+  --nord4: #{$nord4};
+  --nord5: #{$nord5};
+  --nord6: #{$nord6};
+  --nord-black: #{$nord-black};
+  --error-light: #{$error-light};
+  --error-mid: #{$error-mid};
+  --error-dark: #{$error-dark};
+
+  --color-primary: #{$nord2};
+  --color-secondary: #{$nord3};
+  --text-primary: #{$nord6};
+  --text-secondary: #{$nord4};
+  --text-subtle: #{$nord3};
+  --text-error: #{$error-mid};
+  --text-contrast: #{$text-contrast};
+  --bg: #{$nord0};
 }
 
-body {
-  background-color: var(--primary);
-  color: var(--secondary);
-}
+/* SCSS semantic tokens */
+$color-primary: $nord2;
+$color-secondary: $nord3;
+$color-text-primary: $nord6;
+$color-text-secondary: $nord4;
+$color-bg: $nord0;
+$color-error: $error-mid;

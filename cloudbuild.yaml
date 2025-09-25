@@ -1,7 +1,14 @@
 steps:
   - name: gcr.io/cloud-builders/npm
-    args: ["install"]
-  - name: gcr.io/cloud-builders/npm
-    args: ["run", "build"]
-  - name: gcr.io/cloud-builders/gsutil
-    args: ["-m", "rsync", "-r", "-c", "-d", "public/", "gs://www.modiase.dev"]
+    entrypoint: bash
+    args:
+      - -lc
+      - |
+        npm i -g pnpm
+        pnpm install --frozen-lockfile
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        bash bin/deploy-site

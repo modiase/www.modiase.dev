@@ -1,8 +1,7 @@
-
-
 # NPM, Yarn
 node_modules/
-yarn-error.log
+pnpm-debug.log*
+*.log
 
 # Public
 public/
@@ -10,5 +9,29 @@ public/
 # Dev Environment
 .vscode/
 scratch/
+*.local*
+
+# SvelteKit build output
+.svelte-kit/
+
+# Vite cache
+.vite/
+
+# Build output
+build/
+dist/
 
 
+# Adapter outputs (optional, depending on deploy target)
+.vercel/
+.netlify/
+
+# TypeScript
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.*
+
+# OS files
+.DS_Store

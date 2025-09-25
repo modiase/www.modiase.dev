@@ -1,0 +1,129 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p google-cloud-sdk curl
+
+set -euo pipefail
+
+PROJECT_ROOTDIR=$(git rev-parse --show-toplevel)
+
+VERBOSE=false
+while getopts "v" opt; do
+  case $opt in
+    v)
+      VERBOSE=true
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+  esac
+done
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
+
+log() {
+  local level=$1
+  shift
+  local message="$*"
+
+  case $level in
+    "info")
+      echo -e "${BLUE}INFO:${NC} $message"
+      ;;
+    "success")
+      echo -e "${GREEN}SUCCESS:${NC} $message"
+      ;;
+    "warning")
+      echo -e "${YELLOW}WARNING:${NC} $message"
+      ;;
+    "error")
+      echo -e "${RED}ERROR:${NC} $message"
+      ;;
+    *)
+      echo -e "$message"
+      ;;
+  esac
+}
+
+run_cmd() {
+  local cmd="$*"
+  if [ "$VERBOSE" = true ]; then
+    eval "$cmd"
+  else
+    eval "$cmd" > /dev/null 2>&1
+  fi
+}
+
+source_env_if_exists() {
+  pushd $PROJECT_ROOTDIR > /dev/null
+  if [ -f .env ]; then
+    log "info" "Loading environment variables from .env"
+    export $(grep -v '^#' .env | xargs)
+  else
+    log "warning" "⚠️  No .env file found"
+  fi
+  popd > /dev/null
+}
+
+build() {
+  log "info" "Building site..."
+  pushd "$PROJECT_ROOTDIR" > /dev/null
+
+  if run_cmd "pnpm run build"; then
+    log "success" "✅ Build completed successfully!"
+  else
+    log "error" "❌ Build failed!"
+    popd > /dev/null
+    exit 1
+  fi
+
+  popd > /dev/null
+}
+
+upload() {
+  log "info" "Uploading to Google Cloud Storage..."
+  pushd "$PROJECT_ROOTDIR" > /dev/null
+
+  if run_cmd "gsutil -m rsync -r -c -d build/ gs://www.modiase.dev"; then
+    log "success" "✅ Upload completed successfully!"
+  else
+    log "error" "❌ Upload failed!"
+    popd > /dev/null
+    exit 1
+  fi
+
+  popd > /dev/null
+}
+
+purge_cache() {
+  if [ ! -z "${CLOUDFLARE_ZONE_ID:-}" ] && [ ! -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
+    log "info" "Purging Cloudflare cache..."
+    pushd "$PROJECT_ROOTDIR" > /dev/null
+
+    local curl_cmd="curl -X POST 'https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/purge_cache' -H 'Authorization: Bearer $CLOUDFLARE_API_TOKEN' -H 'Content-Type: application/json' --data '{\"purge_everything\":true}'"
+    [ "$VERBOSE" != true ] && curl_cmd="$curl_cmd -sS -o /dev/null"
+
+    if eval "$curl_cmd"; then
+      log "success" "✅ Cache purged successfully!"
+    else
+      log "error" "❌ Cache purge failed!"
+      popd > /dev/null
+      exit 1
+    fi
+
+    popd > /dev/null
+  else
+    log "warning" "⚠️  Skipping cache purge - CLOUDFLARE_ZONE_ID or CLOUDFLARE_API_TOKEN not set"
+  fi
+}
+
+source_env_if_exists
+build
+upload
+purge_cache
+log "success" "🚀 Deployment completed successfully!"

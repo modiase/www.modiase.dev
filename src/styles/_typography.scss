@@ -1,47 +1,32 @@
-@font-face {
-  font-family: "Karla";
-  src: url("../assets/fonts/Karla-Regular.ttf") format("truetype");
-  font-weight: normal;
+@use './mixins' as *;
+
+@include font-face('Lato', '/assets/fonts/Lato-Regular.ttf');
+@include font-face('Lato', '/assets/fonts/Lato-Italic.ttf', normal, italic);
+@include font-face('Lato', '/assets/fonts/Lato-Bold.ttf', bold);
+@include font-face('Lato', '/assets/fonts/Lato-BoldItalic.ttf', bold, italic);
+@include font-face('Lato', '/assets/fonts/Lato-Light.ttf', lighter);
+@include font-face('Lato', '/assets/fonts/Lato-LightItalic.ttf', lighter, italic);
+@include font-face('Lato', '/assets/fonts/Lato-Black.ttf', 900);
+@include font-face('Lato', '/assets/fonts/Lato-BlackItalic.ttf', 900, italic);
+
+@include font-face('Space Grotesk', '/assets/fonts/SpaceGrotesk-Regular.ttf');
+@include font-face('Space Grotesk', '/assets/fonts/SpaceGrotesk-Italic.ttf', normal, italic);
+@include font-face('Space Grotesk', '/assets/fonts/SpaceGrotesk-Bold.ttf', bold);
+@include font-face('Space Grotesk', '/assets/fonts/SpaceGrotesk-BoldItalic.ttf', bold, italic);
+
+.text-error {
+  color: var(--text-error);
 }
-@font-face {
-  font-family: "Karla";
-  src: url("../assets/fonts/Karla-Italic.ttf") format("truetype");
-  font-weight: normal;
-  font-style: italic;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Space Grotesk', Arial, Helvetica, sans-serif;
 }
-@font-face {
-  font-family: "Karla";
-  src: url("../assets/fonts/Karla-Bold.ttf") format("truetype");
-  font-weight: bold;
-}
-@font-face {
-  font-family: "Karla";
-  src: url("../assets/fonts/Karla-BoldItalic.ttf") format("truetype");
-  font-weight: bold;
-  font-style: italic;
-}
-@font-face {
-  font-family: "Karla";
-  src: url("../assets/fonts/Karla-Light.ttf") format("truetype");
-  font-weight: lighter;
-}
-@font-face {
-  font-family: "Karla";
-  src: url("../assets/fonts/Karla-LightItalic.ttf") format("truetype");
-  font-weight: lighter;
-  font-style: italic;
-}
-@font-face {
-  font-family: "Karla";
-  src: url("../assets/fonts/Karla-ExtraBold.ttf") format("truetype");
-  font-weight: bolder;
-}
-@font-face {
-  font-family: "Karla";
-  src: url("../assets/fonts/Karla-ExtraBoldItalic.ttf") format("truetype");
-  font-weight: bolder;
-  font-style: italic;
-}
+
 body {
-  font-family: "Karla", Arial, Helvetica, sans-serif;
+  font-family: 'Lato', Arial, Helvetica, sans-serif;
 }
