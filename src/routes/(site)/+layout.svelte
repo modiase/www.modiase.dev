@@ -19,15 +19,19 @@
     on:click={() => (isMenuOpen = !isMenuOpen)}
     aria-label="Toggle menu"
   >
-    <i class={clsx('fas text-sm', isMenuOpen ? 'fa-times' : 'fa-bars')}></i>
+    <i
+      class={clsx('fas text-sm', {
+        'fa-times': isMenuOpen,
+        'fa-bars': !isMenuOpen,
+      })}
+    ></i>
   </button>
 
   <Sidebar
-    className={clsx(
-      'top-0 left-0 fixed',
-      'hidden lg:block w-[200px] h-screen',
-      isMenuOpen && 'lg:hidden fixed inset-0 z-40 w-screen h-screen border-r-0'
-    )}
+    className={clsx('top-0 left-0 fixed h-screen', {
+      'block lg:hidden w-screen z-40 border-r-0': isMenuOpen,
+      'hidden lg:block w-[200px]': !isMenuOpen,
+    })}
     onLinkClick={closeMenu}
   />
 

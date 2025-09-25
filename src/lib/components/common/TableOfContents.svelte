@@ -33,10 +33,13 @@
 {#if headings.length > 0}
   <Card
     className={clsx(
-      'hidden 2xl:block fixed left-[220px] top-[12px] w-60 z-40 p-2 text-sm',
+      'fixed left-[220px] top-[12px] w-60 z-40 p-2 text-sm',
       'bg-[var(--nord-black)]',
       'transition-all duration-500 ease-in-out',
-      !showToc && 'hidden',
+      {
+        'hidden 2xl:block': showToc,
+        hidden: !showToc,
+      },
       className
     )}
   >
@@ -53,9 +56,11 @@
             'text-left cursor-pointer hover:text-contrast transition-colors',
             'border-l-2 rounded-r-sm',
             'text-xs w-full',
-            activeHeadingId === heading.id
-              ? 'text-contrast border-contrast'
-              : 'text-secondary border-transparent hover:border-secondary'
+            {
+              'text-contrast border-contrast': activeHeadingId === heading.id,
+              'text-secondary border-transparent hover:border-secondary':
+                activeHeadingId !== heading.id,
+            }
           )}
           style="padding-left: {indentLevel * 12 +
             6}px; padding-right: 6px; padding-top: 3px; padding-bottom: 3px;"

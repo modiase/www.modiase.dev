@@ -241,7 +241,7 @@
   <div
     bind:this={container}
     class={clsx(
-      'prose prose-lg max-w-none text-justify',
+      'prose prose-lg text-justify max-w-[80vw] overflow-x-hidden',
       '[&>p]:mb-6 [&>h2]:mt-8 [&>h2]:mb-4 [&>h2]:text-xl [&>h2]:font-bold [&_a]:text-contrast [&_a:hover]:text-secondary',
       '[&_.aside-content]:hidden',
       className

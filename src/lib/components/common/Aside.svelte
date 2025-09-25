@@ -38,14 +38,22 @@
 <!-- Invisible placeholder that stays in document flow (only on 2xl+) -->
 <div
   bind:this={placeholderElement}
-  class="hidden 2xl:block invisible w-0 h-0"
+  class={clsx('invisible w-0 h-0', {
+    'hidden 2xl:block': true,
+  })}
   aria-hidden="true"
 ></div>
 
 <!-- Floating aside positioned relative to placeholder (only on 2xl+) -->
 <aside
   bind:this={asideElement}
-  class={clsx('hidden 2xl:block not-prose absolute z-10', className)}
+  class={clsx(
+    'not-prose absolute z-10',
+    {
+      'hidden 2xl:block': true,
+    },
+    className
+  )}
   {...rest}
 >
   <div class="p-4 text-sm text-[var(--text-secondary)] italic">
@@ -54,7 +62,16 @@
 </aside>
 
 <!-- Inline aside for mobile (below 2xl) -->
-<aside class={clsx('2xl:hidden not-prose my-4 w-full', className)} {...rest}>
+<aside
+  class={clsx(
+    'not-prose my-4 w-full',
+    {
+      '2xl:hidden': true,
+    },
+    className
+  )}
+  {...rest}
+>
   <div class="p-4 text-sm text-[var(--text-secondary)] italic">
     {content}
   </div>
