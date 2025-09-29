@@ -1,9 +1,12 @@
 <script lang="ts">
   import Link from './Link.svelte';
   import clsx from 'clsx';
+  import { page } from '$app/stores';
 
   export let className: string = '';
   export let onLinkClick: (() => void) | undefined = undefined;
+
+  $: currentPath = $page.url.pathname;
 </script>
 
 <aside class={clsx('sidebar', className)}>
@@ -21,38 +24,48 @@
 
       <!-- Social Icons -->
       <div class="flex justify-center space-x-3 mt-2">
-        <Link
-          href="https://github.com/modiase"
-          secondary
-        >
+        <Link href="https://github.com/modiase" secondary>
           <i class="fab fa-github text-sm"></i>
         </Link>
-        <Link
-          href="https://www.linkedin.com/in/moyewa-odiase-6b4698106/"
-          secondary
-        >
+        <Link href="https://www.linkedin.com/in/moyewa-odiase-6b4698106/" secondary>
           <i class="fab fa-linkedin text-sm"></i>
         </Link>
-        <Link
-          href="mailto:hello@modiase.dev"
-          secondary
-        >
+        <Link href="mailto:hello@modiase.dev" secondary>
           <i class="fas fa-envelope text-sm"></i>
         </Link>
       </div>
     </div>
 
     <!-- Navigation -->
-    <nav class="flex flex-col gap-4 text-xl">
-      <Link href="/" onClick={onLinkClick}>Home</Link>
-      <Link href="/about" onClick={onLinkClick}>About</Link>
-      <Link href="/posts" onClick={onLinkClick}>Posts</Link>
-      <Link href="/gallery" onClick={onLinkClick}>Gallery</Link>
+    <nav class="flex flex-col gap-2 text-xl">
+      {#each [{ href: '/', label: 'Home' }, { href: '/about', label: 'About' }, { href: '/posts', label: 'Posts' }, { href: '/gallery', label: 'Gallery' }] as navItem}
+        {@const isActive =
+          currentPath === navItem.href ||
+          (navItem.href !== '/' && currentPath.startsWith(navItem.href + '/'))}
+        <div
+          class={clsx('border-l-2 pl-4 rounded-r-sm my-1 transition-colors', {
+            'border-secondary': isActive,
+            'border-transparent hover:border-secondary': !isActive,
+          })}
+        >
+          <Link
+            href={navItem.href}
+            onClick={onLinkClick}
+            disableActive
+            class={clsx({
+              'text-secondary': isActive,
+              'text-contrast': !isActive,
+            })}>{navItem.label}</Link
+          >
+        </div>
+      {/each}
     </nav>
 
     <!-- Footer -->
     <div class="mt-auto pt-6 border-t border-[var(--nord2)]">
-      <div class="flex flex-col items-center justify-center gap-2 text-[var(--nord4)] text-xs text-secondary hover:drop-shadow-[0_0_8px_rgba(216,222,233,0.3)] transition-all duration-500">
+      <div
+        class="flex flex-col items-center justify-center gap-2 text-[var(--nord4)] text-xs text-secondary hover:drop-shadow-[0_0_8px_rgba(216,222,233,0.3)] transition-all duration-500"
+      >
         <span class="font-medium text-center">sveltejs x tailwindcss</span>
         <div class="flex items-center justify-center gap-2">
           <img src="/assets/images/svelte.svg" alt="Svelte" class="w-4 h-4 svelte-icon" />
