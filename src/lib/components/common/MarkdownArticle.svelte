@@ -225,9 +225,9 @@
 </svelte:head>
 
 <div class="relative">
-  <div class="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
+  <div class="fixed top-0 left-0 w-full h-1 bg-surface z-50">
     <div
-      class="h-full bg-blue-500 transition-all duration-300 ease-out"
+      class="h-full bg-contrast transition-all duration-300 ease-out"
       style="width: {progress}%"
     ></div>
   </div>

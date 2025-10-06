@@ -2,11 +2,31 @@
   import Link from './Link.svelte';
   import clsx from 'clsx';
   import { page } from '$app/stores';
+  import { onMount } from 'svelte';
+  import { getCurrentTheme } from '$lib/utils/theme';
 
   export let className: string = '';
   export let onLinkClick: (() => void) | undefined = undefined;
 
   $: currentPath = $page.url.pathname;
+
+  let isDarkMode = false;
+
+  onMount(() => {
+    isDarkMode = getCurrentTheme() === 'dark';
+
+    // Listen for theme changes
+    const observer = new MutationObserver(() => {
+      isDarkMode = getCurrentTheme() === 'dark';
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+
+    return () => observer.disconnect();
+  });
 </script>
 
 <aside class={clsx('sidebar', className)}>
@@ -44,8 +64,8 @@
           (navItem.href !== '/' && currentPath.startsWith(navItem.href + '/'))}
         <div
           class={clsx('border-l-2 pl-4 rounded-r-sm my-1 transition-colors', {
-            'border-secondary': isActive,
-            'border-transparent hover:border-secondary': !isActive,
+            'border-link-active': isActive,
+            'border-transparent hover:border-link-active': !isActive,
           })}
         >
           <Link
@@ -53,7 +73,7 @@
             onClick={onLinkClick}
             disableActive
             class={clsx({
-              'text-secondary': isActive,
+              'text-link-active': isActive,
               'text-contrast': !isActive,
             })}>{navItem.label}</Link
           >
@@ -62,14 +82,19 @@
     </nav>
 
     <!-- Footer -->
-    <div class="mt-auto pt-6 border-t border-[var(--nord2)]">
+    <div class="mt-auto pt-6 border-t border-border">
       <div
-        class="flex flex-col items-center justify-center gap-2 text-[var(--nord4)] text-xs text-secondary hover:drop-shadow-[0_0_8px_rgba(216,222,233,0.3)] transition-all duration-500"
+        class="flex flex-col items-center justify-center gap-2 text-text-secondary text-xs text-secondary hover:drop-shadow-[0_0_8px_rgba(216,222,233,0.3)] transition-all duration-500"
       >
         <span class="font-medium text-center">sveltejs x tailwindcss</span>
         <div class="flex items-center justify-center gap-2">
-          <img src="/assets/images/svelte.svg" alt="Svelte" class="w-4 h-4 svelte-icon" />
-          <img src="/assets/images/tailwind.svg" alt="Tailwind" class="w-4 h-4 tailwind-icon" />
+          {#if isDarkMode}
+            <img src="/assets/images/svelte-dark.svg" alt="Svelte" class="w-4 h-4" />
+            <img src="/assets/images/tailwind-dark.svg" alt="Tailwind" class="w-4 h-4" />
+          {:else}
+            <img src="/assets/images/svelte-light.svg" alt="Svelte" class="w-4 h-4" />
+            <img src="/assets/images/tailwind-light.svg" alt="Tailwind" class="w-4 h-4" />
+          {/if}
         </div>
       </div>
     </div>
@@ -78,7 +103,7 @@
 
 <style>
   .sidebar {
-    background: linear-gradient(to bottom, var(--nord0) 0%, var(--nord1) 100%);
-    border-right: 1px solid var(--nord2);
+    background: linear-gradient(to bottom, var(--color-background) 0%, var(--color-surface) 100%);
+    border-right: 1px solid var(--color-border);
   }
 </style>

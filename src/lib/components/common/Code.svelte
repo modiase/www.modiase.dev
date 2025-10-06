@@ -17,13 +17,17 @@
   onMount(async () => {
     try {
       const highlighter = await createHighlighter({
-        themes: ['nord'],
+        themes: ['solarized-light', 'nord'],
         langs: ['python', 'javascript', 'typescript', 'html', 'css', 'json', 'bash', 'sql', 'go'],
       });
 
       highlightedHtml = highlighter.codeToHtml(content, {
         lang: language,
-        theme: 'nord',
+        themes: {
+          light: 'solarized-light',
+          dark: 'nord',
+        },
+        defaultColor: false,
       });
     } catch (error) {
       console.error('Failed to highlight code:', error);
@@ -58,14 +62,14 @@
 </script>
 
 {#if isLoading}
-  <div class={clsx('bg-[var(--nord0)] rounded-lg overflow-hidden my-6', className)} {...rest}>
+  <div class={clsx('bg-surface-alt rounded-lg overflow-hidden my-6', className)} {...rest}>
     {#if showHeader}
-      <div class="bg-[var(--nord2)] px-4 py-2 flex items-center justify-between">
-        <span class="text-[var(--nord4)] text-sm font-medium">{language}</span>
+      <div class="code-header px-4 py-2 flex items-center justify-between">
+        <span class="text-text-secondary text-sm font-medium">{language}</span>
         {#if showCopyButton}
           <button
             on:click={copyToClipboard}
-            class="text-[var(--nord4)] text-sm hover:text-[var(--nord6)] transition-colors"
+            class="text-text-secondary text-sm hover:text-text-primary transition-colors"
             title={isCopied ? 'Copied!' : 'Copy to clipboard'}
           >
             {#if isCopied}
@@ -79,21 +83,21 @@
     {/if}
     <div class="p-4">
       <div class="animate-pulse">
-        <div class="h-4 bg-[var(--nord3)] rounded w-3/4 mb-2"></div>
-        <div class="h-4 bg-[var(--nord3)] rounded w-1/2"></div>
+        <div class="h-4 bg-surface rounded w-3/4 mb-2"></div>
+        <div class="h-4 bg-surface rounded w-1/2"></div>
       </div>
     </div>
   </div>
 {:else}
   <div class={clsx('not-prose my-6', className)} {...rest}>
-    <div class="bg-[var(--nord0)] rounded-lg overflow-hidden">
+    <div class="bg-surface-alt rounded-lg overflow-hidden">
       {#if showHeader}
-        <div class="bg-[var(--nord2)] px-4 py-2 flex items-center justify-between">
-          <span class="text-[var(--nord4)] text-sm font-medium">{language}</span>
+        <div class="code-header px-4 py-2 flex items-center justify-between">
+          <span class="text-text-secondary text-sm font-medium">{language}</span>
           {#if showCopyButton}
             <button
               on:click={copyToClipboard}
-              class="text-[var(--nord4)] text-sm hover:text-[var(--nord6)] transition-colors"
+              class="text-text-secondary text-sm hover:text-text-primary transition-colors"
               title={isCopied ? 'Copied!' : 'Copy to clipboard'}
             >
               {#if isCopied}
@@ -114,7 +118,7 @@
 
 <style>
   :global(.shiki) {
-    background-color: var(--nord-black) !important;
+    background-color: var(--color-surface-alt) !important;
     margin: 0 !important;
     padding: 1.5rem !important;
     overflow-x: auto;
@@ -128,5 +132,27 @@
 
   :global(.shiki code) {
     background-color: transparent !important;
+  }
+
+  .code-header {
+    background-color: var(--color-surface);
+  }
+
+  :global(.shiki),
+  :global(.shiki span) {
+    color: var(--shiki-light) !important;
+    background-color: var(--color-surface-alt) !important;
+    font-style: var(--shiki-light-font-style) !important;
+    font-weight: var(--shiki-light-font-weight) !important;
+    text-decoration: var(--shiki-light-text-decoration) !important;
+  }
+
+  :global([data-theme='dark']) :global(.shiki),
+  :global([data-theme='dark']) :global(.shiki span) {
+    color: var(--shiki-dark) !important;
+    background-color: var(--color-surface-alt) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
   }
 </style>

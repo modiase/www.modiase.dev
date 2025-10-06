@@ -6,9 +6,9 @@
   <meta name="description" content="Photos" />
 </svelte:head>
 
-<div class="flex items-center justify-center min-h-full text-center bg-[var(--nord4)]">
+<div class="flex items-center justify-center min-h-full text-center bg-contrast">
   <div>
-    <h1 class="text-4xl font-bold mb-4 text-nord0">Gallery</h1>
-    <p class="text-lg text-nord0">A photo tells a thousand words. Coming soon...</p>
+    <h1 class="text-4xl font-bold mb-4 text-text-primary">Gallery</h1>
+    <p class="text-lg text-text-primary">A photo tells a thousand words. Coming soon...</p>
   </div>
 </div>

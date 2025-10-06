@@ -58,7 +58,7 @@
         {#each posts as post}
           <Card
             href="/posts/{post.slug}"
-            className="bg-[color-mix(in_srgb,var(--nord-black)_40%,transparent)] transition-transform duration-200 hover:-translate-y-1"
+            className="bg-surface-transparent-alt-40 transition-transform duration-200 hover:-translate-y-1"
           >
             <h2 class="text-2xl font-semibold mb-2">
               {post.title}

@@ -34,7 +34,7 @@
   <Card
     className={clsx(
       'fixed left-[220px] top-[12px] w-60 z-40 p-2 text-sm',
-      'bg-[var(--nord-black)]',
+      'bg-surface-transparent-alt-50',
       'transition-all duration-500 ease-in-out',
       'hidden 2xl:block',
       {
@@ -44,9 +44,7 @@
       className
     )}
   >
-    <h3 class="text-xs font-semibold mb-2" style="color: var(--text-secondary);">
-      Table of Contents
-    </h3>
+    <h3 class="text-xs font-semibold mb-2 text-text-secondary">Table of Contents</h3>
     <nav class="space-y-1 flex flex-col gap-1">
       {#each headings as heading, index}
         {@const indentLevel = Math.max(0, heading.level - 1)}
@@ -58,8 +56,9 @@
             'border-l-2 rounded-r-sm',
             'text-xs w-full',
             {
-              'text-contrast border-contrast': activeHeadingId === heading.id,
-              'text-secondary border-transparent hover:border-secondary':
+              'text-link-active border-text-primary font-semibold tracking-tight':
+                activeHeadingId === heading.id,
+              'text-text-secondary border-transparent hover:border-text-primary':
                 activeHeadingId !== heading.id,
             }
           )}

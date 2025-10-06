@@ -1,50 +1,182 @@
-// Source: https://www.nordtheme.com/docs/colors-and-palettes
-// Nord Polar Night palette (nord0–nord3)
+// =============================================================================
+// COLOR PALETTES
+// =============================================================================
+
+// Camel-based color palette (Light theme)
+$camel-primary: #e2984f;
+$camel-primary-hover: #d18a3f;
+$camel-secondary: #e5ad76;
+$camel-accent: #ecc299;
+$camel-light: #f2d7bb;
+$camel-lightest: #f8ebde;
+$camel-background: #fdf8f3;
+
+$camel-text-primary: #6b4423;
+$camel-text-secondary: #8b5a3c;
+$camel-text-muted: #666;
+$camel-text-dark: #333;
+
+// Nord color palette (Dark theme)
 $nord0: #2e3440;
 $nord1: #3b4252;
 $nord2: #434c5e;
 $nord3: #4c566a;
-
-// Custom nord-black
-$nord-black: #1a1f2e;
-
-// Snow Storm for light backgrounds (nord4–nord6)
 $nord4: #d8dee9;
 $nord5: #e5e9f0;
 $nord6: #eceff4;
+$nord-black: #1a1f2e;
+$nord-contrast: #88c0d0;
 
-$error-light: #e66060;
-$error-mid: #ea3434;
-$error-dark: #b62828;
-$text-contrast: #88c0d0;
+// Semantic colors (shared across themes)
+$success: #28a745;
+$success-bg: #d4edda;
+$success-text: #155724;
+$success-border: #c3e6cb;
+
+$error: #dc3545;
+$error-bg: #f8d7da;
+$error-text: #721c24;
+$error-border: #f5c6cb;
+
+$warning: #ffc107;
+$warning-bg: #fff3cd;
+$warning-text: #856404;
+$warning-border: #ffeaa7;
+
+// =============================================================================
+// CSS CUSTOM PROPERTIES
+// =============================================================================
 
 :root {
-  --nord0: #{$nord0};
-  --nord1: #{$nord1};
-  --nord2: #{$nord2};
-  --nord3: #{$nord3};
-  --nord4: #{$nord4};
-  --nord5: #{$nord5};
-  --nord6: #{$nord6};
-  --nord-black: #{$nord-black};
-  --error-light: #{$error-light};
-  --error-mid: #{$error-mid};
-  --error-dark: #{$error-dark};
+  // Legacy mode variable (unused but kept for compatibility)
+  --mode: light;
 
-  --color-primary: #{$nord2};
-  --color-secondary: #{$nord3};
-  --text-primary: #{$nord6};
-  --text-secondary: #{$nord4};
-  --text-subtle: #{$nord3};
-  --text-error: #{$error-mid};
-  --text-contrast: #{$text-contrast};
-  --bg: #{$nord0};
+  // Light theme colors
+  --color-primary: #{$camel-primary};
+  --color-primary-hover: #{$camel-primary-hover};
+  --color-secondary: #{$camel-secondary};
+  --color-accent: #{$camel-accent};
+  --color-light: #{$camel-light};
+  --color-lightest: #{$camel-lightest};
+  --color-background: #{$camel-background};
+
+  // Text colors
+  --text-primary: #{$camel-text-primary};
+  --text-secondary: #{$camel-text-secondary};
+  --text-muted: #{$camel-text-muted};
+  --text-dark: #{$camel-text-dark};
+
+  // Semantic colors
+  --color-success: #{$success};
+  --color-success-bg: #{$success-bg};
+  --color-success-text: #{$success-text};
+  --color-success-border: #{$success-border};
+
+  --color-error: #{$error};
+  --color-error-bg: #{$error-bg};
+  --color-error-text: #{$error-text};
+  --color-error-border: #{$error-border};
+
+  --color-warning: #{$warning};
+  --color-warning-bg: #{$warning-bg};
+  --color-warning-text: #{$warning-text};
+  --color-warning-border: #{$warning-border};
+
+  // UI colors
+  --color-white: white;
+  --color-disabled: #{$camel-accent};
+  --color-border: #ddd;
+  --color-border-light: #{$camel-accent};
+  --color-contrast: #{$camel-accent};
+  --color-link-active: #{$camel-text-primary};
+  --color-link-hover: #{$camel-text-primary};
+  --color-surface: #{color-mix(in srgb, #{$camel-lightest} 70%, #{$camel-light} 30%)};
+  --color-surface-alt: #{$camel-lightest};
+
+  // Surface transparent variants
+  --color-surface-transparent-10: #{color-mix(in srgb, #{$camel-lightest} 10%, transparent)};
+  --color-surface-transparent-20: #{color-mix(in srgb, #{$camel-lightest} 20%, transparent)};
+  --color-surface-transparent-30: #{color-mix(in srgb, #{$camel-lightest} 30%, transparent)};
+  --color-surface-transparent-40: #{color-mix(in srgb, #{$camel-lightest} 40%, transparent)};
+  --color-surface-transparent-50: #{color-mix(in srgb, #{$camel-lightest} 50%, transparent)};
+  --color-surface-transparent-60: #{color-mix(in srgb, #{$camel-lightest} 60%, transparent)};
+  --color-surface-transparent-70: #{color-mix(in srgb, #{$camel-lightest} 70%, transparent)};
+  --color-surface-transparent-80: #{color-mix(in srgb, #{$camel-lightest} 80%, transparent)};
+  --color-surface-transparent-90: #{color-mix(in srgb, #{$camel-lightest} 90%, transparent)};
+  --color-surface-transparent-100: #{$camel-lightest};
+
+  // Surface alt transparent variants
+  --color-surface-transparent-alt-10: #{color-mix(in srgb, #{$camel-light} 10%, transparent)};
+  --color-surface-transparent-alt-20: #{color-mix(in srgb, #{$camel-light} 20%, transparent)};
+  --color-surface-transparent-alt-30: #{color-mix(in srgb, #{$camel-light} 30%, transparent)};
+  --color-surface-transparent-alt-40: #{color-mix(in srgb, #{$camel-light} 40%, transparent)};
+  --color-surface-transparent-alt-50: #{color-mix(in srgb, #{$camel-light} 50%, transparent)};
+  --color-surface-transparent-alt-60: #{color-mix(in srgb, #{$camel-light} 60%, transparent)};
+  --color-surface-transparent-alt-70: #{color-mix(in srgb, #{$camel-light} 70%, transparent)};
+  --color-surface-transparent-alt-80: #{color-mix(in srgb, #{$camel-light} 80%, transparent)};
+  --color-surface-transparent-alt-90: #{color-mix(in srgb, #{$camel-light} 90%, transparent)};
+  --color-surface-transparent-alt-100: #{$camel-light};
 }
 
-/* SCSS semantic tokens */
-$color-primary: $nord2;
-$color-secondary: $nord3;
-$color-text-primary: $nord6;
-$color-text-secondary: $nord4;
-$color-bg: $nord0;
-$color-error: $error-mid;
+// Dark theme overrides
+:root[data-theme='dark'] {
+  // Core colors
+  --color-primary: #{$nord2};
+  --color-primary-hover: #{$nord1};
+  --color-secondary: #{$nord3};
+  --color-accent: #{$nord4};
+  --color-light: #{$nord5};
+  --color-lightest: #{$nord6};
+  --color-background: #{$nord0};
+
+  // Text colors
+  --text-primary: #{$nord6};
+  --text-secondary: #{$nord4};
+  --text-muted: #{$nord3};
+  --text-dark: #{$nord6};
+
+  // UI colors
+  --color-white: #{$nord1};
+  --color-disabled: #{$nord3};
+  --color-border: #{$nord2};
+  --color-border-light: #{$nord3};
+  --color-contrast: #{$nord-contrast};
+  --color-link-active: #{$nord4};
+  --color-link-hover: #{$nord-contrast};
+  --color-surface: #{$nord1};
+  --color-surface-alt: #{$nord-black};
+
+  // Surface transparent variants
+  --color-surface-transparent-10: #{color-mix(in srgb, #{$nord1} 10%, transparent)};
+  --color-surface-transparent-20: #{color-mix(in srgb, #{$nord1} 20%, transparent)};
+  --color-surface-transparent-30: #{color-mix(in srgb, #{$nord1} 30%, transparent)};
+  --color-surface-transparent-40: #{color-mix(in srgb, #{$nord1} 40%, transparent)};
+  --color-surface-transparent-50: #{color-mix(in srgb, #{$nord1} 50%, transparent)};
+  --color-surface-transparent-60: #{color-mix(in srgb, #{$nord1} 60%, transparent)};
+  --color-surface-transparent-70: #{color-mix(in srgb, #{$nord1} 70%, transparent)};
+  --color-surface-transparent-80: #{color-mix(in srgb, #{$nord1} 80%, transparent)};
+  --color-surface-transparent-90: #{color-mix(in srgb, #{$nord1} 90%, transparent)};
+  --color-surface-transparent-100: #{$nord1};
+
+  // Surface alt transparent variants
+  --color-surface-transparent-alt-10: #{color-mix(in srgb, #{$nord-black} 10%, transparent)};
+  --color-surface-transparent-alt-20: #{color-mix(in srgb, #{$nord-black} 20%, transparent)};
+  --color-surface-transparent-alt-30: #{color-mix(in srgb, #{$nord-black} 30%, transparent)};
+  --color-surface-transparent-alt-40: #{color-mix(in srgb, #{$nord-black} 40%, transparent)};
+  --color-surface-transparent-alt-50: #{color-mix(in srgb, #{$nord-black} 50%, transparent)};
+  --color-surface-transparent-alt-60: #{color-mix(in srgb, #{$nord-black} 60%, transparent)};
+  --color-surface-transparent-alt-70: #{color-mix(in srgb, #{$nord-black} 70%, transparent)};
+  --color-surface-transparent-alt-80: #{color-mix(in srgb, #{$nord-black} 80%, transparent)};
+  --color-surface-transparent-alt-90: #{color-mix(in srgb, #{$nord-black} 90%, transparent)};
+  --color-surface-transparent-alt-100: #{$nord-black};
+}
+
+// =============================================================================
+// LEGACY SCSS VARIABLES (for backward compatibility)
+// =============================================================================
+$color-primary: $camel-primary;
+$color-secondary: $camel-secondary;
+$color-text-primary: $camel-text-primary;
+$color-text-secondary: $camel-text-secondary;
+$color-bg: $camel-background;
+$color-error: $error;

@@ -15,10 +15,9 @@
   $: linkClasses = clsx(
     'no-underline transition-colors duration-500',
     {
-      'hover:text-secondary': !secondary,
-      'hover:text-contrast': secondary,
-      'text-secondary': secondary != isActive,
-      'text-contrast': secondary == isActive,
+      'text-link-active': isActive !== secondary,
+      'text-link-hover': isActive === secondary,
+      'hover:text-contrast': true,
     },
     className
   );

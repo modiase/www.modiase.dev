@@ -6,8 +6,7 @@
 </script>
 
 <footer
-  class="footer text-center py-4 transition-all duration-300 flex justify-center items-center font-medium"
-  style="color: var(--text-subtle);"
+  class="footer text-center py-4 transition-all duration-300 flex justify-center items-center font-medium text-text-muted"
   on:mouseenter={() => (isHovered = true)}
   on:mouseleave={() => (isHovered = false)}
 >
