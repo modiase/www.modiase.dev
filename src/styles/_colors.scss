@@ -85,7 +85,7 @@ $warning-border: #ffeaa7;
   // UI colors
   --color-white: white;
   --color-disabled: #{$camel-accent};
-  --color-border: #ddd;
+  --color-border: #{$camel-text-primary};
   --color-border-light: #{$camel-accent};
   --color-contrast: #{$camel-accent};
   --color-link-active: #{$camel-text-primary};
