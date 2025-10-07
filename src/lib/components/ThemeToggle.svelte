@@ -21,7 +21,7 @@
   class={clsx(
     'fixed left-10 lg:left-2 top-2 z-[1010] p-2 rounded-full transition-all duration-300',
     'hover:scale-110',
-    'bg-white/10 backdrop-blur-sm border border-white/20'
+    'bg-white/10 backdrop-blur-sm'
   )}
   title={mode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
 >

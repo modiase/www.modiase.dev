@@ -15,7 +15,7 @@
 
 <div class="bg-bg text-text-primary flex min-h-screen">
   <button
-    class="lg:hidden fixed top-2 left-2 z-50 p-1 rounded-md bg-surface border-border text-text-primary hover:bg-surface-alt transition-colors"
+    class="lg:hidden fixed top-1 left-2 z-50 p-2 rounded-full bg-white/10 backdrop-blur-sm text-text-primary hover:scale-110 transition-all duration-300"
     on:click={() => (isMenuOpen = !isMenuOpen)}
     aria-label="Toggle menu"
   >

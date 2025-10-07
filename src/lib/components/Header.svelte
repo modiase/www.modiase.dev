@@ -4,7 +4,7 @@
 
 <header
   role="navigation"
-  class="fixed top-0 left-0 right-0 z-[1000] h-[60px] border-b border-border rounded-b"
+  class="sticky top-0 left-0 right-0 z-[1000] h-[60px] border-b border-border rounded-b"
 >
   <nav class="flex items-center justify-center h-full gap-16 font-bold">
     <Link href="/about" secondary>About</Link>
