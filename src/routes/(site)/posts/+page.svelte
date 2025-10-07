@@ -40,7 +40,7 @@
 </script>
 
 <svelte:head>
-  <title>Posts | Modiase.dev</title>
+  <title>Posts | modiase.dev</title>
   <meta name="description" content="Some thoughts on various topics" />
 </svelte:head>
 

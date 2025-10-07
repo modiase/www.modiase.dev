@@ -2,7 +2,7 @@
 </script>
 
 <svelte:head>
-  <title>Gallery | Modiase.dev</title>
+  <title>Gallery | modiase.dev</title>
   <meta name="description" content="Photos" />
 </svelte:head>
 

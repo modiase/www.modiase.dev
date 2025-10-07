@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-  <title>About | Modiase.dev</title>
+  <title>About | modiase.dev</title>
   <meta name="description" content="About Me" />
 </svelte:head>
 

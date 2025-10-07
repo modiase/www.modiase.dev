@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-  <title>Modiase.dev</title>
+  <title>modiase.dev</title>
   <meta
     name="description"
     content="Moyewa Odiase - Software engineer, naturalist, and AI researcher exploring the intersection of technology and sustainability"

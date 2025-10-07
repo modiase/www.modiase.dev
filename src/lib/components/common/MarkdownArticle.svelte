@@ -220,7 +220,7 @@
 
 <svelte:head>
   {#if title}
-    <title>{title} | Modiase.dev</title>
+    <title>{title} | modiase.dev</title>
   {/if}
 </svelte:head>
 
