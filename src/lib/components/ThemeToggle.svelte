@@ -19,7 +19,7 @@
 <button
   on:click={toggleMode}
   class={clsx(
-    'fixed left-3 top-3 z-[1010] p-2 rounded-full transition-all duration-300',
+    'fixed left-10 lg:left-2 top-2 z-[1010] p-2 rounded-full transition-all duration-300',
     'hover:scale-110',
     'bg-white/10 backdrop-blur-sm border border-white/20'
   )}

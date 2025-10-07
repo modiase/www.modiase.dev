@@ -15,7 +15,6 @@
   onMount(() => {
     isDarkMode = getCurrentTheme() === 'dark';
 
-    // Listen for theme changes
     const observer = new MutationObserver(() => {
       isDarkMode = getCurrentTheme() === 'dark';
     });
