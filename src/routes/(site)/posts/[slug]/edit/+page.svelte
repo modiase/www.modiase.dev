@@ -9,4 +9,4 @@
   export let data: PageData;
 </script>
 
-<PostPage post={data.post} />
+<PostPage post={data.post} isEditMode={true} />

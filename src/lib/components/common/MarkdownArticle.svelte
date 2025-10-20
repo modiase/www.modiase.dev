@@ -5,6 +5,7 @@
   import Code from '$lib/components/common/Code.svelte';
   import Aside from '$lib/components/common/Aside.svelte';
   import TableOfContents from '$lib/components/common/TableOfContents.svelte';
+  import EditContainer from '$lib/components/common/EditContainer.svelte';
   import { slugify } from '$lib/utils/slugify';
   import type { ContentBlock } from '$lib/types';
 
@@ -35,12 +36,14 @@
     content: string | ContentBlock[];
     className?: string;
     title?: string;
+    isEditMode?: boolean;
     [key: string]: any;
   }
 
   export let content: string | ContentBlock[];
   export let className: string = '';
   export let title: string = '';
+  export let isEditMode: boolean = false;
   export let rest: Record<string, any> = {};
 
   let container: HTMLDivElement;
@@ -59,8 +62,9 @@
   let firstParagraph: HTMLElement | null = null;
   let introductionHeading: HTMLElement | null = null;
 
-  $: html = typeof content === 'string' ? (marked(content) as string) : '';
-  $: contentItems = Array.isArray(content) ? content : [];
+  $: contentItems = Array.isArray(content)
+    ? content
+    : [{ tag: 'markdown' as const, content: content as string }];
 
   const createIntroductionHeading = (firstParagraph: HTMLElement) => {
     const heading = document.createElement('h2');
@@ -243,18 +247,16 @@
     )}
     {...rest}
   >
-    {#if typeof content === 'string'}
-      {@html html}
-    {:else}
-      {#each contentItems as item}
+    {#each contentItems as item}
+      <EditContainer {isEditMode} sourceContent={item.content}>
         {#if item.tag === 'markdown'}
           {@html marked(item.content)}
         {:else if item.tag === 'code'}
-          <Code content={item.content} language={item.language || 'text'} />
+          <Code content={item.content} language={'language' in item ? item.language : 'text'} />
         {:else if item.tag === 'aside'}
-          <Aside content={item.content} />
+          <Aside content={item.content} {isEditMode} />
         {/if}
-      {/each}
-    {/if}
+      </EditContainer>
+    {/each}
   </div>
 </div>

@@ -3,6 +3,8 @@
   import { format } from 'date-fns';
   import { enGB } from 'date-fns/locale';
   import Card from '$lib/components/common/Card.svelte';
+  import { isDevMode } from '$lib/stores/devMode';
+  import clsx from 'clsx';
   import type { Post } from '$lib/types';
 
   let allPosts: Post[] = [];
@@ -17,6 +19,8 @@
   $: hasPrevious = currentPage > 1;
 
   onMount(async () => {
+    console.log('Dev mode:', $isDevMode);
+    console.log('import.meta.env.DEV:', import.meta.env.DEV);
     try {
       const response = await fetch('/posts.json');
       allPosts = await response.json();
@@ -46,6 +50,17 @@
 
 <div class="container mx-auto px-4 py-8">
   <h1 class="text-4xl font-bold mb-8 text-center">Posts</h1>
+
+  {#if $isDevMode}
+    <button
+      class={clsx(
+        'fixed top-4 right-4 z-50 p-3 rounded-full bg-primary text-primary-foreground shadow-lg hover:brightness-90 transition-colors'
+      )}
+      on:click={() => console.log('Plus button clicked!')}
+    >
+      <img src="/assets/icons/plus.svg" alt="Add new post" class="w-6 h-6" />
+    </button>
+  {/if}
 
   {#if allPosts.length === 0}
     <div class="text-center">

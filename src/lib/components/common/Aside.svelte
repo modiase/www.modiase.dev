@@ -5,6 +5,7 @@
   export let content: string;
   export let className: string = '';
   export let rest: Record<string, any> = {};
+  export let isEditMode: boolean = false;
 
   let asideElement: HTMLElement;
   let placeholderElement: HTMLElement;
@@ -50,7 +51,8 @@
   class={clsx(
     'not-prose absolute z-10',
     {
-      'hidden 2xl:block': true,
+      'hidden 2xl:block': !isEditMode,
+      hidden: isEditMode,
     },
     className
   )}
@@ -66,7 +68,8 @@
   class={clsx(
     'not-prose my-4 w-full',
     {
-      '2xl:hidden': true,
+      '2xl:hidden': !isEditMode,
+      block: isEditMode,
     },
     className
   )}
@@ -76,9 +79,3 @@
     {content}
   </div>
 </aside>
-
-<style>
-  :global(.prose) {
-    position: relative;
-  }
-</style>
