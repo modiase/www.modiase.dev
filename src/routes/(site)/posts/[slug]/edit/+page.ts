@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit';
 import type { PageLoad, EntryGenerator } from './$types';
 import type { Post } from '$lib/types';
 
-export const prerender = true;
+export const prerender = false;
 
 export const load: PageLoad = async ({ params, fetch }) => {
   if (!import.meta.env.DEV) {

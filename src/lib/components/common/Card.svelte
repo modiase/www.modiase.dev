@@ -1,9 +1,10 @@
 <script lang="ts">
   import { clsx } from 'clsx';
+  import type { HTMLAttributes } from 'svelte/elements';
 
   export let className: string = '';
   export let href: string | undefined = undefined;
-  export let rest: Record<string, any> = {};
+  export let rest: HTMLAttributes<HTMLDivElement> = {};
 </script>
 
 <div class={clsx('rounded-lg shadow-md p-6 bg-surface-transparent-alt-50', className)} {...rest}>

@@ -2,13 +2,14 @@
   import { onMount } from 'svelte';
   import { createHighlighter } from 'shiki';
   import { clsx } from 'clsx';
+  import type { HTMLAttributes } from 'svelte/elements';
 
   export let content: string;
   export let language: string = 'text';
   export let className: string = '';
   export let showHeader: boolean = true;
   export let showCopyButton: boolean = true;
-  export let rest: Record<string, any> = {};
+  export let rest: HTMLAttributes<HTMLDivElement> = {};
 
   let highlightedHtml: string = '';
   let isLoading = true;

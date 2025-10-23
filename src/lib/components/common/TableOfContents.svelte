@@ -46,7 +46,7 @@
   >
     <h3 class="text-xs font-semibold mb-2 text-text-secondary">Table of Contents</h3>
     <nav class="space-y-1 flex flex-col gap-1">
-      {#each headings as heading, index}
+      {#each headings as heading, _index}
         {@const indentLevel = Math.max(0, heading.level - 1)}
 
         <button

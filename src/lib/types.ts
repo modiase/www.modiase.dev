@@ -1,7 +1,7 @@
 export type ContentBlock =
-  | { tag: 'markdown'; content: string; classes?: string }
-  | { tag: 'aside'; content: string; classes?: string }
-  | { tag: 'code'; content: string; language: string; classes?: string };
+  | { id: string; tag: 'markdown'; content: string; classes?: string }
+  | { id: string; tag: 'aside'; content: string; classes?: string }
+  | { id: string; tag: 'code'; content: string; language: string; classes?: string };
 
 export interface Post {
   id: string;

@@ -3,7 +3,6 @@
   import { format } from 'date-fns';
   import { enGB } from 'date-fns/locale';
   import Card from '$lib/components/common/Card.svelte';
-  import { isDevMode } from '$lib/stores/devMode';
   import clsx from 'clsx';
   import type { Post } from '$lib/types';
 
@@ -19,8 +18,6 @@
   $: hasPrevious = currentPage > 1;
 
   onMount(async () => {
-    console.log('Dev mode:', $isDevMode);
-    console.log('import.meta.env.DEV:', import.meta.env.DEV);
     try {
       const response = await fetch('/posts.json');
       allPosts = await response.json();
@@ -51,7 +48,7 @@
 <div class="container mx-auto px-4 py-8">
   <h1 class="text-4xl font-bold mb-8 text-center">Posts</h1>
 
-  {#if $isDevMode}
+  {#if import.meta.env.DEV}
     <button
       class={clsx(
         'fixed top-4 right-4 z-50 p-3 rounded-full bg-primary text-primary-foreground shadow-lg hover:brightness-90 transition-colors'

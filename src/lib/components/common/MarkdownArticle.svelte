@@ -8,6 +8,10 @@
   import EditContainer from '$lib/components/common/EditContainer.svelte';
   import { slugify } from '$lib/utils/slugify';
   import type { ContentBlock } from '$lib/types';
+  import type { HTMLAttributes } from 'svelte/elements';
+  import { fromEvent } from 'rxjs';
+  import { throttleTime, map, distinctUntilChanged } from 'rxjs/operators';
+  import { createSubscriptionManager } from '$lib/utils/rxjs';
 
   const renderer = new marked.Renderer();
   renderer.link = function ({ href, title, tokens }) {
@@ -32,19 +36,12 @@
     renderer: renderer,
   });
 
-  interface Props {
-    content: string | ContentBlock[];
-    className?: string;
-    title?: string;
-    isEditMode?: boolean;
-    [key: string]: any;
-  }
-
   export let content: string | ContentBlock[];
   export let className: string = '';
   export let title: string = '';
   export let isEditMode: boolean = false;
-  export let rest: Record<string, any> = {};
+  export let postId: string = '';
+  export let rest: HTMLAttributes<HTMLDivElement> = {};
 
   let container: HTMLDivElement;
   let progress = 0;
@@ -62,9 +59,11 @@
   let firstParagraph: HTMLElement | null = null;
   let introductionHeading: HTMLElement | null = null;
 
+  const addSubscription = createSubscriptionManager();
+
   $: contentItems = Array.isArray(content)
     ? content
-    : [{ tag: 'markdown' as const, content: content as string }];
+    : [{ id: crypto.randomUUID(), tag: 'markdown' as const, content: content as string }];
 
   const createIntroductionHeading = (firstParagraph: HTMLElement) => {
     const heading = document.createElement('h2');
@@ -88,63 +87,60 @@
   }
 
   onMount(() => {
-    const getScrollProgress = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      return document.documentElement.scrollHeight - window.innerHeight > 0
-        ? (scrollTop / (document.documentElement.scrollHeight - window.innerHeight)) * 100
-        : 0;
-    };
+    addSubscription(
+      fromEvent(window, 'scroll')
+        .pipe(
+          throttleTime(100, undefined, { leading: true, trailing: true }),
+          map(() => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight;
+            const innerHeight = window.innerHeight;
+            const documentHeight = scrollHeight - innerHeight;
 
-    const getActiveHeadingId = (scrollTop: number) => {
-      if (tocItems.length === 0) return '';
-
-      const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
-      return (
-        tocItems[
-          Math.min(
-            Math.max(Math.floor((scrollTop / documentHeight) * tocItems.length), 0),
-            tocItems.length - 1
+            return {
+              progress: documentHeight > 0 ? (scrollTop / documentHeight) * 100 : 0,
+              activeHeadingId:
+                tocItems.length > 0
+                  ? tocItems[
+                      Math.min(
+                        Math.max(Math.floor((scrollTop / documentHeight) * tocItems.length), 0),
+                        tocItems.length - 1
+                      )
+                    ]?.id || ''
+                  : '',
+              showToc:
+                headings.length > 0 && headings[0] && firstParagraph
+                  ? Math.abs(headings[0].offsetTop - scrollTop) <=
+                    Math.abs(firstParagraph.offsetTop - scrollTop)
+                  : (documentHeight > 0 ? (scrollTop / documentHeight) * 100 : 0) > 0,
+            };
+          }),
+          distinctUntilChanged(
+            (a, b) =>
+              a.progress === b.progress &&
+              a.activeHeadingId === b.activeHeadingId &&
+              a.showToc === b.showToc
           )
-        ]?.id || ''
-      );
-    };
-
-    const shouldShowToc = (scrollTop: number) => {
-      if (headings.length === 0) return false;
-
-      return headings[0] && firstParagraph
-        ? Math.abs(headings[0].offsetTop - scrollTop) <=
-            Math.abs(firstParagraph.offsetTop - scrollTop)
-        : getScrollProgress() > 0;
-    };
-
-    const updateScrollState = () => {
-      if (headings.length === 0) return;
-
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      progress = getScrollProgress();
-      activeHeadingId = getActiveHeadingId(scrollTop);
-      showToc = shouldShowToc(scrollTop);
-    };
-
-    window.addEventListener('scroll', updateScrollState);
-    updateScrollState();
+        )
+        .subscribe(({ progress: p, activeHeadingId: ahId, showToc: st }) => {
+          progress = p;
+          activeHeadingId = ahId;
+          showToc = st;
+        })
+    );
 
     const timeoutId = setTimeout(() => {
       const hash = new URL(window.location.href).hash.slice(1);
       if (hash && tocItems.length > 0) {
         const targetItem = tocItems.find((item) => item.id === hash);
         targetItem &&
-          requestAnimationFrame(() => {
-            window.scrollTo({ top: targetItem.scrollPosition, behavior: 'smooth' });
-          });
+          requestAnimationFrame(() =>
+            window.scrollTo({ top: targetItem.scrollPosition, behavior: 'smooth' })
+          );
       }
     }, 50);
 
-    return () => {
-      window.removeEventListener('scroll', updateScrollState);
-      clearTimeout(timeoutId);
-    };
+    return () => clearTimeout(timeoutId);
   });
 
   function extractHeadingsFromContent() {
@@ -243,12 +239,20 @@
       'prose prose-lg text-justify max-w-[80vw]',
       '[&>p]:mb-6 [&>h2]:mt-8 [&>h2]:mb-4 [&>h2]:text-xl [&>h2]:font-bold [&_a]:text-contrast [&_a:hover]:text-secondary',
       '[&_.aside-content]:hidden [&_pre]:overflow-auto',
+      '[&_h1]:mt-8 [&_h1]:mb-6 [&_h1]:text-2xl [&_h1]:font-bold',
+      '[&_h2]:mt-8 [&_h2]:mb-4 [&_h2]:text-xl [&_h2]:font-bold',
+      '[&_h3]:mt-6 [&_h3]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold',
+      '[&_h4]:mt-4 [&_h4]:mb-2 [&_h4]:text-base [&_h4]:font-semibold',
+      '[&_h5]:mt-3 [&_h5]:mb-2 [&_h5]:text-sm [&_h5]:font-semibold',
+      '[&_h6]:mt-2 [&_h6]:mb-1 [&_h6]:text-xs [&_h6]:font-semibold',
+      '[&_h1]:block [&_h2]:block [&_h3]:block [&_h4]:block [&_h5]:block [&_h6]:block',
+      '[&_p+_h1]:mt-8 [&_p+_h2]:mt-8 [&_p+_h3]:mt-6 [&_p+_h4]:mt-4 [&_p+_h5]:mt-3 [&_p+_h6]:mt-2',
       className
     )}
     {...rest}
   >
     {#each contentItems as item}
-      <EditContainer {isEditMode} sourceContent={item.content}>
+      <EditContainer {isEditMode} sourceContent={item.content} {postId} blockId={item.id}>
         {#if item.tag === 'markdown'}
           {@html marked(item.content)}
         {:else if item.tag === 'code'}

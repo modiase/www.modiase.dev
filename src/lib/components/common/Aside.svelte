@@ -1,10 +1,10 @@
 <script lang="ts">
   import clsx from 'clsx';
-  import { onMount } from 'svelte';
+  import type { HTMLAttributes } from 'svelte/elements';
 
   export let content: string;
   export let className: string = '';
-  export let rest: Record<string, any> = {};
+  export let rest: HTMLAttributes<HTMLElement> = {};
   export let isEditMode: boolean = false;
 
   let asideElement: HTMLElement;
@@ -34,48 +34,35 @@
   $: if (asideElement && placeholderElement) {
     requestAnimationFrame(positionAside);
   }
+
+  const asideContent = () =>
+    `<div class="p-4 text-sm text-[var(--text-secondary)] italic">${content}</div>`;
 </script>
 
-<!-- Invisible placeholder that stays in document flow (only on 2xl+) -->
-<div
-  bind:this={placeholderElement}
-  class={clsx('invisible w-0 h-0', {
-    'hidden 2xl:block': true,
-  })}
-  aria-hidden="true"
-></div>
+{#if !isEditMode}
+  <!-- Invisible placeholder that stays in document flow (only on 2xl+) -->
+  <div
+    bind:this={placeholderElement}
+    class="invisible w-0 h-0 hidden 2xl:block"
+    aria-hidden="true"
+  ></div>
 
-<!-- Floating aside positioned relative to placeholder (only on 2xl+) -->
-<aside
-  bind:this={asideElement}
-  class={clsx(
-    'not-prose absolute z-10',
-    {
-      'hidden 2xl:block': !isEditMode,
-      hidden: isEditMode,
-    },
-    className
-  )}
-  {...rest}
->
-  <div class="p-4 text-sm text-[var(--text-secondary)] italic">
-    {content}
-  </div>
-</aside>
+  <!-- Floating aside positioned relative to placeholder (only on 2xl+) -->
+  <aside
+    bind:this={asideElement}
+    class={clsx('not-prose absolute z-10 hidden 2xl:block', className)}
+    {...rest}
+  >
+    {@html asideContent()}
+  </aside>
 
-<!-- Inline aside for mobile (below 2xl) -->
-<aside
-  class={clsx(
-    'not-prose my-4 w-full',
-    {
-      '2xl:hidden': !isEditMode,
-      block: isEditMode,
-    },
-    className
-  )}
-  {...rest}
->
-  <div class="p-4 text-sm text-[var(--text-secondary)] italic">
-    {content}
-  </div>
-</aside>
+  <!-- Inline aside for mobile (below 2xl) -->
+  <aside class={clsx('not-prose my-4 w-full 2xl:hidden', className)} {...rest}>
+    {@html asideContent()}
+  </aside>
+{:else}
+  <!-- Edit mode: always show inline -->
+  <aside class={clsx('not-prose my-4 w-full', className)} {...rest}>
+    {@html asideContent()}
+  </aside>
+{/if}

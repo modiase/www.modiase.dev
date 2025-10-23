@@ -5,35 +5,50 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "dev": "vite dev",
+    "dev": "bash ./bin/develop",
+    "dev:frontend": "vite dev",
+    "dev:backend": "pnpm exec bun server/index.ts",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "format": "prettier --write .",
-    "lint": "prettier --check . && pnpm run check"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
+    "@eslint/js": "^9.38.0",
     "@sveltejs/adapter-static": "^2.0.3",
     "@sveltejs/kit": "^1.30.4",
     "@sveltejs/vite-plugin-svelte": "^2.5.3",
     "@types/node": "^24.4.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
     "autoprefixer": "^10.4.21",
+    "eslint": "^9.38.0",
+    "eslint-plugin-svelte": "^3.12.5",
+    "globals": "^16.4.0",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
     "prettier-plugin-svelte": "^3.4.0",
     "sass": "^1.69.5",
     "svelte": "^4.2.7",
     "svelte-check": "^3.8.6",
-    "svelte-preprocess": "^6.0.3",
+    "svelte-eslint-parser": "^1.4.0",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.0.0",
     "vite": "^4.4.2"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^7.0.1",
+    "@fastify/cors": "^11.1.0",
+    "@fortawesome/fontawesome-free": "^7.1.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "fastify": "^5.6.1",
+    "fp-ts": "^2.16.11",
+    "io-ts": "^2.2.22",
     "marked": "^16.3.0",
-    "shiki": "^3.12.2"
+    "rxjs": "^7.8.2",
+    "shiki": "^3.12.2",
+    "svelte-french-toast": "^1.2.0"
   }
 }
