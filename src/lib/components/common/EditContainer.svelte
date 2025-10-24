@@ -12,7 +12,8 @@
     hasChange,
     commitAllChanges,
   } from '$lib/stores/pendingChanges';
-  import { addContentBlock, moveContentBlock } from '$lib/utils/api';
+  import { CONTENT_BLOCK_TYPES, addContentBlock, moveContentBlock } from '$lib/utils/api';
+  import type { ContentBlockType } from '$lib/types';
 
   const State = {
     VIEWING: 'VIEWING',
@@ -137,17 +138,17 @@
     }
   }
 
-  function handleAddContentBlock(type: string) {
+  function handleAddContentBlock(tag: ContentBlockType) {
     isLoading$.next(true);
     const content = {
       markdown: 'New content block',
       code: '// New code block',
       aside: 'New aside content',
-    }[type as keyof { markdown: string; code: string; aside: string }];
+    }[tag];
 
     addSubscription(
       addContentBlock(postId, {
-        type: type as 'markdown' | 'code' | 'aside',
+        tag,
         content,
         position: 'after',
         targetBlockId: blockId,
@@ -174,7 +175,7 @@
         },
         error: (error) => {
           console.error('Failed to move block:', error);
-          toast.error('Failed to move block. Please try again.');
+          toast.error('Failed to move block.');
           isLoading$.next(false);
         },
       })
@@ -225,10 +226,10 @@
               role="menu"
               tabindex="-1"
             >
-              {#each [{ type: 'markdown', label: 'Markdown' }, { type: 'code', label: 'Code' }, { type: 'aside', label: 'Aside' }] as item}
+              {#each CONTENT_BLOCK_TYPES as item}
                 <button
                   class="w-full text-center text-sm transition-colors hover:bg-black/20 py-1"
-                  on:click={() => handleAddContentBlock(item.type)}
+                  on:click={() => handleAddContentBlock(item.tag)}
                 >
                   {item.label}
                 </button>

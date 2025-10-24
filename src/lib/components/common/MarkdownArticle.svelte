@@ -7,11 +7,13 @@
   import TableOfContents from '$lib/components/common/TableOfContents.svelte';
   import EditContainer from '$lib/components/common/EditContainer.svelte';
   import { slugify } from '$lib/utils/slugify';
-  import type { ContentBlock } from '$lib/types';
+  import type { ContentBlock, ContentBlockType } from '$lib/types';
   import type { HTMLAttributes } from 'svelte/elements';
-  import { fromEvent } from 'rxjs';
+  import { fromEvent, BehaviorSubject } from 'rxjs';
   import { throttleTime, map, distinctUntilChanged } from 'rxjs/operators';
   import { createSubscriptionManager } from '$lib/utils/rxjs';
+  import { addContentBlock, CONTENT_BLOCK_TYPES } from '$lib/utils/api';
+  import { toast } from 'svelte-french-toast';
 
   const renderer = new marked.Renderer();
   renderer.link = function ({ href, title, tokens }) {
@@ -60,6 +62,8 @@
   let introductionHeading: HTMLElement | null = null;
 
   const addSubscription = createSubscriptionManager();
+  const isLoading$ = new BehaviorSubject<boolean>(false);
+  let isLoading = false;
 
   $: contentItems = Array.isArray(content)
     ? content
@@ -86,7 +90,36 @@
     window.location.href !== url.href && window.history.replaceState(null, '', url.href);
   }
 
+  function handleAddFirstBlock(tag: ContentBlockType) {
+    isLoading$.next(true);
+    const defaultContent = {
+      markdown: 'New content block',
+      code: '// New code block',
+      aside: 'New aside content',
+    }[tag];
+
+    addSubscription(
+      addContentBlock(postId, {
+        tag,
+        content: defaultContent,
+        position: 'after',
+      }).subscribe({
+        next: () => {
+          toast.success('Block added successfully');
+          window.location.reload();
+        },
+        error: (error) => {
+          console.error('Failed to add block:', error);
+          toast.error('Failed to add block. Please try again.');
+          isLoading$.next(false);
+        },
+      })
+    );
+  }
+
   onMount(() => {
+    addSubscription(isLoading$.subscribe((val) => (isLoading = val)));
+
     addSubscription(
       fromEvent(window, 'scroll')
         .pipe(
@@ -251,16 +284,45 @@
     )}
     {...rest}
   >
-    {#each contentItems as item}
-      <EditContainer {isEditMode} sourceContent={item.content} {postId} blockId={item.id}>
-        {#if item.tag === 'markdown'}
-          {@html marked(item.content)}
-        {:else if item.tag === 'code'}
-          <Code content={item.content} language={'language' in item ? item.language : 'text'} />
-        {:else if item.tag === 'aside'}
-          <Aside content={item.content} {isEditMode} />
-        {/if}
-      </EditContainer>
-    {/each}
+    {#if contentItems.length === 0 && isEditMode}
+      <div class="flex items-center justify-center min-h-[200px]">
+        <div class="relative group/dropdown">
+          <button
+            class="p-4 bg-contrast text-background rounded-full shadow-lg hover:brightness-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            disabled={isLoading}
+          >
+            <img src="/assets/icons/plus.svg" alt="Add first block" class="w-6 h-6" />
+          </button>
+          <div
+            class="absolute left-1/2 -translate-x-1/2 top-full z-10 hidden group-hover/dropdown:block"
+            role="menu"
+            tabindex="-1"
+          >
+            <div class="bg-contrast text-primary-dark font-semibold shadow-lg p-2 min-w-32 rounded">
+              {#each CONTENT_BLOCK_TYPES as item}
+                <button
+                  class="w-full text-center text-sm transition-colors hover:bg-black/20 py-1 rounded"
+                  on:click={() => handleAddFirstBlock(item.tag)}
+                >
+                  {item.label}
+                </button>
+              {/each}
+            </div>
+          </div>
+        </div>
+      </div>
+    {:else}
+      {#each contentItems as item}
+        <EditContainer {isEditMode} sourceContent={item.content} {postId} blockId={item.id}>
+          {#if item.tag === 'markdown'}
+            {@html marked(item.content)}
+          {:else if item.tag === 'code'}
+            <Code content={item.content} language={'language' in item ? item.language : 'text'} />
+          {:else if item.tag === 'aside'}
+            <Aside content={item.content} {isEditMode} />
+          {/if}
+        </EditContainer>
+      {/each}
+    {/if}
   </div>
 </div>

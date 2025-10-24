@@ -3,12 +3,15 @@
   import { format } from 'date-fns';
   import { enGB } from 'date-fns/locale';
   import Card from '$lib/components/common/Card.svelte';
+  import Modal from '$lib/components/common/Modal.svelte';
+  import CreatePostForm from '$lib/components/CreatePostForm.svelte';
   import clsx from 'clsx';
   import type { Post } from '$lib/types';
 
   let allPosts: Post[] = [];
   let currentPage = 1;
   const postsPerPage = 5;
+  let showModal = false;
 
   $: totalPages = Math.ceil(allPosts.length / postsPerPage);
   $: startIndex = (currentPage - 1) * postsPerPage;
@@ -53,7 +56,7 @@
       class={clsx(
         'fixed top-4 right-4 z-50 p-3 rounded-full bg-primary text-primary-foreground shadow-lg hover:brightness-90 transition-colors'
       )}
-      on:click={() => console.log('Plus button clicked!')}
+      on:click={() => (showModal = true)}
     >
       <img src="/assets/icons/plus.svg" alt="Add new post" class="w-6 h-6" />
     </button>
@@ -113,3 +116,7 @@
     </div>
   {/if}
 </div>
+
+<Modal isOpen={showModal} onClose={() => (showModal = false)}>
+  <CreatePostForm onClose={() => (showModal = false)} />
+</Modal>

@@ -1,14 +1,26 @@
-import type { ContentBlock } from '$lib/types';
+import type { ContentBlock, ContentBlockType, Post } from '$lib/types';
 import { Observable, from } from 'rxjs';
 import { timeout, catchError, map } from 'rxjs/operators';
 import { retryWithBackoff } from './rxjs';
 
+export const CONTENT_BLOCK_TYPES = [
+  { tag: 'markdown', label: 'Markdown' },
+  { tag: 'code', label: 'Code' },
+  { tag: 'aside', label: 'Aside' },
+] as const;
+
 interface AddContentBlockRequest {
-  type: 'markdown' | 'code' | 'aside';
+  tag: ContentBlockType;
   content: string;
   language?: string;
   position: 'before' | 'after';
-  targetBlockId: string;
+  targetBlockId?: string;
+}
+
+interface CreatePostRequest {
+  title: string;
+  lead: string;
+  tags: string[];
 }
 
 function fetchJson<T>(url: string, options?: RequestInit): Observable<T> {
@@ -97,4 +109,12 @@ export function moveContentBlock(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ direction }),
   }).pipe(map((result) => result.block));
+}
+
+export function createPost(request: CreatePostRequest): Observable<Post> {
+  return fetchJson<{ post: Post }>('/api/posts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(request),
+  }).pipe(map((result) => result.post));
 }

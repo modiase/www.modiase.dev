@@ -3,6 +3,8 @@ export type ContentBlock =
   | { id: string; tag: 'aside'; content: string; classes?: string }
   | { id: string; tag: 'code'; content: string; language: string; classes?: string };
 
+export type ContentBlockType = 'markdown' | 'aside' | 'code';
+
 export interface Post {
   id: string;
   slug: string;

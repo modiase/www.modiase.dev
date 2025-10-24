@@ -1,26 +1,39 @@
-import Fastify from 'fastify';
+import Fastify, { type FastifyReply } from 'fastify';
 import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 import cors from '@fastify/cors';
 import type { Post, ContentBlock } from '../src/lib/types';
-import { pipe } from 'fp-ts/lib/function.js';
+import { flow, identity, pipe } from 'fp-ts/lib/function.js';
 import * as E from 'fp-ts/lib/Either.js';
 import * as T from 'fp-ts/lib/Task.js';
 import * as TE from 'fp-ts/lib/TaskEither.js';
 import * as O from 'fp-ts/lib/Option.js';
 import * as RA from 'fp-ts/lib/ReadonlyArray.js';
-import { sequenceS } from 'fp-ts/lib/Apply.js';
 import * as t from 'io-ts';
 import { PathReporter } from 'io-ts/lib/PathReporter.js';
 
 const fastify = Fastify({
   logger: true,
 });
-
 fastify.register(cors, {
   origin: ['http://localhost:5173', 'http://localhost:3000'],
 });
+
+const decode =
+  <O>(decoder: t.Decoder<unknown, O>) =>
+  (reply: FastifyReply): ((input: unknown) => E.Either<FastifyReply, O>) =>
+    flow(
+      decoder.decode,
+      E.mapLeft((errors) => reply.status(400).send(PathReporter.report(E.left(errors)).join(', ')))
+    );
+
+const slugify = (text: string): string =>
+  text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 
 /**
  * Read posts from static/posts.json
@@ -41,7 +54,7 @@ const readPosts = async (): Promise<Post[]> =>
  * @param posts - Array of posts to write
  * @returns Promise<void>
  */
-const writePosts = async (posts: Post[]): Promise<void> =>
+const writePosts = async (posts: readonly Post[]): Promise<void> =>
   pipe(
     TE.tryCatch(
       () => writeFile(join(process.cwd(), 'static', 'posts.json'), JSON.stringify(posts, null, 2)),
@@ -54,32 +67,65 @@ const writePosts = async (posts: Post[]): Promise<void> =>
  * Generate UUID for new content blocks
  * @returns string - A new UUID
  */
-function generateId(): string {
-  return crypto.randomUUID();
-}
+const generateId = (): string => crypto.randomUUID();
 
 fastify.get('/api/posts', readPosts);
 
+fastify.post('/api/posts', async (request, reply) =>
+  pipe(
+    request.body,
+    TE.fromEitherK(
+      decode(t.strict({ title: t.string, lead: t.string, tags: t.array(t.string) }))(reply)
+    ),
+    TE.chain(({ title, lead, tags }) =>
+      pipe(
+        TE.Do,
+        TE.bind('posts', () =>
+          TE.tryCatch(
+            () => readPosts(),
+            (err) => reply.status(500).send({ error: `Failed to read posts: ${err}` })
+          )
+        ),
+        TE.bind('newPost', () =>
+          TE.right({
+            id: generateId(),
+            slug: slugify(title),
+            title,
+            date: new Date().toISOString(),
+            lead,
+            content: [],
+            tags,
+          } as Post)
+        ),
+        TE.bind('updatedPosts', ({ posts, newPost }) => TE.right([...posts, newPost] as Post[])),
+        TE.chainFirstW(({ updatedPosts }) =>
+          TE.tryCatch(
+            () => writePosts(updatedPosts),
+            (err) => reply.status(400).send({ error: `Failed to write posts: ${err}` })
+          )
+        )
+      )
+    ),
+    TE.match(identity, ({ newPost }) => reply.status(201).send({ success: true, post: newPost }))
+  )()
+);
+
 fastify.get('/api/posts/:postId', async (request, reply) =>
   pipe(
-    t.strict({ postId: t.string }).decode(request.params),
-    E.mapLeft((errors) => PathReporter.report(E.left(errors)).join(', ')),
-    TE.fromEither,
+    request.params,
+    TE.fromEitherK(decode(t.strict({ postId: t.string }))(reply)),
     TE.chainW(({ postId }) =>
       pipe(
         TE.tryCatch(
           () => readPosts(),
-          (err) => `Failed to read posts: ${err}`
+          (err) => reply.status(500).send({ error: `Failed to read posts: ${err}` })
         ),
-        TE.chainOptionK(() => 'Post not found')((posts) =>
+        TE.chainOptionK(() => reply.status(404).send({ error: 'Post not found' }))((posts) =>
           RA.findFirst((p: Post) => p.id === postId)(posts)
         )
       )
     ),
-    TE.matchW(
-      (error) => reply.status(400).send({ error }),
-      (post) => post
-    )
+    TE.match(identity, (post) => reply.status(200).send(post))
   )()
 );
 
@@ -87,80 +133,59 @@ fastify.put('/api/posts/:postId/content/:blockId', async (request, reply) =>
   pipe(
     E.Do,
     E.bind('params', () =>
-      pipe(
-        t.strict({ postId: t.string, blockId: t.string }).decode(request.params),
-        E.mapLeft((errors) => PathReporter.report(E.left(errors)).join(', '))
-      )
+      pipe(request.params, decode(t.strict({ postId: t.string, blockId: t.string }))(reply))
     ),
-    E.bind('body', () =>
-      pipe(
-        t.strict({ content: t.string }).decode(request.body),
-        E.mapLeft((errors) => PathReporter.report(E.left(errors)).join(', '))
-      )
+    TE.fromEitherK(
+      E.bind('body', () => pipe(request.body, decode(t.strict({ content: t.string }))(reply)))
     ),
-    TE.fromEither,
-    TE.chainW(({ params: { postId, blockId }, body: { content } }) =>
+    TE.chain(({ params: { postId, blockId }, body: { content } }) =>
       pipe(
         TE.Do,
         TE.bind('posts', () =>
           TE.tryCatch(
             () => readPosts(),
-            (err) => `Failed to read posts: ${err}`
+            (err) => reply.status(500).send({ error: `Failed to read posts: ${err}` })
           )
         ),
         TE.bind('postIndex', ({ posts }) =>
           pipe(
             RA.findIndex((p: Post) => p.id === postId)(posts),
-            TE.fromOption(() => 'Post not found')
+            TE.fromOption(() => reply.status(404).send({ error: 'Post not found' }))
           )
         ),
-        TE.bind('blockIndex', ({ posts, postIndex }) =>
+        TE.bind('updatedPosts', ({ posts, postIndex }) =>
           pipe(
             RA.findIndex((block: ContentBlock) => block.id === blockId)(posts[postIndex].content),
-            TE.fromOption(() => 'Content block not found')
-          )
-        ),
-        TE.bind('updatedContent', ({ posts, postIndex, blockIndex }) =>
-          pipe(
-            RA.modifyAt(blockIndex, (block: ContentBlock) => ({ ...block, content }))(
-              posts[postIndex].content
+            O.chain((blockIndex) =>
+              RA.modifyAt(blockIndex, (block: ContentBlock) => ({ ...block, content }))(
+                posts[postIndex].content
+              )
             ),
-            TE.fromOption(() => 'Failed to modify block')
+            O.chain((updatedContent) =>
+              RA.updateAt(postIndex, {
+                ...posts[postIndex],
+                content: Array.from(updatedContent),
+              })(posts)
+            ),
+            TE.fromOption(() => reply.status(404).send({ error: 'Content block not found' }))
           )
         ),
-        TE.bind('updatedPosts', ({ posts, postIndex, updatedContent }) =>
-          pipe(
-            RA.updateAt(postIndex, {
-              ...posts[postIndex],
-              content: Array.from(updatedContent),
-            })(posts),
-            TE.fromOption(() => 'Failed to update post'),
-            TE.map((p) => Array.from(p) as Post[])
-          )
-        ),
-        TE.chainFirstW(({ updatedPosts }) =>
+        TE.chainFirst(({ updatedPosts }) =>
           TE.tryCatch(
             () => writePosts(updatedPosts),
-            (err) => `Failed to write posts: ${err}`
+            (err) => reply.status(500).send({ error: `Failed to write posts: ${err}` })
           )
-        ),
-        TE.map(({ updatedContent, blockIndex }) => ({
-          success: true,
-          block: updatedContent[blockIndex],
-        }))
+        )
       )
     ),
-    TE.matchW(
-      (error) => reply.status(400).send({ error }),
-      (result) => result
-    )
+    TE.match(identity, () => reply.status(200).send({ success: true }))
   )()
 );
 
 fastify.delete('/api/posts/:postId/content/:blockId', async (request, reply) =>
   pipe(
-    t.strict({ postId: t.string, blockId: t.string }).decode(request.params),
-    E.mapLeft((errors) => PathReporter.report(E.left(errors)).join(', ')),
+    request.params,
+    decode(t.strict({ postId: t.string, blockId: t.string }))(reply),
     TE.fromEither,
     TE.chainW(({ postId, blockId }) =>
       pipe(
@@ -218,154 +243,72 @@ fastify.delete('/api/posts/:postId/content/:blockId', async (request, reply) =>
 fastify.post('/api/posts/:postId/content', async (request, reply) =>
   pipe(
     E.Do,
-    E.bind('params', () =>
-      pipe(
-        t.strict({ postId: t.string }).decode(request.params),
-        E.mapLeft((errors) => PathReporter.report(E.left(errors)).join(', '))
-      )
-    ),
-    E.bind('body', () =>
-      pipe(
-        t
-          .strict({
-            type: t.union([t.literal('markdown'), t.literal('code'), t.literal('aside')]),
-            content: t.string,
-            language: t.union([t.string, t.undefined]),
-            position: t.union([t.literal('before'), t.literal('after')]),
-            targetBlockId: t.string,
-          })
-          .decode(request.body),
-        E.mapLeft((errors) => PathReporter.report(E.left(errors)).join(', '))
-      )
-    ),
-    TE.fromEither,
-    TE.chainW(
-      ({ params: { postId }, body: { type, content, language, position, targetBlockId } }) =>
+    E.bind('params', () => pipe(request.params, decode(t.strict({ postId: t.string }))(reply))),
+    TE.fromEitherK(
+      E.bind('body', () =>
         pipe(
-          TE.Do,
-          TE.bind('posts', () =>
-            TE.tryCatch(
-              () => readPosts(),
-              (err) => `Failed to read posts: ${err}`
-            )
-          ),
-          TE.bind('postIndex', ({ posts }) =>
-            pipe(
-              RA.findIndex((p: Post) => p.id === postId)(posts),
-              TE.fromOption(() => 'Post not found')
-            )
-          ),
-          TE.bind('targetBlockIndex', ({ posts, postIndex }) =>
-            pipe(
-              RA.findIndex((block: ContentBlock) => block.id === targetBlockId)(
-                posts[postIndex].content
-              ),
-              TE.fromOption(() => 'Target content block not found')
-            )
-          ),
-          TE.bind('newBlock', () =>
-            TE.right({
-              id: generateId(),
-              tag: type,
-              content,
-              ...(type === 'code' && language ? { language } : {}),
-            } as ContentBlock)
-          ),
-          TE.bind('insertIndex', ({ targetBlockIndex }) =>
-            TE.right(position === 'before' ? targetBlockIndex : targetBlockIndex + 1)
-          ),
-          TE.bind('updatedContent', ({ posts, postIndex, insertIndex, newBlock }) =>
-            pipe(
-              RA.insertAt(insertIndex, newBlock)(posts[postIndex].content),
-              TE.fromOption(() => 'Failed to insert block')
-            )
-          ),
-          TE.bind('updatedPosts', ({ posts, postIndex, updatedContent }) =>
-            pipe(
-              RA.updateAt(postIndex, {
-                ...posts[postIndex],
-                content: Array.from(updatedContent),
-              })(posts),
-              TE.fromOption(() => 'Failed to update post'),
-              TE.map((p) => Array.from(p) as Post[])
-            )
-          ),
-          TE.chainFirstW(({ updatedPosts }) =>
-            TE.tryCatch(
-              () => writePosts(updatedPosts),
-              (err) => `Failed to write posts: ${err}`
-            )
-          ),
-          TE.map(({ newBlock }) => ({ success: true, block: newBlock }))
+          request.body,
+          decode(
+            // TODO: Use union to make discriminated union based on code content type needing language.
+            t.strict({
+              type: t.union([t.literal('markdown'), t.literal('code'), t.literal('aside')]),
+              content: t.string,
+              language: t.union([t.string, t.undefined]),
+              position: t.union([t.literal('before'), t.literal('after')]),
+              targetBlockId: t.union([t.string, t.undefined]),
+            })
+          )(reply)
         )
-    ),
-    TE.matchW(
-      (error) => reply.status(400).send({ error }),
-      (result) => result
-    )
-  )()
-);
-
-fastify.put('/api/posts/:postId/content/:blockId/move', async (request, reply) =>
-  pipe(
-    E.Do,
-    E.bind('params', () =>
-      pipe(
-        t.strict({ postId: t.string, blockId: t.string }).decode(request.params),
-        E.mapLeft((errors) => PathReporter.report(E.left(errors)).join(', '))
       )
     ),
-    E.bind('body', () =>
-      pipe(
-        t.strict({ direction: t.union([t.literal('up'), t.literal('down')]) }).decode(request.body),
-        E.mapLeft((errors) => PathReporter.report(E.left(errors)).join(', '))
-      )
-    ),
-    TE.fromEither,
-    TE.chainW(({ params: { postId, blockId }, body: { direction } }) =>
+    TE.chain(({ params: { postId }, body: { type, content, language, position, targetBlockId } }) =>
       pipe(
         TE.Do,
         TE.bind('posts', () =>
           TE.tryCatch(
             () => readPosts(),
-            (err) => `Failed to read posts: ${err}`
+            (err) => reply.status(500).send({ error: `Failed to read posts: ${err}` })
           )
         ),
         TE.bind('postIndex', ({ posts }) =>
           pipe(
             RA.findIndex((p: Post) => p.id === postId)(posts),
-            TE.fromOption(() => 'Post not found')
+            TE.fromOption(() => reply.status(404).send({ error: 'Post not found' }))
           )
         ),
-        TE.bind('blockIndex', ({ posts, postIndex }) =>
-          pipe(
-            RA.findIndex((block: ContentBlock) => block.id === blockId)(posts[postIndex].content),
-            TE.fromOption(() => 'Content block not found')
+        TE.bind('targetBlockIndex', ({ posts, postIndex }) =>
+          targetBlockId === undefined
+            ? TE.right(-1)
+            : pipe(
+                RA.findIndex((block: ContentBlock) => block.id === targetBlockId)(
+                  posts[postIndex].content
+                ),
+                TE.fromOption(() =>
+                  reply.status(404).send({ error: 'Target content block not found' })
+                )
+              )
+        ),
+        TE.bind('newBlock', () =>
+          TE.right({
+            id: generateId(),
+            tag: type,
+            content,
+            ...(type === 'code' && language ? { language } : {}),
+          } as ContentBlock)
+        ),
+        TE.bind('insertIndex', ({ targetBlockIndex }) =>
+          TE.right(
+            targetBlockIndex === -1
+              ? 0
+              : position === 'before'
+                ? targetBlockIndex
+                : targetBlockIndex + 1
           )
         ),
-        TE.bind('moveData', ({ posts, postIndex, blockIndex }) =>
-          sequenceS(TE.ApplicativePar)({
-            newIndex: pipe(
-              direction === 'up' ? blockIndex - 1 : blockIndex + 1,
-              O.fromPredicate((idx) => idx >= 0 && idx < posts[postIndex].content.length),
-              TE.fromOption(() => 'Cannot move block in that direction')
-            ),
-            block: pipe(
-              RA.lookup(blockIndex)(posts[postIndex].content),
-              TE.fromOption(() => 'Failed to lookup block')
-            ),
-          })
-        ),
-        TE.bind('withoutBlock', ({ posts, postIndex, blockIndex }) =>
+        TE.bind('updatedContent', ({ posts, postIndex, insertIndex, newBlock }) =>
           pipe(
-            RA.deleteAt(blockIndex)(posts[postIndex].content),
-            TE.fromOption(() => 'Failed to delete block')
-          )
-        ),
-        TE.bind('updatedContent', ({ withoutBlock, moveData: { newIndex, block } }) =>
-          pipe(
-            RA.insertAt(newIndex, block)(withoutBlock),
-            TE.fromOption(() => 'Failed to insert block')
+            RA.insertAt(insertIndex, newBlock)(posts[postIndex].content),
+            TE.fromOption(() => reply.status(500).send({ error: 'Failed to insert block' }))
           )
         ),
         TE.bind('updatedPosts', ({ posts, postIndex, updatedContent }) =>
@@ -374,23 +317,98 @@ fastify.put('/api/posts/:postId/content/:blockId/move', async (request, reply) =
               ...posts[postIndex],
               content: Array.from(updatedContent),
             })(posts),
-            TE.fromOption(() => 'Failed to update post'),
+            TE.fromOption(() => reply.status(500).send({ error: 'Failed to update post' })),
             TE.map((p) => Array.from(p) as Post[])
           )
         ),
-        TE.chainFirstW(({ updatedPosts }) =>
+        TE.chainFirst(({ updatedPosts }) =>
           TE.tryCatch(
             () => writePosts(updatedPosts),
-            (err) => `Failed to write posts: ${err}`
+            (err) => reply.status(500).send({ error: `Failed to write posts: ${err}` })
           )
-        ),
-        TE.map(({ moveData: { block } }) => ({ success: true, block }))
+        )
       )
     ),
-    TE.matchW(
-      (error) => reply.status(400).send({ error }),
-      (result) => result
-    )
+    TE.match(identity, ({ newBlock }) => reply.status(200).send({ success: true, newBlock }))
+  )()
+);
+
+fastify.put('/api/posts/:postId/content/:blockId/move', async (request, reply) =>
+  pipe(
+    E.Do,
+    E.bind('params', () =>
+      pipe(request.params, decode(t.strict({ postId: t.string, blockId: t.string }))(reply))
+    ),
+    TE.fromEitherK(
+      E.bind('body', () =>
+        pipe(
+          request.body,
+          decode(t.strict({ direction: t.union([t.literal('up'), t.literal('down')]) }))(reply)
+        )
+      )
+    ),
+    TE.chain(({ params: { postId, blockId }, body: { direction } }) =>
+      pipe(
+        TE.Do,
+        TE.bind('posts', () =>
+          TE.tryCatch(
+            () => readPosts(),
+            (err) => reply.status(500).send({ error: `Failed to read posts: ${err}` })
+          )
+        ),
+        TE.bind('postIndex', ({ posts }) =>
+          pipe(
+            RA.findIndex((p: Post) => p.id === postId)(posts),
+            TE.fromOption(() => reply.status(404).send({ error: 'Post not found' }))
+          )
+        ),
+        TE.bind('blockIndex', ({ posts, postIndex }) =>
+          pipe(
+            RA.findIndex((block: ContentBlock) => block.id === blockId)(posts[postIndex].content),
+            TE.fromOption(() => reply.status(404).send({ error: 'Content block not found' }))
+          )
+        ),
+        TE.bind('updatedContent', ({ posts, postIndex, blockIndex }) =>
+          pipe(
+            O.Do,
+            O.bind('newIndex', () =>
+              pipe(
+                direction === 'up' ? blockIndex - 1 : blockIndex + 1,
+                O.fromPredicate((idx) => idx >= 0 && idx < posts[postIndex].content.length)
+              )
+            ),
+            O.bind('block', () => pipe(posts[postIndex].content, RA.lookup(blockIndex))),
+            O.chain(({ block, newIndex }) =>
+              pipe(
+                posts[postIndex].content,
+                RA.deleteAt(blockIndex),
+                O.chain(RA.insertAt(newIndex, block))
+              )
+            ),
+            TE.fromOption(() =>
+              reply.status(400).send({ error: 'Cannot move block in that direction' })
+            )
+          )
+        ),
+        TE.bind('updatedPosts', ({ posts, postIndex, updatedContent }) =>
+          pipe(
+            RA.updateAt(postIndex, {
+              ...posts[postIndex],
+              content: Array.from(updatedContent),
+            })(posts),
+            TE.fromOption(() => reply.status(500).send({ error: 'Failed to update post' })),
+            TE.map((p) => Array.from(p) as Post[])
+          )
+        ),
+        TE.chainFirst(({ updatedPosts }) =>
+          TE.tryCatch(
+            () => writePosts(updatedPosts),
+            (err) => reply.status(500).send({ error: `Failed to write posts: ${err}` })
+          )
+        )
+      )
+    ),
+    TE.match(identity, ({ blockIndex }) => reply.status(200).send({ success: true, blockIndex }))
   )()
 );
 
