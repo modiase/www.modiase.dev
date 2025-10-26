@@ -34,7 +34,15 @@ function fetchJson<T>(url: string, options?: RequestInit): Observable<T> {
           body: errorText,
           url,
         });
-        throw new Error(`Failed request: ${response.status} ${response.statusText} - ${errorText}`);
+
+        let errorBody;
+        try {
+          errorBody = JSON.parse(errorText);
+        } catch {
+          errorBody = { error: `Failed request: ${response.status} ${response.statusText}` };
+        }
+
+        throw errorBody;
       }
       return response.json();
     })
@@ -72,9 +80,15 @@ export function deleteContentBlock(postId: string, blockId: string): Observable<
             body: errorText,
             url: `/api/posts/${postId}/content/${blockId}`,
           });
-          throw new Error(
-            `Failed to delete: ${response.status} ${response.statusText} - ${errorText}`
-          );
+
+          let errorBody;
+          try {
+            errorBody = JSON.parse(errorText);
+          } catch {
+            errorBody = { error: `Failed to delete: ${response.status} ${response.statusText}` };
+          }
+
+          throw errorBody;
         }
       }
     )

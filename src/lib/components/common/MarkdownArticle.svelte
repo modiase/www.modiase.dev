@@ -94,7 +94,7 @@
     isLoading$.next(true);
     const defaultContent = {
       markdown: 'New content block',
-      code: '// New code block',
+      code: `// New code block`,
       aside: 'New aside content',
     }[tag];
 
@@ -110,7 +110,8 @@
         },
         error: (error) => {
           console.error('Failed to add block:', error);
-          toast.error('Failed to add block. Please try again.');
+          const errorMessage = error?.error || 'Failed to add block. Please try again.';
+          toast.error(errorMessage);
           isLoading$.next(false);
         },
       })
@@ -284,7 +285,7 @@
     )}
     {...rest}
   >
-    {#if contentItems.length === 0 && isEditMode}
+    {#if import.meta.env.DEV && contentItems.length === 0 && isEditMode}
       <div class="flex items-center justify-center min-h-[200px]">
         <div class="relative group/dropdown">
           <button
@@ -313,7 +314,7 @@
       </div>
     {:else}
       {#each contentItems as item}
-        <EditContainer {isEditMode} sourceContent={item.content} {postId} blockId={item.id}>
+        <EditContainer {isEditMode} block={item} {postId} blockId={item.id}>
           {#if item.tag === 'markdown'}
             {@html marked(item.content)}
           {:else if item.tag === 'code'}

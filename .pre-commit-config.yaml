@@ -10,6 +10,19 @@ repos:
 
   - repo: local
     hooks:
+      - id: lint
+        name: lint (pnpm)
+        entry: pnpm lint
+        language: system
+        files: "\\.(svelte|ts|js|cjs|mjs|json)$"
+
+      - id: format
+        name: format (pnpm)
+        entry: pnpm format
+        language: system
+        files: "\\.(svelte|ts|js|cjs|mjs|json|md|scss|css|html|ya?ml)$"
+        pass_filenames: true
+
       - id: prettier
         name: prettier (pnpm)
         entry: pnpm exec prettier --write

@@ -9,7 +9,11 @@ export type PendingEditChange = {
   blockId: string;
   content: string;
   originalContent: string;
-};
+} & (
+  | { blockTag: 'markdown'; options: Record<string, never> }
+  | { blockTag: 'aside'; options: Record<string, never> }
+  | { blockTag: 'code'; options: { language: string | null } }
+);
 
 export type PendingDeleteChange = {
   type: 'delete';
@@ -26,9 +30,44 @@ export const hasPendingChanges$ = pendingChanges$.pipe(map((changes) => changes.
 
 export const pendingChangesCount$ = pendingChanges$.pipe(map((changes) => changes.size));
 
-export function addEdit(blockId: string, content: string, originalContent: string) {
+export function addEdit(
+  blockId: string,
+  blockTag: 'markdown' | 'aside' | 'code',
+  content: string,
+  originalContent: string,
+  options: Record<string, string | null> | Record<string, never>
+): void {
   const current = new Map(pendingChangesMap$.value);
-  current.set(blockId, { type: 'edit', blockId, content, originalContent });
+
+  if (blockTag === 'code') {
+    current.set(blockId, {
+      type: 'edit',
+      blockTag: 'code',
+      blockId,
+      content,
+      originalContent,
+      options: options as { language: string | null },
+    });
+  } else if (blockTag === 'markdown') {
+    current.set(blockId, {
+      type: 'edit',
+      blockTag: 'markdown',
+      blockId,
+      content,
+      originalContent,
+      options: {},
+    });
+  } else if (blockTag === 'aside') {
+    current.set(blockId, {
+      type: 'edit',
+      blockTag: 'aside',
+      blockId,
+      content,
+      originalContent,
+      options: {},
+    });
+  }
+
   pendingChangesMap$.next(current);
 }
 
@@ -70,7 +109,15 @@ export function commitAllChanges(postId: string) {
 
   if (edits.length > 0) {
     operations.push(
-      forkJoin(edits.map((change) => updateContentBlock(postId, change.blockId, change.content)))
+      forkJoin(
+        edits.map((change) => {
+          const pragmaLines = Object.entries(change.options)
+            .filter(([, v]) => v !== null)
+            .map(([k, v]) => `#${k}=${v}`);
+          const content = [...pragmaLines, change.content].join('\n');
+          return updateContentBlock(postId, change.blockId, content);
+        })
+      )
     );
   }
 

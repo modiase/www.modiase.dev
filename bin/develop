@@ -78,7 +78,7 @@ trap cleanup SIGINT SIGTERM EXIT
 log_info "Starting development servers..."
 
 log_info "Starting backend server on port 3001..."
-(NODE_ENV=development pnpm exec node server/index.ts 2>&1 | while IFS= read -r line; do echo -e "$(date '+%Y-%m-%d %H:%M:%S') | ${PURPLE}backend${NC} | $line"; done | tee logs/backend.log) &
+(NODE_ENV=development pnpm exec tsx watch server/index.ts 2>&1 | while IFS= read -r line; do echo -e "$(date '+%Y-%m-%d %H:%M:%S') | ${PURPLE}backend${NC} | $line"; done | tee logs/backend.log) &
 BACKEND_PID=$!
 
 log_info "Waiting for backend server to be ready..."

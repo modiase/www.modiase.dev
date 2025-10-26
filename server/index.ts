@@ -12,6 +12,7 @@ import * as O from 'fp-ts/lib/Option.js';
 import * as RA from 'fp-ts/lib/ReadonlyArray.js';
 import * as t from 'io-ts';
 import { PathReporter } from 'io-ts/lib/PathReporter.js';
+import { handleEdit, handleAdd } from './handlers/contentBlocks.js';
 
 const fastify = Fastify({
   logger: true,
@@ -153,21 +154,35 @@ fastify.put('/api/posts/:postId/content/:blockId', async (request, reply) =>
             TE.fromOption(() => reply.status(404).send({ error: 'Post not found' }))
           )
         ),
-        TE.bind('updatedPosts', ({ posts, postIndex }) =>
+        TE.bind('blockIndex', ({ posts, postIndex }) =>
           pipe(
             RA.findIndex((block: ContentBlock) => block.id === blockId)(posts[postIndex].content),
-            O.chain((blockIndex) =>
-              RA.modifyAt(blockIndex, (block: ContentBlock) => ({ ...block, content }))(
-                posts[postIndex].content
-              )
+            TE.fromOption(() => reply.status(404).send({ error: 'Content block not found' }))
+          )
+        ),
+        TE.bind('updatedBlock', ({ posts, postIndex, blockIndex }) =>
+          pipe(
+            TE.fromOption(() => reply.status(404).send({ error: 'Content block not found' }))(
+              RA.lookup(blockIndex)(posts[postIndex].content)
             ),
+            TE.chain((block) =>
+              pipe(
+                TE.fromEitherK(handleEdit)(block, content),
+                TE.mapLeft((err) => reply.status(400).send({ error: err }))
+              )
+            )
+          )
+        ),
+        TE.bind('updatedPosts', ({ posts, postIndex, blockIndex, updatedBlock }) =>
+          pipe(
+            RA.modifyAt(blockIndex, () => updatedBlock)(posts[postIndex].content),
             O.chain((updatedContent) =>
               RA.updateAt(postIndex, {
                 ...posts[postIndex],
                 content: Array.from(updatedContent),
               })(posts)
             ),
-            TE.fromOption(() => reply.status(404).send({ error: 'Content block not found' }))
+            TE.fromOption(() => reply.status(500).send({ error: 'Failed to update block' }))
           )
         ),
         TE.chainFirst(({ updatedPosts }) =>
@@ -249,11 +264,9 @@ fastify.post('/api/posts/:postId/content', async (request, reply) =>
         pipe(
           request.body,
           decode(
-            // TODO: Use union to make discriminated union based on code content type needing language.
             t.strict({
-              type: t.union([t.literal('markdown'), t.literal('code'), t.literal('aside')]),
+              tag: t.union([t.literal('markdown'), t.literal('code'), t.literal('aside')]),
               content: t.string,
-              language: t.union([t.string, t.undefined]),
               position: t.union([t.literal('before'), t.literal('after')]),
               targetBlockId: t.union([t.string, t.undefined]),
             })
@@ -261,7 +274,7 @@ fastify.post('/api/posts/:postId/content', async (request, reply) =>
         )
       )
     ),
-    TE.chain(({ params: { postId }, body: { type, content, language, position, targetBlockId } }) =>
+    TE.chain(({ params: { postId }, body: { tag, content, position, targetBlockId } }) =>
       pipe(
         TE.Do,
         TE.bind('posts', () =>
@@ -289,12 +302,10 @@ fastify.post('/api/posts/:postId/content', async (request, reply) =>
               )
         ),
         TE.bind('newBlock', () =>
-          TE.right({
-            id: generateId(),
-            tag: type,
-            content,
-            ...(type === 'code' && language ? { language } : {}),
-          } as ContentBlock)
+          pipe(
+            TE.fromEitherK(handleAdd)(generateId(), tag, content),
+            TE.mapLeft((err) => reply.status(400).send({ error: err }))
+          )
         ),
         TE.bind('insertIndex', ({ targetBlockIndex }) =>
           TE.right(

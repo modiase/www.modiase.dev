@@ -25,11 +25,11 @@
   const addSubscription = createSubscriptionManager();
 
   onMount(() => {
-    if (isEditMode) {
+    if (import.meta.env.DEV && isEditMode) {
       clearAll();
+      addSubscription(hasPendingChanges$.subscribe((val) => (hasPendingChanges = val)));
+      addSubscription(pendingChangesCount$.subscribe((val) => (pendingChangesCount = val)));
     }
-    addSubscription(hasPendingChanges$.subscribe((val) => (hasPendingChanges = val)));
-    addSubscription(pendingChangesCount$.subscribe((val) => (pendingChangesCount = val)));
   });
 
   function saveAll() {
@@ -40,7 +40,8 @@
       commitAllChanges(post.id).subscribe({
         error: (error) => {
           console.error('Failed to save changes:', error);
-          toast.error('Failed to save changes. Please try again.');
+          const errorMessage = error?.error || 'Failed to save changes. Please try again.';
+          toast.error(errorMessage);
           isSaving = false;
         },
       })

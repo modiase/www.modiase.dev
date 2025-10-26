@@ -5,15 +5,10 @@
   import { BehaviorSubject } from 'rxjs';
   import { createSubscriptionManager } from '$lib/utils/rxjs';
   import { onMount } from 'svelte';
-  import {
-    addEdit,
-    addDelete,
-    removeChange,
-    hasChange,
-    commitAllChanges,
-  } from '$lib/stores/pendingChanges';
+  import { addDelete, removeChange, hasChange, commitAllChanges } from '$lib/stores/pendingChanges';
   import { CONTENT_BLOCK_TYPES, addContentBlock, moveContentBlock } from '$lib/utils/api';
-  import type { ContentBlockType } from '$lib/types';
+  import type { ContentBlock, ContentBlockType } from '$lib/types';
+  import { addEdit } from '$lib/utils/contentBlockEdits';
 
   const State = {
     VIEWING: 'VIEWING',
@@ -22,9 +17,12 @@
   } as const;
 
   export let isEditMode: boolean = false;
-  export let sourceContent: string = '';
+  export let block: ContentBlock;
   export let postId: string = '';
   export let blockId: string = '';
+
+  $: sourceContent = block.content;
+  $: blockTag = block.tag;
 
   const state$ = new BehaviorSubject<keyof typeof State>(State.VIEWING);
   const isLoading$ = new BehaviorSubject<boolean>(false);
@@ -37,8 +35,8 @@
   let isLoading = false;
   let hasPendingChange = false;
 
-  $: if (state === State.EDITING && textareaValue !== sourceContent) {
-    addEdit(blockId, textareaValue, sourceContent);
+  $: if (state === State.EDITING) {
+    addEdit(blockId, blockTag, textareaValue, sourceContent);
   }
 
   $: buttonConfig = [
@@ -85,9 +83,11 @@
 
   function toggleEditing() {
     if (state$.value === State.VIEWING) {
-      textareaValue = sourceContent;
+      const blockOptions = block.tag === 'code' ? { language: block.language } : {};
+      const pragmaLines = Object.entries(blockOptions).map(([k, v]) => `#${k}=${v}`);
+      textareaValue = [...pragmaLines, sourceContent].join('\n');
+
       state$.next(State.EDITING);
-      addEdit(blockId, textareaValue, sourceContent);
       hasPendingChange = true;
     } else if (state$.value === State.EDITING) {
       isLoading$.next(true);
@@ -95,7 +95,8 @@
         commitAllChanges(postId).subscribe({
           error: (error) => {
             console.error('Failed to save changes:', error);
-            toast.error('Failed to save changes. Please try again.');
+            const errorMessage = error?.error || 'Failed to save changes. Please try again.';
+            toast.error(errorMessage);
             isLoading$.next(false);
           },
         })
@@ -122,7 +123,8 @@
         commitAllChanges(postId).subscribe({
           error: (error) => {
             console.error('Failed to save changes:', error);
-            toast.error('Failed to save changes. Please try again.');
+            const errorMessage = error?.error || 'Failed to save changes. Please try again.';
+            toast.error(errorMessage);
             isLoading$.next(false);
           },
         })
@@ -159,7 +161,8 @@
         },
         error: (error) => {
           console.error('Failed to add block:', error);
-          toast.error('Failed to add block. Please try again.');
+          const errorMessage = error?.error || 'Failed to add block. Please try again.';
+          toast.error(errorMessage);
           isLoading$.next(false);
         },
       })
@@ -175,7 +178,8 @@
         },
         error: (error) => {
           console.error('Failed to move block:', error);
-          toast.error('Failed to move block.');
+          const errorMessage = error?.error || 'Failed to move block.';
+          toast.error(errorMessage);
           isLoading$.next(false);
         },
       })
