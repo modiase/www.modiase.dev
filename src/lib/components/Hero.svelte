@@ -1,5 +1,6 @@
 <script lang="ts">
   import Link from './Link.svelte';
+  import Tooltip from './common/Tooltip.svelte';
 </script>
 
 <div class="flex flex-col items-center pt-[40px]">
@@ -17,20 +18,30 @@
   </div>
 
   <div class="flex justify-center space-x-8 mt-8">
-    <Link href="/posts" secondary>
-      <i class="fas fa-pen-fancy text-3xl"></i>
-    </Link>
-    <Link href="/gallery" secondary>
-      <i class="fas fa-camera text-3xl"></i>
-    </Link>
-    <Link href="https://github.com/modiase" secondary>
-      <i class="fab fa-github text-3xl"></i>
-    </Link>
-    <Link href="https://www.linkedin.com/in/moyewa-odiase-6b4698106/" secondary>
-      <i class="fab fa-linkedin text-3xl"></i>
-    </Link>
-    <Link href="mailto:hello@modiase.dev" secondary>
-      <i class="fas fa-envelope text-3xl"></i>
-    </Link>
+    <Tooltip text="Posts">
+      <Link href="/posts" secondary>
+        <i class="fas fa-pen-fancy text-3xl"></i>
+      </Link>
+    </Tooltip>
+    <Tooltip text="Gallery">
+      <Link href="/gallery" secondary>
+        <i class="fas fa-camera text-3xl"></i>
+      </Link>
+    </Tooltip>
+    <Tooltip text="GitHub">
+      <Link href="https://github.com/modiase" secondary>
+        <i class="fab fa-github text-3xl"></i>
+      </Link>
+    </Tooltip>
+    <Tooltip text="LinkedIn">
+      <Link href="https://www.linkedin.com/in/moyewa-odiase-6b4698106/" secondary>
+        <i class="fab fa-linkedin text-3xl"></i>
+      </Link>
+    </Tooltip>
+    <Tooltip text="Email">
+      <Link href="mailto:hello@modiase.dev" secondary>
+        <i class="fas fa-envelope text-3xl"></i>
+      </Link>
+    </Tooltip>
   </div>
 </div>
