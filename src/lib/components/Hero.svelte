@@ -17,6 +17,12 @@
   </div>
 
   <div class="flex justify-center space-x-8 mt-8">
+    <Link href="/posts" secondary>
+      <i class="fas fa-pen-fancy text-3xl"></i>
+    </Link>
+    <Link href="/gallery" secondary>
+      <i class="fas fa-camera text-3xl"></i>
+    </Link>
     <Link href="https://github.com/modiase" secondary>
       <i class="fab fa-github text-3xl"></i>
     </Link>

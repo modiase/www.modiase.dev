@@ -57,7 +57,7 @@
 
     <!-- Navigation -->
     <nav class="flex flex-col gap-2 text-xl">
-      {#each [{ href: '/', label: 'Home' }, { href: '/about', label: 'About' }, { href: '/posts', label: 'Posts' }, { href: '/gallery', label: 'Gallery' }] as navItem}
+      {#each [{ href: '/', label: 'About' }, { href: '/posts', label: 'Posts' }, { href: '/gallery', label: 'Gallery' }] as navItem}
         {@const isActive =
           currentPath === navItem.href ||
           (navItem.href !== '/' && currentPath.startsWith(navItem.href + '/'))}
