@@ -88,8 +88,8 @@ $warning-border: #ffeaa7;
   --color-border: #{$camel-text-primary};
   --color-border-light: #{$camel-accent};
   --color-contrast: #{$camel-accent};
-  --color-link-active: #{$camel-text-primary};
-  --color-link-hover: #{$camel-text-primary};
+  --color-link-active: #{$camel-primary};
+  --color-link-hover: #{$camel-primary-hover};
   --color-surface: #{color-mix(in srgb, #{$camel-lightest} 70%, #{$camel-light} 30%)};
   --color-surface-alt: #{$camel-lightest};
 

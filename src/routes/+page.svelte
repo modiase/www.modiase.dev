@@ -41,9 +41,7 @@
             <p>
               I graduated from the University of Cambridge in 2018 having studied for an MSc. in
               Natural Sciences. During this time, I studied Mathematics, Chemistry, Physics and
-              Computer Science before ultimately specialising in theoretical chemistry. Prior to
-              that, I was a student at St. Bernard's Catholic Grammar School where I learnt much and
-              cultivated a love for the sciences and the classical world.
+              Computer Science before ultimately specialising in theoretical chemistry.
             </p>
           </section>
           <section>
@@ -61,9 +59,9 @@
               >.
             </p>
             <p>
-              Presently, I am taking some time off from work to appreciate the world, reflect and
-              pursue personal projects. I am keen to hear about opportunities to work on AI
-              interpretability and applications of AI to scientific discovery and sustainability.
+              Presently, I am taking some time off from work to appreciate the world, reflect, and
+              pursue personal projects. I am keen to hear about opportunities to work on AI safety,
+              interpretability and applications to scientific discovery.
             </p>
           </section>
         </div>

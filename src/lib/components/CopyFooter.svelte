@@ -12,15 +12,15 @@
 >
   <span
     class={clsx(
-      'footer-full inline whitespace-nowrap overflow-hidden transition-all duration-500 text-subtle',
+      'footer-full inline whitespace-nowrap overflow-hidden transition-all duration-500 text-subtle text-sm',
       {
         'w-0': !isHovered,
-        'w-[175px]': isHovered,
+        'w-[200px]': isHovered,
       }
     )}
     >Moyewa Odiase - {currentYear}
   </span>
-  <i class="fas fa-copyright text-subtle copyleft"></i>
+  <i class="fas fa-copyright text-subtle copyleft text-sm"></i>
 </footer>
 
 <style>
