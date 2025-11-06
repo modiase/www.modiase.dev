@@ -6,11 +6,17 @@
 @include font-face('Lato', '/assets/fonts/Lato-BoldItalic.ttf', bold, italic);
 @include font-face('Lato', '/assets/fonts/Lato-Light.ttf', lighter);
 @include font-face('Lato', '/assets/fonts/Lato-LightItalic.ttf', lighter, italic);
+@include font-face('Lato', '/assets/fonts/Lato-Medium.ttf', 500);
+@include font-face('Lato', '/assets/fonts/Lato-MediumItalic.ttf', 500, italic);
+@include font-face('Lato', '/assets/fonts/Lato-Semibold.ttf', 600);
+@include font-face('Lato', '/assets/fonts/Lato-SemiboldItalic.ttf', 600, italic);
 @include font-face('Lato', '/assets/fonts/Lato-Black.ttf', 900);
 @include font-face('Lato', '/assets/fonts/Lato-BlackItalic.ttf', 900, italic);
 
 @include font-face('Space Grotesk', '/assets/fonts/SpaceGrotesk-Regular.ttf');
 @include font-face('Space Grotesk', '/assets/fonts/SpaceGrotesk-Italic.ttf', normal, italic);
+@include font-face('Space Grotesk', '/assets/fonts/SpaceGrotesk-Medium.ttf', 500);
+@include font-face('Space Grotesk', '/assets/fonts/SpaceGrotesk-SemiBold.ttf', 600);
 @include font-face('Space Grotesk', '/assets/fonts/SpaceGrotesk-Bold.ttf', bold);
 @include font-face('Space Grotesk', '/assets/fonts/SpaceGrotesk-BoldItalic.ttf', bold, italic);
 
