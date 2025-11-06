@@ -1,5 +1,6 @@
 import { onDestroy } from 'svelte';
-import { Observable, Subscription, timer } from 'rxjs';
+import type { Observable } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { retryWhen, mergeMap, finalize, tap } from 'rxjs/operators';
 
 export function createSubscriptionManager() {

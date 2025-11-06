@@ -1,5 +1,6 @@
 import type { ContentBlock, ContentBlockType, Post } from '$lib/types';
-import { Observable, from } from 'rxjs';
+import type { Observable } from 'rxjs';
+import { from } from 'rxjs';
 import { timeout, catchError, map } from 'rxjs/operators';
 import { retryWithBackoff } from './rxjs';
 

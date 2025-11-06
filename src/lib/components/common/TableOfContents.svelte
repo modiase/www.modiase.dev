@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Card from '$lib/components/common/Card.svelte';
   import clsx from 'clsx';
   import { onMount } from 'svelte';
 
@@ -14,6 +13,12 @@
   export let showToc: boolean = false;
   export let activeHeadingId: string = '';
   export let className: string = '';
+
+  let isExpanded = true;
+
+  function toggleExpanded() {
+    isExpanded = !isExpanded;
+  }
 
   onMount(() => {
     if (activeHeadingId && typeof window !== 'undefined') {
@@ -31,12 +36,12 @@
 </script>
 
 {#if headings.length > 0}
-  <Card
-    className={clsx(
-      'fixed left-[220px] top-[12px] w-60 z-40 p-2 text-sm',
-      'bg-surface-transparent-alt-50',
+  <div
+    class={clsx(
+      'fixed left-[220px] top-[12px] z-40 p-2 text-sm w-48',
       'transition-all duration-500 ease-in-out',
       'hidden 2xl:block',
+      'group',
       {
         'opacity-100 translate-x-0': showToc,
         'opacity-0 -translate-x-4': !showToc,
@@ -44,8 +49,21 @@
       className
     )}
   >
-    <h3 class="text-xs font-semibold mb-2 text-text-secondary">Table of Contents</h3>
-    <nav class="space-y-1 flex flex-col gap-1">
+    <button
+      class="text-xs font-semibold mb-2 text-text-secondary cursor-pointer hover:text-contrast transition-colors text-left w-full"
+      on:click={toggleExpanded}
+    >
+      Table of Contents
+    </button>
+    <nav
+      class={clsx(
+        'space-y-1 flex flex-col gap-1 overflow-hidden transition-all duration-300 ease-in-out',
+        {
+          'max-h-0 opacity-0': !isExpanded,
+          'max-h-[80vh] opacity-100': isExpanded,
+        }
+      )}
+    >
       {#each headings as heading, _index}
         {@const indentLevel = Math.max(0, heading.level - 1)}
 
@@ -69,5 +87,5 @@
         </button>
       {/each}
     </nav>
-  </Card>
+  </div>
 {/if}

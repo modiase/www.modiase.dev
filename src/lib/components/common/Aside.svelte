@@ -50,19 +50,25 @@
   <!-- Floating aside positioned relative to placeholder (only on 2xl+) -->
   <aside
     bind:this={asideElement}
-    class={clsx('not-prose absolute z-10 hidden 2xl:block', className)}
+    class={clsx(
+      'not-prose absolute z-10 hidden 2xl:block border-t border-b border-border',
+      className
+    )}
     {...rest}
   >
     {@html asideContent()}
   </aside>
 
   <!-- Inline aside for mobile (below 2xl) -->
-  <aside class={clsx('not-prose my-4 w-full 2xl:hidden', className)} {...rest}>
+  <aside
+    class={clsx('not-prose my-4 w-full 2xl:hidden border-t border-b border-border', className)}
+    {...rest}
+  >
     {@html asideContent()}
   </aside>
 {:else}
   <!-- Edit mode: always show inline -->
-  <aside class={clsx('not-prose my-4 w-full', className)} {...rest}>
+  <aside class={clsx('not-prose my-4 w-full border-t border-b border-border', className)} {...rest}>
     {@html asideContent()}
   </aside>
 {/if}
