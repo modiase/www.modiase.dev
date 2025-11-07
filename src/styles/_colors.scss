@@ -2,30 +2,49 @@
 // COLOR PALETTES
 // =============================================================================
 
-// Camel-based color palette (Light theme)
-$camel-primary: #e2984f;
-$camel-primary-hover: #d18a3f;
-$camel-secondary: #e5ad76;
-$camel-accent: #ecc299;
-$camel-light: #f2d7bb;
-$camel-lightest: #f8ebde;
-$camel-background: #fdf8f3;
+// Light theme color palette
+$light-primary: #e2984f;
+$light-primary-hover: #d18a3f;
+$light-secondary: #e5ad76;
+$light-accent: #ecc299;
+$light-light: #f2d7bb;
+$light-lightest: #f8ebde;
+$light-background: #fdf8f3;
 
-$camel-text-primary: #6b4423;
-$camel-text-secondary: #8b5a3c;
-$camel-text-muted: #666;
-$camel-text-dark: #333;
+$light-text-primary: #6b4423;
+$light-text-secondary: #8b5a3c;
+$light-text-muted: #666;
+$light-text-dark: #333;
 
-// Nord color palette (Dark theme)
-$nord0: #2e3440;
-$nord1: #3b4252;
-$nord2: #434c5e;
-$nord3: #4c566a;
-$nord4: #d8dee9;
-$nord5: #e5e9f0;
-$nord6: #eceff4;
-$nord-black: #1a1f2e;
-$nord-contrast: #88c0d0;
+$light-link-active: #064e3b;
+$light-link-hover: #022c22;
+
+$light-surface: #{color-mix(in srgb, #{$light-lightest} 70%, #{$light-light} 30%)};
+$light-surface-alt: #{$light-lightest};
+$light-contrast: #{$light-accent};
+$light-subtle: #{color-mix(in srgb, #{$light-background} 75%, #{$light-text-muted} 25%)};
+
+// Dark theme color palette
+$dark-primary: #434c5e;
+$dark-primary-hover: #3b4252;
+$dark-secondary: #4c566a;
+$dark-accent: #d8dee9;
+$dark-light: #e5e9f0;
+$dark-lightest: #eceff4;
+$dark-background: #2e3440;
+
+$dark-text-primary: #eceff4;
+$dark-text-secondary: #d8dee9;
+$dark-text-muted: #4c566a;
+$dark-text-dark: #eceff4;
+
+$dark-link-active: #88c0d0;
+$dark-link-hover: #d8dee9;
+
+$dark-surface: #3b4252;
+$dark-surface-alt: #1a1f2e;
+$dark-contrast: #{color-mix(in srgb, #d8dee9 65%, #88c0d0 35%)};
+$dark-subtle: #{color-mix(in srgb, #{$dark-background} 70%, #{$dark-text-muted} 30%)};
 
 // Semantic colors (shared across themes)
 $success: #28a745;
@@ -44,6 +63,29 @@ $warning-text: #856404;
 $warning-border: #ffeaa7;
 
 // =============================================================================
+// SCSS MIXINS AND FUNCTIONS
+// =============================================================================
+
+@mixin generate-transparent-variants($base-color, $prefix) {
+  @for $i from 1 through 9 {
+    $opacity: $i * 10;
+    --color-#{$prefix}-#{$opacity}: #{color-mix(
+        in srgb,
+        #{$base-color} #{$opacity * 1%},
+        transparent
+      )};
+  }
+  --color-#{$prefix}-100: #{$base-color};
+}
+
+@mixin generate-semantic-colors($name, $color, $bg, $text, $border) {
+  --color-#{$name}: #{$color};
+  --color-#{$name}-bg: #{$bg};
+  --color-#{$name}-text: #{$text};
+  --color-#{$name}-border: #{$border};
+}
+
+// =============================================================================
 // CSS CUSTOM PROPERTIES
 // =============================================================================
 
@@ -52,131 +94,94 @@ $warning-border: #ffeaa7;
   --mode: light;
 
   // Light theme colors
-  --color-primary: #{$camel-primary};
-  --color-primary-hover: #{$camel-primary-hover};
-  --color-secondary: #{$camel-secondary};
-  --color-accent: #{$camel-accent};
-  --color-light: #{$camel-light};
-  --color-lightest: #{$camel-lightest};
-  --color-background: #{$camel-background};
+  --color-primary: #{$light-primary};
+  --color-primary-hover: #{$light-primary-hover};
+  --color-secondary: #{$light-secondary};
+  --color-accent: #{$light-accent};
+  --color-light: #{$light-light};
+  --color-lightest: #{$light-lightest};
+  --color-background: #{$light-background};
 
   // Text colors
-  --text-primary: #{$camel-text-primary};
-  --text-secondary: #{$camel-text-secondary};
-  --text-muted: #{$camel-text-muted};
-  --text-dark: #{$camel-text-dark};
+  --text-primary: #{$light-text-primary};
+  --text-secondary: #{$light-text-secondary};
+  --text-muted: #{$light-text-muted};
+  --text-dark: #{$light-text-dark};
 
   // Semantic colors
-  --color-success: #{$success};
-  --color-success-bg: #{$success-bg};
-  --color-success-text: #{$success-text};
-  --color-success-border: #{$success-border};
-
-  --color-error: #{$error};
-  --color-error-bg: #{$error-bg};
-  --color-error-text: #{$error-text};
-  --color-error-border: #{$error-border};
-
-  --color-warning: #{$warning};
-  --color-warning-bg: #{$warning-bg};
-  --color-warning-text: #{$warning-text};
-  --color-warning-border: #{$warning-border};
+  @include generate-semantic-colors(
+    'success',
+    $success,
+    $success-bg,
+    $success-text,
+    $success-border
+  );
+  @include generate-semantic-colors('error', $error, $error-bg, $error-text, $error-border);
+  @include generate-semantic-colors(
+    'warning',
+    $warning,
+    $warning-bg,
+    $warning-text,
+    $warning-border
+  );
 
   // UI colors
   --color-white: white;
-  --color-disabled: #{$camel-accent};
-  --color-border: #{$camel-text-primary};
-  --color-border-light: #{$camel-accent};
-  --color-contrast: #{$camel-accent};
-  --color-link-active: #{$camel-primary};
-  --color-link-hover: #{$camel-primary-hover};
-  --color-surface: #{color-mix(in srgb, #{$camel-lightest} 70%, #{$camel-light} 30%)};
-  --color-surface-alt: #{$camel-lightest};
+  --color-disabled: #{$light-accent};
+  --color-border: #{$light-text-primary};
+  --color-border-light: #{$light-accent};
+  --color-contrast: #{$light-contrast};
+  --color-subtle: #{$light-subtle};
+  --color-link-active: #{$light-link-active};
+  --color-link-hover: #{$light-link-hover};
+  --color-surface: #{$light-surface};
+  --color-surface-alt: #{$light-surface-alt};
 
   // Surface transparent variants
-  --color-surface-transparent-10: #{color-mix(in srgb, #{$camel-lightest} 10%, transparent)};
-  --color-surface-transparent-20: #{color-mix(in srgb, #{$camel-lightest} 20%, transparent)};
-  --color-surface-transparent-30: #{color-mix(in srgb, #{$camel-lightest} 30%, transparent)};
-  --color-surface-transparent-40: #{color-mix(in srgb, #{$camel-lightest} 40%, transparent)};
-  --color-surface-transparent-50: #{color-mix(in srgb, #{$camel-lightest} 50%, transparent)};
-  --color-surface-transparent-60: #{color-mix(in srgb, #{$camel-lightest} 60%, transparent)};
-  --color-surface-transparent-70: #{color-mix(in srgb, #{$camel-lightest} 70%, transparent)};
-  --color-surface-transparent-80: #{color-mix(in srgb, #{$camel-lightest} 80%, transparent)};
-  --color-surface-transparent-90: #{color-mix(in srgb, #{$camel-lightest} 90%, transparent)};
-  --color-surface-transparent-100: #{$camel-lightest};
-
-  // Surface alt transparent variants
-  --color-surface-transparent-alt-10: #{color-mix(in srgb, #{$camel-light} 10%, transparent)};
-  --color-surface-transparent-alt-20: #{color-mix(in srgb, #{$camel-light} 20%, transparent)};
-  --color-surface-transparent-alt-30: #{color-mix(in srgb, #{$camel-light} 30%, transparent)};
-  --color-surface-transparent-alt-40: #{color-mix(in srgb, #{$camel-light} 40%, transparent)};
-  --color-surface-transparent-alt-50: #{color-mix(in srgb, #{$camel-light} 50%, transparent)};
-  --color-surface-transparent-alt-60: #{color-mix(in srgb, #{$camel-light} 60%, transparent)};
-  --color-surface-transparent-alt-70: #{color-mix(in srgb, #{$camel-light} 70%, transparent)};
-  --color-surface-transparent-alt-80: #{color-mix(in srgb, #{$camel-light} 80%, transparent)};
-  --color-surface-transparent-alt-90: #{color-mix(in srgb, #{$camel-light} 90%, transparent)};
-  --color-surface-transparent-alt-100: #{$camel-light};
+  @include generate-transparent-variants($light-surface-alt, 'surface-transparent');
+  @include generate-transparent-variants($light-light, 'surface-transparent-alt');
 }
 
 // Dark theme overrides
 :root[data-theme='dark'] {
   // Core colors
-  --color-primary: #{$nord2};
-  --color-primary-hover: #{$nord1};
-  --color-secondary: #{$nord3};
-  --color-accent: #{$nord4};
-  --color-light: #{$nord5};
-  --color-lightest: #{$nord6};
-  --color-background: #{$nord0};
+  --color-primary: #{$dark-primary};
+  --color-primary-hover: #{$dark-primary-hover};
+  --color-secondary: #{$dark-secondary};
+  --color-accent: #{$dark-accent};
+  --color-light: #{$dark-light};
+  --color-lightest: #{$dark-lightest};
+  --color-background: #{$dark-background};
 
   // Text colors
-  --text-primary: #{$nord6};
-  --text-secondary: #{$nord4};
-  --text-muted: #{$nord3};
-  --text-dark: #{$nord6};
+  --text-primary: #{$dark-text-primary};
+  --text-secondary: #{$dark-text-secondary};
+  --text-muted: #{$dark-text-muted};
+  --text-dark: #{$dark-text-dark};
 
   // UI colors
-  --color-white: #{$nord1};
-  --color-disabled: #{$nord3};
-  --color-border: #{$nord2};
-  --color-border-light: #{$nord3};
-  --color-contrast: #{$nord-contrast};
-  --color-link-active: #{$nord4};
-  --color-link-hover: #{$nord-contrast};
-  --color-surface: #{$nord1};
-  --color-surface-alt: #{$nord-black};
+  --color-white: #{$dark-surface};
+  --color-disabled: #{$dark-secondary};
+  --color-border: #{$dark-primary};
+  --color-border-light: #{$dark-secondary};
+  --color-contrast: #{$dark-contrast};
+  --color-subtle: #{$dark-subtle};
+  --color-link-active: #{$dark-link-active};
+  --color-link-hover: #{$dark-link-hover};
+  --color-surface: #{$dark-surface};
+  --color-surface-alt: #{$dark-surface-alt};
 
   // Surface transparent variants
-  --color-surface-transparent-10: #{color-mix(in srgb, #{$nord1} 10%, transparent)};
-  --color-surface-transparent-20: #{color-mix(in srgb, #{$nord1} 20%, transparent)};
-  --color-surface-transparent-30: #{color-mix(in srgb, #{$nord1} 30%, transparent)};
-  --color-surface-transparent-40: #{color-mix(in srgb, #{$nord1} 40%, transparent)};
-  --color-surface-transparent-50: #{color-mix(in srgb, #{$nord1} 50%, transparent)};
-  --color-surface-transparent-60: #{color-mix(in srgb, #{$nord1} 60%, transparent)};
-  --color-surface-transparent-70: #{color-mix(in srgb, #{$nord1} 70%, transparent)};
-  --color-surface-transparent-80: #{color-mix(in srgb, #{$nord1} 80%, transparent)};
-  --color-surface-transparent-90: #{color-mix(in srgb, #{$nord1} 90%, transparent)};
-  --color-surface-transparent-100: #{$nord1};
-
-  // Surface alt transparent variants
-  --color-surface-transparent-alt-10: #{color-mix(in srgb, #{$nord-black} 10%, transparent)};
-  --color-surface-transparent-alt-20: #{color-mix(in srgb, #{$nord-black} 20%, transparent)};
-  --color-surface-transparent-alt-30: #{color-mix(in srgb, #{$nord-black} 30%, transparent)};
-  --color-surface-transparent-alt-40: #{color-mix(in srgb, #{$nord-black} 40%, transparent)};
-  --color-surface-transparent-alt-50: #{color-mix(in srgb, #{$nord-black} 50%, transparent)};
-  --color-surface-transparent-alt-60: #{color-mix(in srgb, #{$nord-black} 60%, transparent)};
-  --color-surface-transparent-alt-70: #{color-mix(in srgb, #{$nord-black} 70%, transparent)};
-  --color-surface-transparent-alt-80: #{color-mix(in srgb, #{$nord-black} 80%, transparent)};
-  --color-surface-transparent-alt-90: #{color-mix(in srgb, #{$nord-black} 90%, transparent)};
-  --color-surface-transparent-alt-100: #{$nord-black};
+  @include generate-transparent-variants($dark-surface, 'surface-transparent');
+  @include generate-transparent-variants($dark-surface-alt, 'surface-transparent-alt');
 }
 
 // =============================================================================
 // LEGACY SCSS VARIABLES (for backward compatibility)
 // =============================================================================
-$color-primary: $camel-primary;
-$color-secondary: $camel-secondary;
-$color-text-primary: $camel-text-primary;
-$color-text-secondary: $camel-text-secondary;
-$color-bg: $camel-background;
+$color-primary: $light-primary;
+$color-secondary: $light-secondary;
+$color-text-primary: $light-text-primary;
+$color-text-secondary: $light-text-secondary;
+$color-bg: $light-background;
 $color-error: $error;

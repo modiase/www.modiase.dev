@@ -54,6 +54,7 @@ module.exports = {
         border: 'var(--color-border)',
         'border-light': 'var(--color-border-light)',
         contrast: 'var(--color-contrast)',
+        subtle: 'var(--color-subtle)',
         'link-active': 'var(--color-link-active)',
         'link-hover': 'var(--color-link-hover)',
       },
