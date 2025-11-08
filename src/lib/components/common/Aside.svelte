@@ -51,7 +51,7 @@
   <aside
     bind:this={asideElement}
     class={clsx(
-      'not-prose absolute z-10 hidden 2xl:block border-t border-b border-border',
+      'not-prose absolute z-10 hidden 2xl:block border-t border-b border-link-active',
       className
     )}
     {...rest}
@@ -61,14 +61,17 @@
 
   <!-- Inline aside for mobile (below 2xl) -->
   <aside
-    class={clsx('not-prose my-4 w-full 2xl:hidden border-t border-b border-border', className)}
+    class={clsx('not-prose my-4 w-full 2xl:hidden border-t border-b border-link-active', className)}
     {...rest}
   >
     {@html asideContent()}
   </aside>
 {:else}
   <!-- Edit mode: always show inline -->
-  <aside class={clsx('not-prose my-4 w-full border-t border-b border-border', className)} {...rest}>
+  <aside
+    class={clsx('not-prose my-4 w-full border-t border-b border-link-active', className)}
+    {...rest}
+  >
     {@html asideContent()}
   </aside>
 {/if}
