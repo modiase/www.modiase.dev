@@ -8,6 +8,16 @@ const config = {
     adapter: adapter({
       fallback: '404.html',
     }),
+    typescript: {
+      config(config) {
+        // Remove deprecated options and use verbatimModuleSyntax instead
+        delete config.compilerOptions.importsNotUsedAsValues;
+        delete config.compilerOptions.preserveValueImports;
+        delete config.compilerOptions.ignoreDeprecations;
+        config.compilerOptions.verbatimModuleSyntax = true;
+        return config;
+      },
+    },
   },
 };
 
