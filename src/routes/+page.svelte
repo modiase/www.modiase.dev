@@ -52,8 +52,7 @@
             <p>
               I graduated from the University of Cambridge in 2018 having studied for an MSc. in
               Natural Sciences. During this time, I studied Mathematics, Chemistry, Physics and
-              Computer Science before ultimately specialising in theoretical chemistry. As a result,
-              I am passionate about the applications of AI to accelerate scientific discovery.
+              Computer Science before ultimately specialising in theoretical chemistry.
             </p>
             <p>
               Presently, I am taking some time off from work to appreciate the world, reflect, and
