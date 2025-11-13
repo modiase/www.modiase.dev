@@ -16,8 +16,8 @@ $light-text-secondary: #8b5a3c;
 $light-text-muted: #666;
 $light-text-dark: #333;
 
-$light-link-active: #064e3b;
-$light-link-hover: #022c22;
+$light-link-default: #064e3b;
+$light-link-active: #022c22;
 
 $light-surface: #{color-mix(in srgb, #{$light-lightest} 70%, #{$light-light} 30%)};
 $light-surface-alt: #{$light-lightest};
@@ -38,8 +38,8 @@ $dark-text-secondary: #d8dee9;
 $dark-text-muted: #4c566a;
 $dark-text-dark: #eceff4;
 
-$dark-link-active: #88c0d0;
-$dark-link-hover: #d8dee9;
+$dark-link-default: #88c0d0;
+$dark-link-active: #8fbcbb;
 
 $dark-surface: #3b4252;
 $dark-surface-alt: #1a1f2e;
@@ -132,8 +132,8 @@ $warning-border: #ffeaa7;
   --color-border-light: #{$light-accent};
   --color-contrast: #{$light-contrast};
   --color-subtle: #{$light-subtle};
+  --color-link-default: #{$light-link-default};
   --color-link-active: #{$light-link-active};
-  --color-link-hover: #{$light-link-hover};
   --color-surface: #{$light-surface};
   --color-surface-alt: #{$light-surface-alt};
 
@@ -166,8 +166,8 @@ $warning-border: #ffeaa7;
   --color-border-light: #{$dark-secondary};
   --color-contrast: #{$dark-contrast};
   --color-subtle: #{$dark-subtle};
+  --color-link-default: #{$dark-link-default};
   --color-link-active: #{$dark-link-active};
-  --color-link-hover: #{$dark-link-hover};
   --color-surface: #{$dark-surface};
   --color-surface-alt: #{$dark-surface-alt};
 

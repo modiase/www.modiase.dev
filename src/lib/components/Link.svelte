@@ -5,7 +5,6 @@
   export let href: string = '#';
   export let target: string | undefined = undefined;
   export let rel: string | undefined = undefined;
-  export let secondary: boolean = false;
   export let disableActive: boolean = false;
   export let onClick: (() => void) | undefined = undefined;
   export let className: string = '';
@@ -15,8 +14,8 @@
   $: linkClasses = clsx(
     'no-underline transition-colors duration-500',
     {
-      'text-link-active': isActive !== secondary,
-      'text-link-hover': isActive === secondary,
+      'text-link-default': !isActive,
+      'text-link-active': isActive,
       'hover:text-contrast': true,
     },
     className

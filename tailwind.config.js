@@ -55,8 +55,8 @@ module.exports = {
         'border-light': 'var(--color-border-light)',
         contrast: 'var(--color-contrast)',
         subtle: 'var(--color-subtle)',
+        'link-default': 'var(--color-link-default)',
         'link-active': 'var(--color-link-active)',
-        'link-hover': 'var(--color-link-hover)',
       },
       fontFamily: {
         grotesk: ['Space Grotesk', 'Arial', 'Helvetica', 'sans-serif'],
