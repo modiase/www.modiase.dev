@@ -9,7 +9,9 @@
     <p class="text-center font-semibold">Naturalist, Technologist and Software Engineer</p>
     <p class="text-center">Interested in cleantech, and safe and fair AI</p>
   </div>
-  <div class="w-96 h-96 bg-gray-500 rounded-full flex items-center justify-center overflow-hidden">
+  <div
+    class="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 bg-gray-500 rounded-full flex items-center justify-center overflow-hidden"
+  >
     <img
       src="/assets/images/hero.jpg"
       alt="Moyewa Odiase"

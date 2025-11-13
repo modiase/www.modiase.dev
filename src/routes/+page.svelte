@@ -16,7 +16,7 @@
 <div class="flex-1 flex flex-col" in:fade={{ duration: 200 }}>
   <main class="relative flex-1 flex items-start lg:items-center justify-center">
     <div
-      class="flex flex-col lg:flex-row items-start justify-center gap-8 px-8 py-8 lg:py-16 max-w-7xl mx-auto w-full"
+      class="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-8 px-8 py-8 lg:py-16 max-w-7xl mx-auto w-full"
     >
       <div class="flex-shrink-0 w-full lg:w-auto">
         <Hero />
