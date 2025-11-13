@@ -20,7 +20,7 @@
   <div class="flex justify-center space-x-8 mt-8">
     <Tooltip text="Posts">
       <Link href="/posts" secondary>
-        <i class="fas fa-pen-fancy text-3xl"></i>
+        <i class="fas fa-comment text-3xl"></i>
       </Link>
     </Tooltip>
     <Tooltip text="Gallery">
