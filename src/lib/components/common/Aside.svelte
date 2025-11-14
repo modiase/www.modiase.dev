@@ -1,6 +1,10 @@
 <script lang="ts">
   import clsx from 'clsx';
   import type { HTMLAttributes } from 'svelte/elements';
+  import { onMount } from 'svelte';
+  import { fromEvent } from 'rxjs';
+  import { throttleTime } from 'rxjs/operators';
+  import { createSubscriptionManager } from '$lib/utils/rxjs';
 
   export let content: string;
   export let className: string = '';
@@ -10,8 +14,13 @@
   let asideElement: HTMLElement;
   let placeholderElement: HTMLElement;
 
+  const addSubscription = createSubscriptionManager();
+
   const positionAside = () => {
     if (!asideElement || !placeholderElement) return;
+
+    // offsetParent === null indicates element is hidden (display: none)
+    if (placeholderElement.offsetParent === null) return;
 
     const placeholderRect = placeholderElement.getBoundingClientRect();
     const container = placeholderElement.closest('.prose');
@@ -34,6 +43,32 @@
   $: if (asideElement && placeholderElement) {
     requestAnimationFrame(positionAside);
   }
+
+  onMount(() => {
+    addSubscription(
+      fromEvent(window, 'resize')
+        .pipe(throttleTime(100, undefined, { leading: true, trailing: true }))
+        .subscribe(() => {
+          requestAnimationFrame(positionAside);
+        })
+    );
+
+    if (typeof window !== 'undefined') {
+      const breakpoint2xl = getComputedStyle(document.documentElement)
+        .getPropertyValue('--breakpoint-2xl')
+        .trim();
+      const mediaQuery = window.matchMedia(`(min-width: ${breakpoint2xl})`);
+      const handleMediaChange = () => {
+        requestAnimationFrame(positionAside);
+      };
+
+      mediaQuery.addEventListener('change', handleMediaChange);
+
+      return () => {
+        mediaQuery.removeEventListener('change', handleMediaChange);
+      };
+    }
+  });
 
   const asideContent = () =>
     `<div class="p-4 text-sm text-[var(--text-secondary)] italic">${content}</div>`;
