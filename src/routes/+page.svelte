@@ -54,11 +54,6 @@
               Natural Sciences. During this time, I studied Mathematics, Chemistry, Physics and
               Computer Science before ultimately specialising in theoretical chemistry.
             </p>
-            <p>
-              Presently, I am taking some time off from work to appreciate the world, reflect, and
-              pursue personal projects. I am keen to hear about opportunities to work on AI safety,
-              interpretability, and applications to scientific discovery.
-            </p>
           </section>
         </div>
       </div>
