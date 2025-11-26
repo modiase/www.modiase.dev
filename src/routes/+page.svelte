@@ -24,7 +24,7 @@
       <div
         class="flex-1 lg:pl-8 lg:border-l border-t lg:border-t-0 pt-8 lg:pt-0 border-border max-w-2xl w-full"
       >
-        <div class="flex flex-col gap-8">
+        <div class="flex flex-col gap-8 text-[0.96875rem]">
           <h1 class="text-lg font-bold mb-2">About Me</h1>
           <section>
             <p>

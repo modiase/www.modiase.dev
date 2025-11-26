@@ -6,7 +6,7 @@
 <div class="flex flex-col items-center">
   <h1 class="text-4xl text-center mb-4 font-medium">Moyewa Odiase</h1>
   <div class="flex flex-col items-center gap-1 mb-8">
-    <p class="text-center font-semibold">Naturalist, Technologist and Software Engineer</p>
+    <p class="text-sm text-center font-semibold">Naturalist, Technologist and Software Engineer</p>
   </div>
   <div
     class="w-48 h-48 sm:w-30 sm:h-30 lg:w-64 lg:h-64 bg-gray-500 rounded-full flex items-center justify-center overflow-hidden"

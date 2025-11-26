@@ -59,8 +59,8 @@ module.exports = {
         'link-active': 'var(--color-link-active)',
       },
       fontFamily: {
-        grotesk: ['Space Grotesk', 'Arial', 'Helvetica', 'sans-serif'],
-        Lato: ['Lato', 'Arial', 'Helvetica', 'sans-serif'],
+        aleo: ['Aleo', 'Georgia', 'Times New Roman', 'Times', 'serif'],
+        sans: ['Lato', 'Arial', 'Helvetica', 'sans-serif'],
       },
     },
   },
