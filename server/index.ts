@@ -96,6 +96,7 @@ fastify.post('/api/posts', async (request, reply) =>
             lead,
             content: [],
             tags,
+            hidden: true,
           } as Post)
         ),
         TE.bind('updatedPosts', ({ posts, newPost }) => TE.right([...posts, newPost] as Post[])),
@@ -420,6 +421,53 @@ fastify.put('/api/posts/:postId/content/:blockId/move', async (request, reply) =
       )
     ),
     TE.match(identity, ({ blockIndex }) => reply.status(200).send({ success: true, blockIndex }))
+  )()
+);
+
+fastify.put('/api/posts/:postId/publish', async (request, reply) =>
+  pipe(
+    request.params,
+    decode(t.strict({ postId: t.string }))(reply),
+    TE.fromEither,
+    TE.chainW(({ postId }) =>
+      pipe(
+        TE.Do,
+        TE.bind('posts', () =>
+          TE.tryCatch(
+            () => readPosts(),
+            (err) => reply.status(500).send({ error: `Failed to read posts: ${err}` })
+          )
+        ),
+        TE.bind('postIndex', ({ posts }) =>
+          pipe(
+            RA.findIndex((p: Post) => p.id === postId)(posts),
+            TE.fromOption(() => reply.status(404).send({ error: 'Post not found' }))
+          )
+        ),
+        TE.bind('updatedPost', ({ posts, postIndex }) =>
+          TE.right({
+            ...posts[postIndex],
+            hidden: !posts[postIndex].hidden,
+          } as Post)
+        ),
+        TE.bind('updatedPosts', ({ posts, postIndex, updatedPost }) =>
+          pipe(
+            RA.updateAt(postIndex, updatedPost)(posts),
+            TE.fromOption(() => reply.status(500).send({ error: 'Failed to update post' })),
+            TE.map((p) => Array.from(p) as Post[])
+          )
+        ),
+        TE.chainFirst(({ updatedPosts }) =>
+          TE.tryCatch(
+            () => writePosts(updatedPosts),
+            (err) => reply.status(500).send({ error: `Failed to write posts: ${err}` })
+          )
+        )
+      )
+    ),
+    TE.match(identity, ({ updatedPost }) =>
+      reply.status(200).send({ success: true, post: updatedPost })
+    )
   )()
 );
 

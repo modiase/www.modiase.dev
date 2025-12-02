@@ -14,6 +14,7 @@
     commitAllChanges,
     clearAll,
   } from '$lib/stores/pendingChanges';
+  import { publishPost } from '$lib/utils/api';
 
   export let post: Post;
   export let isEditMode: boolean = false;
@@ -21,6 +22,7 @@
   let hasPendingChanges = false;
   let pendingChangesCount = 0;
   let isSaving = false;
+  let isPublishing = false;
 
   const addSubscription = createSubscriptionManager();
 
@@ -43,6 +45,27 @@
           const errorMessage = error?.error || 'Failed to save changes. Please try again.';
           toast.error(errorMessage);
           isSaving = false;
+        },
+      })
+    );
+  }
+
+  function handlePublish() {
+    if (isPublishing) return;
+
+    isPublishing = true;
+    addSubscription(
+      publishPost(post.id).subscribe({
+        next: (updatedPost) => {
+          post = updatedPost;
+          toast.success('Post published successfully!');
+          isPublishing = false;
+        },
+        error: (error) => {
+          console.error('Failed to publish post:', error);
+          const errorMessage = error?.error || 'Failed to publish post. Please try again.';
+          toast.error(errorMessage);
+          isPublishing = false;
         },
       })
     );
@@ -76,6 +99,20 @@
               </span>
             {/if}
           </div>
+        </button>
+      {/if}
+
+      {#if post.hidden}
+        <button
+          class={clsx(
+            'fixed top-4 right-20 z-50 p-3 rounded-full bg-primary text-primary-foreground shadow-lg hover:brightness-90 transition-colors',
+            { 'opacity-50 cursor-not-allowed': isPublishing }
+          )}
+          on:click={handlePublish}
+          disabled={isPublishing}
+          title="Publish post"
+        >
+          <img src="/assets/icons/document.svg" alt="Publish post" class="w-6 h-6" />
         </button>
       {/if}
 

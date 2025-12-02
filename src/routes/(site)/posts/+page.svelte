@@ -23,7 +23,14 @@
   onMount(async () => {
     try {
       const response = await fetch('/posts.json');
-      allPosts = await response.json();
+      let posts = await response.json();
+
+      // Filter out hidden posts in production
+      if (!import.meta.env.DEV) {
+        posts = posts.filter((post: Post) => !post.hidden);
+      }
+
+      allPosts = posts;
       allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     } catch (error) {
       console.error('Failed to load posts:', error);
@@ -73,7 +80,10 @@
         {#each posts as post}
           <Card
             href="/posts/{post.slug}"
-            className="bg-surface-transparent-alt-40 transition-transform duration-200 hover:-translate-y-1"
+            className={clsx(
+              'transition-transform duration-200 hover:-translate-y-1',
+              post.hidden && import.meta.env.DEV ? 'bg-subtle' : 'bg-surface-transparent-alt-40'
+            )}
           >
             <h2 class="text-2xl font-semibold mb-2">
               {post.title}

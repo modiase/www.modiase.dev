@@ -13,4 +13,5 @@ export interface Post {
   lead: string;
   content: ContentBlock[];
   tags: string[];
+  hidden: boolean;
 }

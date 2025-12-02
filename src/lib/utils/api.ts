@@ -133,3 +133,10 @@ export function createPost(request: CreatePostRequest): Observable<Post> {
     body: JSON.stringify(request),
   }).pipe(map((result) => result.post));
 }
+
+export function publishPost(postId: string): Observable<Post> {
+  return fetchJson<{ post: Post }>(`/api/posts/${postId}/publish`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+  }).pipe(map((result) => result.post));
+}
