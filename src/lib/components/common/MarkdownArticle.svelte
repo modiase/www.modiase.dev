@@ -270,7 +270,7 @@
   <div
     bind:this={container}
     class={clsx(
-      'prose prose-lg text-justify max-w-[80vw]',
+      'prose prose-lg max-w-[80vw]',
       '[&>p]:mb-6 [&>h2]:mt-8 [&>h2]:mb-4 [&>h2]:text-xl [&>h2]:font-bold [&_a]:text-link-default [&_a:hover]:text-contrast',
       '[&_.aside-content]:hidden [&_pre]:overflow-auto',
       '[&_h1]:mt-8 [&_h1]:mb-6 [&_h1]:text-2xl [&_h1]:font-bold',
