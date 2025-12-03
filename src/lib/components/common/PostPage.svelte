@@ -102,7 +102,7 @@
         </button>
       {/if}
 
-      {#if post.hidden}
+      {#if !post.date}
         <button
           class={clsx(
             'fixed top-4 right-20 z-50 p-3 rounded-full bg-primary text-primary-foreground shadow-lg hover:brightness-90 transition-colors',
@@ -141,7 +141,11 @@
       <h1 class="text-4xl font-bold mb-4">{post.title}</h1>
       <p class="text-md mb-4">{post.lead}</p>
       <div class="flex justify-between items-center text-sm mb-6">
-        <time>{format(new Date(post.date), 'd MMMM yyyy', { locale: enGB })}</time>
+        <time class={clsx({ 'text-contrast': !post.date })}
+          >{!post.date
+            ? 'Draft'
+            : format(new Date(post.date), 'd MMMM yyyy', { locale: enGB })}</time
+        >
         <div class="flex gap-2">
           {#each post.tags as tag}
             <span class="px-2 py-1 rounded text-xs">{tag}</span>

@@ -9,9 +9,8 @@ export interface Post {
   id: string;
   slug: string;
   title: string;
-  date: string;
+  date: string | null;
   lead: string;
   content: ContentBlock[];
   tags: string[];
-  hidden: boolean;
 }

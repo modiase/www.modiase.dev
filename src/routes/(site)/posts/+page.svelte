@@ -25,13 +25,19 @@
       const response = await fetch('/posts.json');
       let posts = await response.json();
 
-      // Filter out hidden posts in production
+      // Filter out unpublished posts in production
       if (!import.meta.env.DEV) {
-        posts = posts.filter((post: Post) => !post.hidden);
+        posts = posts.filter((post: Post) => post.date !== null);
       }
 
       allPosts = posts;
-      allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      allPosts.sort((a, b) => {
+        // Put drafts (null dates) first
+        if (a.date === null && b.date === null) return 0;
+        if (a.date === null) return -1;
+        if (b.date === null) return 1;
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
     } catch (error) {
       console.error('Failed to load posts:', error);
     }
@@ -80,7 +86,7 @@
         {#each posts as post}
           <Card
             href="/posts/{post.slug}"
-            bgClassName={post.hidden && import.meta.env.DEV
+            bgClassName={!post.date && import.meta.env.DEV
               ? 'bg-subtle'
               : 'bg-surface-transparent-alt-40'}
             className="transition-transform duration-200 hover:-translate-y-1"
@@ -90,7 +96,11 @@
             </h2>
             <p class="mb-3">{post.lead}</p>
             <div class="flex justify-between items-center text-sm">
-              <time>{format(new Date(post.date), 'd MMMM yyyy', { locale: enGB })}</time>
+              <time
+                >{!post.date
+                  ? 'Draft'
+                  : format(new Date(post.date), 'd MMMM yyyy', { locale: enGB })}</time
+              >
               <div class="flex gap-2">
                 {#each post.tags as tag}
                   <span class="px-2 py-1 rounded text-xs">{tag}</span>

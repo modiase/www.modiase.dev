@@ -92,11 +92,10 @@ fastify.post('/api/posts', async (request, reply) =>
             id: generateId(),
             slug: slugify(title),
             title,
-            date: new Date().toISOString(),
+            date: null,
             lead,
             content: [],
             tags,
-            hidden: true,
           } as Post)
         ),
         TE.bind('updatedPosts', ({ posts, newPost }) => TE.right([...posts, newPost] as Post[])),
@@ -444,12 +443,13 @@ fastify.put('/api/posts/:postId/publish', async (request, reply) =>
             TE.fromOption(() => reply.status(404).send({ error: 'Post not found' }))
           )
         ),
-        TE.bind('updatedPost', ({ posts, postIndex }) =>
-          TE.right({
-            ...posts[postIndex],
-            hidden: !posts[postIndex].hidden,
-          } as Post)
-        ),
+        TE.bind('updatedPost', ({ posts, postIndex }) => {
+          const post = posts[postIndex];
+          return TE.right({
+            ...post,
+            date: new Date().toISOString(),
+          } as Post);
+        }),
         TE.bind('updatedPosts', ({ posts, postIndex, updatedPost }) =>
           pipe(
             RA.updateAt(postIndex, updatedPost)(posts),
