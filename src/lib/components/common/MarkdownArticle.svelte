@@ -318,6 +318,7 @@
       '[&_h6]:mt-2 [&_h6]:mb-1 [&_h6]:text-xs [&_h6]:font-semibold',
       '[&_h1]:block [&_h2]:block [&_h3]:block [&_h4]:block [&_h5]:block [&_h6]:block',
       '[&_p+_h1]:mt-8 [&_p+_h2]:mt-8 [&_p+_h3]:mt-6 [&_p+_h4]:mt-4 [&_p+_h5]:mt-3 [&_p+_h6]:mt-2',
+      '[&_blockquote]:text-base [&_blockquote]:italic [&_blockquote]:my-6 [&_blockquote]:pl-4 [&_blockquote]:border-l-4 [&_blockquote]:border-contrast',
       className
     )}
     {...rest}
