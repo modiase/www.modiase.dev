@@ -6,6 +6,7 @@
   import Aside from '$lib/components/common/Aside.svelte';
   import TableOfContents from '$lib/components/common/TableOfContents.svelte';
   import EditContainer from '$lib/components/common/EditContainer.svelte';
+  import PostFooter from '$lib/components/common/PostFooter.svelte';
   import { slugify } from '$lib/utils/slugify';
   import type { ContentBlock, ContentBlockType } from '$lib/types';
   import type { HTMLAttributes } from 'svelte/elements';
@@ -15,13 +16,23 @@
   import { addContentBlock, CONTENT_BLOCK_TYPES } from '$lib/utils/api';
   import { toast } from 'svelte-french-toast';
 
+  let linkCounter = 0;
+
   const renderer = new marked.Renderer();
   renderer.link = function ({ href, title, tokens }) {
     const text = tokens.map((token) => token.raw).join('');
     const isExternal =
       href.startsWith('http') &&
       (typeof window === 'undefined' || !href.includes(window.location.hostname));
-    return `<a href="${href}"${isExternal ? ' target="_blank" rel="noopener noreferrer"' : ''}${title ? ` title="${title}"` : ''}>${text}</a>`;
+
+    if (isExternal) {
+      linkCounter++;
+      const linkId = `link-${linkCounter}`;
+      const dataCommentAttr = title ? ` data-comment="${title}"` : '';
+      return `<a id="${linkId}" href="${href}" target="_blank" rel="noopener noreferrer"${dataCommentAttr}>${text}</a>`;
+    }
+
+    return `<a href="${href}"${title ? ` title="${title}"` : ''}>${text}</a>`;
   };
 
   renderer.em = function ({ tokens }) {
@@ -60,6 +71,7 @@
   let activeHeadingId = '';
   let firstParagraph: HTMLElement | null = null;
   let introductionHeading: HTMLElement | null = null;
+  let references: Array<{ text: string; url: string; comment?: string; linkId: string }> = [];
 
   const addSubscription = createSubscriptionManager();
   const isLoading$ = new BehaviorSubject<boolean>(false);
@@ -250,6 +262,31 @@
       };
     });
   }
+
+  function extractReferences() {
+    if (!container) return;
+
+    const links = Array.from(container.querySelectorAll('a[target="_blank"]'));
+
+    references = links
+      .map((link) => {
+        const url = link.getAttribute('href') || '';
+        const text = link.textContent?.trim() || '';
+        const comment = link.getAttribute('data-comment') || undefined;
+        const linkId = link.getAttribute('id') || '';
+        return { text, url, comment, linkId };
+      })
+      .filter((ref) => ref.url && ref.text && ref.linkId);
+  }
+
+  $: if (contentItems) {
+    linkCounter = 0;
+  }
+
+  $: if (container && contentItems) {
+    // Use a small delay to ensure DOM has updated
+    setTimeout(() => extractReferences(), 0);
+  }
 </script>
 
 <svelte:head>
@@ -325,5 +362,7 @@
         </EditContainer>
       {/each}
     {/if}
+
+    <PostFooter {references} />
   </div>
 </div>

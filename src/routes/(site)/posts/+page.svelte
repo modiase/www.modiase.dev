@@ -80,10 +80,10 @@
         {#each posts as post}
           <Card
             href="/posts/{post.slug}"
-            className={clsx(
-              'transition-transform duration-200 hover:-translate-y-1',
-              post.hidden && import.meta.env.DEV ? 'bg-subtle' : 'bg-surface-transparent-alt-40'
-            )}
+            bgClassName={post.hidden && import.meta.env.DEV
+              ? 'bg-subtle'
+              : 'bg-surface-transparent-alt-40'}
+            className="transition-transform duration-200 hover:-translate-y-1"
           >
             <h2 class="text-2xl font-semibold mb-2">
               {post.title}

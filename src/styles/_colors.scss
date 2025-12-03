@@ -22,7 +22,7 @@ $light-link-active: #047857;
 $light-surface: #{color-mix(in srgb, #{$light-lightest} 70%, #{$light-light} 30%)};
 $light-surface-alt: #{$light-lightest};
 $light-contrast: #{$light-accent};
-$light-subtle: #{color-mix(in srgb, #{$light-background} 75%, #{$light-text-muted} 25%)};
+$light-subtle: #{color-mix(in srgb, #{$light-background} 40%, #{$light-text-muted} 60%)};
 
 // Dark theme color palette
 $dark-primary: #434c5e;
@@ -44,7 +44,7 @@ $dark-link-active: #8fbcbb;
 $dark-surface: #3b4252;
 $dark-surface-alt: #1a1f2e;
 $dark-contrast: #{color-mix(in srgb, #d8dee9 65%, #88c0d0 35%)};
-$dark-subtle: #{color-mix(in srgb, #{$dark-background} 70%, #{$dark-text-muted} 30%)};
+$dark-subtle: #{color-mix(in srgb, #{$dark-background} 30%, #{$dark-text-muted} 70%)};
 
 // Semantic colors (shared across themes)
 $success: #28a745;
